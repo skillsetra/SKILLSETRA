@@ -13,7 +13,16 @@ def client():
 def fetch_profile(user_id:str):
     sb=client();
     if not sb:return None
-    r=sb.table('profiles').select('*').eq('id',user_id).maybe_single().execute();return r.data
+    def fetch_profile(user_id):
+    r = (
+        sb.table("profiles")
+        .select("*")
+        .eq("id", user_id)
+        .limit(1)
+        .execute()
+    )
+    rows = r.data or []
+    return rows[0] if rows else None
 
 def upsert_profile(user_id:str,data:dict):
     sb=client();
