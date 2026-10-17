@@ -74,9 +74,12 @@ class WorkspaceStore:
   if not sb:
    raise RuntimeError('Supabase workspace read is unavailable; refusing to substitute an empty workspace.')
   try:
-   r=sb.table('workspace_snapshots').select('data').eq('user_id',uid).maybe_single().execute()
-   if r.data and r.data.get('data'):
-    loaded=r.data['data'];base=deepcopy(_BASE_TEMPLATE)
+   # Use a list response instead of maybe_single(): an empty maybe_single()
+   # response can be HTTP 204, which some postgrest-py versions mishandle.
+   r=sb.table('workspace_snapshots').select('data').eq('user_id',uid).limit(1).execute()
+   rows=r.data or []
+   if rows and rows[0].get('data'):
+    loaded=rows[0]['data'];base=deepcopy(_BASE_TEMPLATE)
     for key,value in base.items(): loaded.setdefault(key,deepcopy(value))
     loaded.setdefault('profile', {})['id']=uid
     saved_settings=loaded.setdefault('settings',deepcopy(_BASE_TEMPLATE['settings']))
