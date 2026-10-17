@@ -10,10 +10,7 @@ def client():
       sb=create_client(settings.supabase_url,settings.supabase_anon_key);sb.postgrest.auth(token);return sb
     except Exception:return None
 
-def fetch_profile(user_id:str):
-    sb=client();
-    if not sb:return None
-    def fetch_profile(user_id):
+def fetch_profile(user_id):
     r = (
         sb.table("profiles")
         .select("*")
@@ -21,6 +18,7 @@ def fetch_profile(user_id:str):
         .limit(1)
         .execute()
     )
+
     rows = r.data or []
     return rows[0] if rows else None
 
