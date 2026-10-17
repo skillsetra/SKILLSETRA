@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     github_token:str=""
     admin_user_ids:str="skillsetra"
     demo_session_ttl_hours:int=720
-    cors_origins:str="http://localhost:3000"
+    cors_origins:str="http://localhost:3000,https://skillsetra-lz2i.onrender.com"
     rate_limit_per_minute:int=60
     request_timeout_seconds:int=20
     model_config=SettingsConfigDict(env_file=".env",extra="ignore",case_sensitive=False)
