@@ -1,0 +1,21 @@
+# Sql Databases
+# Format: Title | URL | Type | Level
+SQL & Databases YouTube learning | https://www.youtube.com/@freecodecamp | youtube | All levels
+SQL & Databases - PDF YouTube lesson 01 | https://youtu.be/DwFu-cqVm7E | youtube | All levels
+SQL & Databases - PDF YouTube lesson 02 | https://youtu.be/HXV3zeQKqGY | youtube | All levels
+SQL & Databases - PDF YouTube lesson 03 | https://youtu.be/7S_tz1z_5bA | youtube | All levels
+SQL & Databases - PDF YouTube lesson 04 | https://youtu.be/OT1RErkfLNQ | youtube | All levels
+SQL & Databases - PDF YouTube lesson 05 | https://youtu.be/hOnxCDiD-zg | youtube | All levels
+Sql Databases - YouTube lesson 01 | https://youtu.be/cnzka7kF5Zk?si=LZPFDTDjUp15FHfT | youtube | All levels
+Sql Databases - YouTube lesson 02 | https://youtu.be/lZi8zVfNoO0?si=m4VfMrwksbCBXsar | youtube | All levels
+Sql Databases - YouTube lesson 03 | https://youtu.be/qw--VYLpxG4?si=-3abpnG70h2twHRg | youtube | All levels
+Sql Databases - YouTube lesson 04 | https://youtu.be/SpfIwlAYaKk?si=tWo5-NLgHdnbCX09 | youtube | All levels
+Sql Databases - YouTube lesson 05 | https://youtu.be/85pG_pDkITY?si=3BUeH0A23jYmR_LX | youtube | All levels
+Sql Databases - YouTube lesson 06 | https://youtu.be/eESMCA2O7TU?si=Dh3lBNJ7E8Nuu0KQ | youtube | All levels
+Sql Databases - YouTube lesson 07 | https://youtu.be/o4Aa_kUqTAU?si=QckVLIoa3izM0y-5 | youtube | All levels
+Sql Databases - YouTube lesson 08 | https://youtu.be/oQRmL4ry5qw?si=HvqcWRMfsYrKOmcS | youtube | All levels
+Sql Databases - YouTube lesson 09 | https://youtu.be/blkZ6APzT8Q?si=8iS72tUfqZ5O8SZj | youtube | All levels
+Sql Databases - YouTube lesson 10 | https://youtu.be/chz_g0VfP4U?si=1G4HZaZ2DqMgDw6y | youtube | All levels
+SQL & Database - PDF YouTube lesson 01 | https://youtu.be/yE6tlle64tU | youtube | All levels
+SQL & Database - PDF YouTube lesson 02 | https://youtu.be/7azCOKryADA | youtube | All levels
+SQL & Database - PDF YouTube lesson 03 | https://youtu.be/SSKVgrwhzus | youtube | All levels

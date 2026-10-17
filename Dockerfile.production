@@ -1,0 +1,35 @@
+# Mixed-mode production image: Supabase accounts and isolated demo sessions can coexist.
+# Anonymous production demos are enabled by default to match the public landing CTA; override
+# NEXT_PUBLIC_DEMO_MODE, DEMO_MODE, and ALLOW_PRODUCTION_DEMO to false to disable demos.
+FROM node:20-bookworm-slim AS frontend-build
+WORKDIR /app/frontend
+ARG NEXT_PUBLIC_DEMO_MODE=true
+ARG NEXT_PUBLIC_API_BASE_URL=
+ARG BACKEND_INTERNAL_URL=http://127.0.0.1:8000
+ENV NEXT_PUBLIC_DEMO_MODE=${NEXT_PUBLIC_DEMO_MODE} \
+    NEXT_PUBLIC_API_BASE_URL=${NEXT_PUBLIC_API_BASE_URL} \
+    BACKEND_INTERNAL_URL=${BACKEND_INTERNAL_URL}
+COPY frontend/package*.json ./
+RUN npm install --no-audit --no-fund
+COPY frontend/ ./
+RUN npm run typecheck && npm run build && npm prune --omit=dev
+
+FROM node:20-bookworm-slim AS runtime
+ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1 NODE_ENV=production \
+    DEMO_MODE=true ALLOW_PRODUCTION_DEMO=true ENVIRONMENT=production \
+    BACKEND_INTERNAL_URL=http://127.0.0.1:8000 NEXT_PUBLIC_DEMO_MODE=true \
+    NEXT_PUBLIC_API_BASE_URL= PORT=3000
+RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-venv python3-pip ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY backend/requirements.txt /app/backend/requirements.txt
+RUN python3 -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -r /app/backend/requirements.txt
+COPY --from=frontend-build /app/frontend /app/frontend
+COPY backend/ /app/backend/
+COPY learning-materials/ /app/learning-materials/
+COPY field-guides/ /app/field-guides/
+COPY database/ /app/database/
+COPY docker/start-production.sh /app/docker/start-production.sh
+RUN chmod +x /app/docker/start-production.sh && mkdir -p /app/backend/data
+EXPOSE 3000
+CMD ["/app/docker/start-production.sh"]

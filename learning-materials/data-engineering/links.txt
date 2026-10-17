@@ -1,0 +1,10 @@
+# Data Engineering
+# Format: Title | URL | Type | Level
+Data Engineering - YouTube lesson 01 | https://youtu.be/SETspQRY9ZU?si=CxzJPun67d9bIzCd | youtube | All levels
+Data Engineering - YouTube lesson 02 | https://youtu.be/O_OMFMlPPZs?si=yOHK89-FSk96RVcX | youtube | All levels
+Data Engineering - YouTube lesson 03 | https://youtu.be/PHsC_t0j1dU?si=mNs5_OLy73a2H-u- | youtube | All levels
+Data Engineering - YouTube lesson 04 | https://youtu.be/oJUM7jJGzl4?si=JWW251BEhlwG15af | youtube | All levels
+Data Engineering - YouTube lesson 05 | https://youtu.be/T23Bs75F7ZQ?si=uRUDM_EuJrN66qHO | youtube | All levels
+Data Engineering - YouTube lesson 06 | https://youtu.be/SSz7HiyQN1M?si=_O3C2LyZ2lbvVk56 | youtube | All levels
+Data Engineering - YouTube lesson 07 | https://youtu.be/9XQFUA6OVTA?si=awHYFH7_iq6pTy63 | youtube | All levels
+data engineering - YouTube lesson 06 | https://youtu.be/OT1RErkfLNQ?si=-0aNiQ_8c-lBmR7L | youtube | All levels

@@ -1,0 +1,20 @@
+# Fullstack Engineering
+# Format: Title | URL | Type | Level
+Full-Stack Engineering - Course / reference 01 | https://media.geeksforgeeks.org/wp-content/uploads/20260526175613922276/Full-Stack-Developer-PDF_compressed.pdf?utm_source=chatgpt.com | course | All levels
+Full-Stack Engineering - Course / reference 02 | https://fullstackacademy.in/wp-content/uploads/2024/12/MERN-Course-content-1.pdf?utm_source=chatgpt.com | course | All levels
+Full-Stack Engineering - Course / reference 03 | https://books.google.com/books?id=anteDwAAQBAJ&utm_source=chatgpt.com | course | All levels
+Full-Stack Engineering - Course / reference 04 | https://github.com/manitejagarlapati/full_stack_web_dev?utm_source=chatgpt.com | course | All levels
+Full-Stack Engineering - Course / reference 05 | https://docs.rizwanashiq.com/?utm_source=chatgpt.com | course | All levels
+Full-Stack Engineering - Course / reference 06 | https://link.springer.com/book/10.1007/978-1-4842-4391-6?utm_source=chatgpt.com | course | All levels
+Full-Stack Engineering - Course / reference 07 | https://www.mongodb.com/resources/languages/mern-stack-tutorial?utm_source=chatgpt.com | course | All levels
+Full-Stack Engineering - Course / reference 09 | https://kelcaigroup.com/course/full-stack-web-development-ebed?utm_source=chatgpt.com | course | All levels
+fullstack engineering - YouTube lesson 01 | https://youtu.be/kJEsTjH5mVg?si=wxzzIoBgFi2-gWRn | youtube | All levels
+fullstack engineering - YouTube lesson 02 | https://youtu.be/Eafgk0GbEUg?si=CN1vuvWYPK-vH8CB | youtube | All levels
+fullstack engineering - YouTube lesson 03 | https://youtu.be/c-QsfbznSXI?si=cBltGk0tmog5MmV4 | youtube | All levels
+fullstack engineering - YouTube lesson 04 | https://youtu.be/Oe421EPjeBE?si=QgcRg2ZqMmunCj7n | youtube | All levels
+fullstack engineering - YouTube lesson 05 | https://youtu.be/LzMnsfqjzkA?si=a24X7eMpOXfCojxv | youtube | All levels
+fullstack engineering - YouTube lesson 06 | https://youtu.be/1mKtGF3OvQs?si=oVlO1ZTbcuzMuECn | youtube | All levels
+fullstack engineering - YouTube lesson 07 | https://youtu.be/nu_pCVPKzTk?si=LLZtRSImU-INbZ5A | youtube | All levels
+fullstack engineering - YouTube lesson 08 | https://youtu.be/JD-age0BPVo?si=0YMNbY0yMaUXycM6 | youtube | All levels
+fullstack engineering - YouTube lesson 09 | https://youtu.be/H91aqUHn8sE?si=6afU7cNv5igGZABs | youtube | All levels
+fullstack engineering - YouTube lesson 10 | https://youtu.be/ZxMB6Njs3ck?si=c3X6ZXk7eEWAm56G | youtube | All levels

@@ -1,0 +1,71 @@
+# Cloud Engineering
+# Format: Title | URL | Type | Level
+Cloud Engineering YouTube learning | https://www.youtube.com/@amazonwebservices | youtube | All levels
+Cloud Engineering - Course / reference 01 | https://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-overview/aws-overview.pdf?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 02 | https://github.com/YashGarg11/aws-cloud-foundations-notes?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 03 | https://github.com/avinashadev/aws-notes?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 04 | https://github.com/YashGarg11/aws-cloud-foundations-notes/blob/main/ec2.pdf?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 05 | https://github.com/YashGarg11/aws-cloud-foundations-notes/blob/main/AWS%20S3%20Service.pdf?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 06 | https://github.com/YashGarg11/aws-cloud-foundations-notes/blob/main/Amazon%20VPC.pdf?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 07 | https://github.com/YashGarg11/aws-cloud-foundations-notes/blob/main/AMAZON%20RDS.pdf?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 08 | https://github.com/YashGarg11/aws-cloud-foundations-notes/blob/main/aws%20eks%20service.pdf?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 09 | https://github.com/YashGarg11/aws-cloud-foundations-notes/blob/main/ami.pdf?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 10 | https://github.com/YashGarg11/aws-cloud-foundations-notes/blob/main/aws%20intro%20and%201st%20service.pdf?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 01 | https://www.connection.com/media/s0pc1mle/azure-cloud-adoption-framework.pdf?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 02 | https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 03 | https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 04 | https://learn.microsoft.com/en-us/azure/cloud-adoption-framework/ready/landing-zone/design-areas?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 05 | https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-900?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 06 | https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-104?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 08 | https://github.com/MicrosoftDocs/cloud-adoption-framework/blob/main/docs/ready/landing-zone/design-area/identity-access-landing-zones.md?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 10 | https://learn.microsoft.com/en-us/azure/architecture/?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 01 | https://storage.googleapis.com/cloud-training/CLS_LIVE_DataSheets/2/English/T-KUBGKE-I_DS_EN.pdf?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 02 | https://docs.cloud.google.com/iam/docs?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 03 | https://docs.cloud.google.com/docs/get-started?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 04 | https://docs.cloud.google.com/?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 05 | https://cloud.google.com/docs/storage?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 06 | https://docs.cloud.google.com/iam/docs/iam-security-architecture?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 07 | https://docs.cloud.google.com/architecture/identity?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 08 | https://docs.cloud.google.com/docs/access-resources?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 09 | https://docs.cloud.google.com/architecture/secure-data-environments?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - Course / reference 10 | https://github.com/GoogleCloudPlatform/terraform-google-examples?utm_source=chatgpt.com | course | All levels
+Cloud Engineering - PDF YouTube lesson 01 | https://youtu.be/dMVowidqBnw | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 02 | https://youtu.be/w4c88CmYtuw | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 03 | https://youtu.be/nLQNFuSpLTk | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 04 | https://youtu.be/-8032k26RWA | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 05 | https://youtu.be/c3Cn4xYfxJY | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 06 | https://youtu.be/OlAmyf8_404 | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 07 | https://youtu.be/10PbGbTUSAg | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 08 | https://youtu.be/8n-kWJetQRk | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 10 | https://youtu.be/RgvztOD8bR4 | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 11 | https://youtu.be/Dz3IxCVTD1c | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 12 | https://youtu.be/XWuP5Yf5ILI | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 13 | https://youtu.be/iBy5PdTplYs | youtube | All levels
+Cloud Engineering - PDF YouTube lesson 14 | https://youtu.be/WO7wP3QaJ_g | youtube | All levels
+Cloud Engineering - YouTube lesson 01 | https://youtu.be/N4sJj-SxX00?si=O7bu4iLBfSQgv22E | youtube | All levels
+Cloud Engineering - YouTube lesson 02 | https://youtu.be/91JZG07lNY0?si=UiQD20eAk-cZA30K | youtube | All levels
+Cloud Engineering - YouTube lesson 03 | https://youtu.be/K3bclpu1kus?si=R9DiNfrQMYo5cm6y | youtube | All levels
+Cloud Engineering - YouTube lesson 04 | https://www.youtube.com/live/KE3RVpq2ATQ?si=gdyYNlWojt3u_BgB | youtube | All levels
+Cloud Engineering - YouTube lesson 05 | https://youtu.be/k1RI5locZE4?si=UTqsdUwSRC1iuRmS | youtube | All levels
+Cloud Engineering - YouTube lesson 06 | https://www.youtube.com/live/WkJ0xB1dPwM?si=ShkK3G54GO_R9cON | youtube | All levels
+Cloud Engineering - YouTube lesson 07 | https://www.youtube.com/live/3Kh6WmGo0vw?si=zzbIO6RmF3Exv3nM | youtube | All levels
+Cloud Engineering - YouTube lesson 08 | https://www.youtube.com/live/1UrW8kFnFlc?si=rKAEjJqc4CUCeRJK | youtube | All levels
+Cloud Engineering - YouTube lesson 09 | https://youtu.be/WB4XeU_jGnY?si=-KcCDKljs81Ft8rS | youtube | All levels
+Cloud Engineering - YouTube lesson 10 | https://youtu.be/oqqwaWw8k8M?si=M6syOFT-1RWcZ64U | youtube | All levels
+Cloud Engineering - YouTube lesson 11 | https://www.youtube.com/live/0zkz_5iPKcc?si=iwJTZaQIC2hcGXRW | youtube | All levels
+Cloud Engineering - YouTube lesson 12 | https://youtu.be/tDuruX7XSac?si=U5aB2p2fCKmi8Rnt | youtube | All levels
+Cloud Engineering - YouTube lesson 13 | https://www.youtube.com/live/wK3U7xSt31M?si=y5DWp29h0Hp8zPo5 | youtube | All levels
+Cloud Engineering - YouTube lesson 14 | https://youtu.be/pY0LnKiDwRA?si=rI66C14vWyaXI-Vz | youtube | All levels
+Cloud Engineering - YouTube lesson 15 | https://youtu.be/-pX5PjIYTJs?si=T_eevWoU43JAKbv6 | youtube | All levels
+Cloud Engineering - YouTube lesson 16 | https://www.youtube.com/watch?v=8n-kWJetQRk&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 17 | https://www.youtube.com/watch?v=0Knf9nub4-k&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 18 | https://www.youtube.com/watch?v=j8ppGyfONpo&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 19 | https://www.youtube.com/results?search_query=How+to+Create+a+VM+in+Google+Cloud+Hindi+Urdu+DEVOPS+MADE+SIMPLE&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 20 | https://www.youtube.com/watch?v=OlAmyf8_4O4&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 21 | https://www.youtube.com/watch?v=jpno8FSqpc8&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 22 | https://www.youtube.com/watch?v=6VRatA0SAwE&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 23 | https://www.youtube.com/watch?v=HU58N5fz7B8&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 24 | https://www.youtube.com/results?search_query=Great+Learning+Cloud+Computing+Tutorial+for+Beginners+Google+Cloud+GCP+10+hours&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 25 | https://www.youtube.com/results?search_query=Great+Learning+Cloud+Computing+From+Basics+to+Advanced+AWS+Azure+GCP&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 26 | https://www.youtube.com/results?search_query=Edureka+Google+Cloud+Platform+Full+Course+7+hours+40+minutes&utm_source=chatgpt.com | youtube | All levels
+Cloud Engineering - YouTube lesson 27 | https://www.youtube.com/watch?v=3kDz9hJd9sQ&utm_source=chatgpt.com | youtube | All levels

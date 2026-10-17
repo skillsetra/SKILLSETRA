@@ -1,0 +1,11 @@
+SKILLSETRA — ANONYMOUS LOCAL DEMO
+
+Run START_TEST_NO_SIGNIN.bat from Windows. It creates local Python/Node environments if needed, installs project dependencies, starts FastAPI and Next.js, and opens http://localhost:3000.
+
+- No SKILLSETRA account is required for the local demo.
+- Node.js 20+, Python 3.10+, and internet access for first-time dependency installs are required.
+- The demo launcher sets demo mode and a browser-based AI provider as the default. AI availability depends on browser connectivity and provider/model availability; no provider credential is bundled.
+- Spoken dictation requires a browser with speech-recognition support, microphone permission, and HTTPS (or localhost). Available languages depend on that browser's recognition service; installed text-to-speech voices affect pronunciation/output.
+- This is a demo, not production authentication. Do not use sensitive personal data.
+
+If a service fails to start, review the startup message and files under .skillsetra-run, then follow DEPLOYMENT_GUIDE.md. If port 3000 or 8000 is already in use, stop the existing process before relaunching.

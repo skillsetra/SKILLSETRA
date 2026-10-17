@@ -1,0 +1,2 @@
+import Link from "next/link";import {ArrowLeft} from "lucide-react";import Logo from "../components/Logo";
+export default function NotFound(){return <main className="locked"><div className="auth-card" style={{textAlign:"center"}}><Logo/><div className="eyebrow">404 / signal lost</div><h2>This page is outside your competency map.</h2><p>That route doesn't exist in the current workspace.</p><Link href="/dashboard" className="button primary">Return to dashboard <ArrowLeft/></Link></div></main>}

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://skillsetra-ai.vercel.app/sitemap.xml

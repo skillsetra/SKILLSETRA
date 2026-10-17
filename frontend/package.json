@@ -1,0 +1,28 @@
+{
+  "name": "skillsetra",
+  "version": "2.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "typecheck": "tsc --noEmit",
+    "test:interview": "node --test tests/interview-questions.test.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "test:coach-voice": "node --test tests/coach-voice.test.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.0",
+    "lucide-react": "^0.468.0",
+    "next": "15.5.28",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "recharts": "^2.15.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "typescript": "^5.7.3"
+  }
+}

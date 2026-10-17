@@ -1,0 +1,19 @@
+"use client";
+import {FormEvent,useState} from "react";
+import Link from "next/link";
+import {useApp} from "../../components/AppProvider";
+import {ArrowRight,Sparkles,MailCheck} from "lucide-react";
+import Logo from "../../components/Logo";
+import {supabase} from "../../lib/supabase";
+export default function SignUp(){
+ const {signUp,demoAvailable,startDemo}=useApp();const [name,setName]=useState("");const [email,setEmail]=useState("");const [password,setPassword]=useState("");const [error,setError]=useState("");const [success,setSuccess]=useState("");const [busy,setBusy]=useState(false);
+ async function go(e:FormEvent){e.preventDefault();setError("");setSuccess("");setBusy(true);try{const r=await signUp(name.trim(),email.trim(),password);if(r.authenticated){window.location.assign("/dashboard");return}setSuccess(r.confirmationRequired?"Account created. Check your email for the Supabase confirmation link, then return here to sign in.":"Your account request was accepted. You can now sign in.");setPassword("")}catch(x:any){setError(x.message||"Unable to create account")}finally{setBusy(false)}}
+ async function beginDemo(){setError("");setSuccess("");setBusy(true);try{await startDemo();window.location.assign("/onboarding")}catch(x:any){setError(x.message||"Could not start the demo.")}finally{setBusy(false)}}
+ return <main id="main-content" className="locked"><section className="auth-card auth-card-split"><Logo/><div className="eyebrow" style={{marginTop:25}}>CREATE YOUR ACCOUNT</div><h1>Build your evidence-based career path.</h1><p>Connect your target role, competency gaps, inspectable evidence, focused learning and assessments in one workspace.</p>
+ {error&&<div className="error" role="alert">{error}</div>}{success&&<div className="auth-success" role="status"><MailCheck size={18}/><span>{success}</span></div>}
+ {!supabase&&<div className="auth-context" role="note"><strong>Supabase setup required</strong><p>Account creation becomes active after you add <code>NEXT_PUBLIC_SUPABASE_URL</code> and <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> to <code>frontend/.env.local</code> or your hosting environment, then rebuild/redeploy. No account password is stored in this website's code.</p></div>}
+ <form onSubmit={go}><div className="form-grid" style={{marginTop:18}}><div className="field full"><label htmlFor="name">Full name</label><input id="name" autoComplete="name" required maxLength={120} value={name} onChange={e=>setName(e.target.value)} placeholder="Your name"/></div><div className="field full"><label htmlFor="email">Email</label><input id="email" type="email" autoComplete="email" required maxLength={320} value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></div><div className="field full"><label htmlFor="password">Password</label><input id="password" autoComplete="new-password" type="password" required minLength={8} maxLength={128} value={password} onChange={e=>setPassword(e.target.value)} placeholder="At least 8 characters"/><small>Use a unique password of at least 8 characters.</small></div></div><button className="button primary" style={{width:"100%",marginTop:15}} disabled={busy||!supabase||!name.trim()||!email.trim()||password.length<8}>{busy?"Creating account…":<>Let’s Start <ArrowRight size={16}/></>}</button></form>
+ <p style={{marginTop:18}}>Already have an account? <Link href="/sign-in">Sign in</Link></p>
+ {demoAvailable&&<div className="auth-demo-choice"><span>Just exploring first?</span><button type="button" className="button" disabled={busy} onClick={beginDemo}>{busy?"Starting demo…":<>Try a Demo <Sparkles size={16}/></>}</button><small>No account required. Demo activity is separate from your account.</small></div>}
+ <nav className="auth-legal-links" aria-label="Legal and help"><Link href="/features">Features</Link><Link href="/privacy">Privacy</Link><Link href="/terms">Terms</Link><Link href="/contact">Contact</Link></nav></section></main>
+}

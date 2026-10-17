@@ -1,0 +1,22 @@
+# Kubernetes
+# Format: Title | URL | Type | Level
+Kubernetes - Course / reference 01 | https://kubeconcepts.readthedocs.io/_/downloads/en/latest/pdf/?utm_source=chatgpt.com | course | All levels
+Kubernetes - Course / reference 02 | https://github.com/PlatformRelay/Kubernetes-Workshop?utm_source=chatgpt.com | course | All levels
+Kubernetes - Course / reference 03 | https://kubernetes.io/docs/concepts/?utm_source=chatgpt.com | course | All levels
+Kubernetes - Course / reference 04 | https://kubernetes.io/docs/concepts/architecture/?utm_source=chatgpt.com | course | All levels
+Kubernetes - Course / reference 05 | https://kubernetes.io/docs/concepts/workloads/?utm_source=chatgpt.com | course | All levels
+Kubernetes - Course / reference 06 | https://kubernetes.io/docs/concepts/services-networking/?utm_source=chatgpt.com | course | All levels
+Kubernetes - Course / reference 07 | https://kubernetes.io/docs/concepts/storage/?utm_source=chatgpt.com | course | All levels
+Kubernetes - Course / reference 08 | https://kubernetes.io/docs/concepts/configuration/?utm_source=chatgpt.com | course | All levels
+Kubernetes - Course / reference 09 | https://kubernetes.io/docs/concepts/security/?utm_source=chatgpt.com | course | All levels
+Kubernetes - Course / reference 10 | https://www.cncf.io/free-ebook-kubernetes-deployment-security-patterns/?utm_source=chatgpt.com | course | All levels
+Kubernetes - YouTube lesson 01 | https://youtu.be/5NXmbV50IxE?si=GBD2TxlBCh32IqQk | youtube | All levels
+Kubernetes - YouTube lesson 02 | https://www.youtube.com/live/fTuEKYpM3Q0?si=ooT_fJnwCRGWzjzJ | youtube | All levels
+Kubernetes - YouTube lesson 03 | https://youtu.be/X48VuDVv0do?si=Uqm7JlvXwSDyC78z | youtube | All levels
+Kubernetes - YouTube lesson 04 | https://youtu.be/_4uQI4ihGVU?si=5NOS15tQKb9L1-CR | youtube | All levels
+Kubernetes - YouTube lesson 05 | https://youtu.be/d6WC5n9G_sM?si=KNgMK5rJcvQumAS7 | youtube | All levels
+Kubernetes - YouTube lesson 06 | https://youtu.be/XuSQU5Grv1g?si=gVQ9V-8cigg5dXqI | youtube | All levels
+Kubernetes - YouTube lesson 07 | https://youtu.be/7bA0gTroJjw?si=y0LHnwQafeWOoHfg | youtube | All levels
+Kubernetes - YouTube lesson 08 | https://www.youtube.com/live/IcslsH7OoYo?si=7gT-bO4KUnrnqOHV | youtube | All levels
+Kubernetes - YouTube lesson 09 | https://youtu.be/AplluksKvzI?si=pcyaB7drbDLyeLQa | youtube | All levels
+Kubernetes - YouTube lesson 10 | https://youtu.be/s_o8dwzRlu4?si=l3H6oZeJEcM6V99x | youtube | All levels

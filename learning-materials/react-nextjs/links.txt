@@ -1,0 +1,13 @@
+# React Nextjs
+# Format: Title | URL | Type | Level
+React & Next.js YouTube learning | https://www.youtube.com/@freecodecamp | youtube | All levels
+React Nextjs - YouTube lesson 01 | https://youtu.be/cHIn7PUAxlg?si=wmP6ivW_0AhsSASx | youtube | All levels
+React Nextjs - YouTube lesson 02 | https://youtu.be/9koAAfPCBxM?si=ABB8mlZHLFMBb6qm | youtube | All levels
+React Nextjs - YouTube lesson 03 | https://youtu.be/JPT3bFIwJYA?si=TBN-1unsaTI6JhtG | youtube | All levels
+React Nextjs - YouTube lesson 04 | https://youtu.be/bMknfKXIFA8?si=E6pxI6gC3mEGgKQq | youtube | All levels
+React Nextjs - YouTube lesson 05 | https://youtu.be/x4rFhThSX04?si=XNgi9unjdefgfCg8 | youtube | All levels
+React Nextjs - YouTube lesson 06 | https://youtu.be/I1V9YWqRIeI?si=lBuSR_jC1WhNd53N | youtube | All levels
+React Nextjs - YouTube lesson 07 | https://youtu.be/k7o9R6eaSes?si=fjCJlHa_daGhwwQt | youtube | All levels
+React Nextjs - YouTube lesson 08 | https://youtu.be/Zq5fmkH0T78?si=-qzkMiIUwqPIjbjN | youtube | All levels
+React Nextjs - YouTube lesson 09 | https://youtu.be/oxEmHmx4jm4?si=X9Ci6yjM0PQjHcPg | youtube | All levels
+React Nextjs - YouTube lesson 10 | https://youtu.be/r8nXMA_pf0w?si=cg9pabBo46dtpAs5 | youtube | All levels

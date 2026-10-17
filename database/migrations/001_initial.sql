@@ -1,0 +1,1 @@
+-- Run database/schema.sql first; this migration is kept for versioned deployment workflows.

@@ -1,0 +1,10 @@
+# Fastapi Apis
+# Format: Title | URL | Type | Level
+FastAPI & APIs YouTube learning | https://www.youtube.com/@freecodecamp | youtube | All levels
+FastAPI & APIS - PDF YouTube lesson 01 | https://youtu.be/SdRdpWIsjLQ | youtube | All levels
+FastAPI & APIS - PDF YouTube lesson 02 | https://youtu.be/OSOvCWFmrtA | youtube | All levels
+FastAPI & APIS - PDF YouTube lesson 03 | https://youtu.be/iukOehU5aF4 | youtube | All levels
+FastAPI & APIS - PDF YouTube lesson 04 | https://youtu.be/tLKKmouUams | youtube | All levels
+FastAPI & APIS - PDF YouTube lesson 05 | https://youtu.be/OsOvCWFmrtA | youtube | All levels
+FastAPI & APIS - PDF YouTube lesson 06 | https://youtu.be/_1POUqk50Ps | youtube | All levels
+FastAPI & APIS - PDF YouTube lesson 07 | https://youtu.be/2tagcO5v9aw | youtube | All levels

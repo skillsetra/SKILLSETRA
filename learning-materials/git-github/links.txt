@@ -1,0 +1,9 @@
+# Git Github
+# Format: Title | URL | Type | Level
+Git Github - YouTube lesson 01 | https://youtu.be/q8EevlEpQ2A?si=CGu0FI-x0ZAWOUH2 | youtube | All levels
+Git Github - YouTube lesson 02 | https://youtu.be/apGV9Kg7ics?si=P2PfZO6_-qB2nqYO | youtube | All levels
+Git Github - YouTube lesson 03 | https://youtu.be/Jdc0i7RcBv8?si=eodedU-DUhRoFlQD | youtube | All levels
+Git Github - YouTube lesson 04 | https://youtu.be/fUdHTZcfoDY?si=Z8vaFJ-n4T_Xn7em | youtube | All levels
+Git Github - YouTube lesson 05 | https://youtu.be/RGOj5yH7evk?si=K86b_WCb3rYJ0TF_ | youtube | All levels
+Git Github - YouTube lesson 06 | https://youtu.be/Uszj_k0DGsg?si=UttJd49pWULtOzvR | youtube | All levels
+Git Github - YouTube lesson 07 | https://youtu.be/AB3J8ufDYHQ?si=zNjw6psoESQQXVFy | youtube | All levels

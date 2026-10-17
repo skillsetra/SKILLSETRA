@@ -1,0 +1,19 @@
+# Frontend Engineering
+# Format: Title | URL | Type | Level
+Frontend Engineering - Course / reference 01 | https://www.kodyfier.com/notes/?utm_source=chatgpt.com | course | All levels
+Frontend Engineering - Course / reference 04 | https://open.umn.edu/opentextbooks/textbooks/1656?utm_source=chatgpt.com | course | All levels
+Frontend Engineering - Course / reference 05 | https://github.com/FrontendMasters/front-end-handbook?utm_source=chatgpt.com | course | All levels
+Frontend Engineering - Course / reference 06 | https://github.com/frontendmasters/front-end-handbook-2019?utm_source=chatgpt.com | course | All levels
+Frontend Engineering - Course / reference 07 | https://1995parham-teaching.github.io/ie-lecture/?utm_source=chatgpt.com | course | All levels
+Frontend Engineering - Course / reference 08 | https://uinexa.io/cheat-sheets/?utm_source=chatgpt.com | course | All levels
+Frontend Engineering - Course / reference 09 | https://flaviocopes.com/javascript-handbook.pdf?utm_source=chatgpt.com | course | All levels
+Frontend Engineering - Course / reference 10 | https://flaviocopes.com/books/react-handbook.pdf?utm_source=chatgpt.com | course | All levels
+Frontend Engineering - YouTube lesson 01 | https://youtu.be/Qrsp4WY3axk?si=yjbSj8x5vns6NW1g | youtube | All levels
+Frontend Engineering - YouTube lesson 02 | https://youtu.be/deR3T80xcZE?si=SaL-fRGT7ivsAmLc | youtube | All levels
+Frontend Engineering - YouTube lesson 03 | https://youtu.be/BI1o2H9z9fo?si=L8Be2_HL6616-h4M | youtube | All levels
+Frontend Engineering - YouTube lesson 04 | https://youtu.be/1Rs2ND1ryYc?si=gq0QDv8YJb9j7w6e | youtube | All levels
+Frontend Engineering - YouTube lesson 05 | https://youtu.be/4UZrsTqkcW4?si=wCsNbLQp6tASQQn7 | youtube | All levels
+Frontend Engineering - YouTube lesson 06 | https://youtu.be/TQQPAU21ZUw?si=z1QR9MIrfWjV32w0 | youtube | All levels
+Frontend Engineering - YouTube lesson 07 | https://youtu.be/DHjqpvDnNGE?si=VJBI-ByVlHtH3Oqp | youtube | All levels
+Frontend Engineering - YouTube lesson 08 | https://youtu.be/Dorf8i6lCuk?si=FW9w93xBwcqhTE7v | youtube | All levels
+Frontend Engineering - YouTube lesson 09 | https://youtu.be/EerdGm-ehJQ?si=rH7AJSpFmu6-St4c | youtube | All levels

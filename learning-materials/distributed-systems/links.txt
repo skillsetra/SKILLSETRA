@@ -1,0 +1,12 @@
+# Distributed Systems
+# Format: Title | URL | Type | Level
+Distributed Systems - YouTube lesson 01 | https://youtu.be/GNhLl0tMToE?si=4cTH6fQ0vhnjY_G6 | youtube | All levels
+Distributed Systems - YouTube lesson 02 | https://youtu.be/klUH2wqxzyw?si=v1oatUuinwiMDBq3 | youtube | All levels
+Distributed Systems - YouTube lesson 03 | https://youtu.be/cQP8WApzIQQ?si=dh2DAMMDWemaE3fV | youtube | All levels
+Distributed Systems - YouTube lesson 04 | https://youtu.be/gA4YXUJX7t8?si=pHMz7aq9facEmvjP | youtube | All levels
+Distributed Systems - YouTube lesson 05 | https://youtu.be/M_teob23ZzY?si=UnxMapMoXeyR5zgF | youtube | All levels
+Distributed Systems - YouTube lesson 06 | https://youtu.be/UzzcUS2OHqo?si=tmMmcI6qCn79PYu1 | youtube | All levels
+Distributed Systems - YouTube lesson 07 | https://youtu.be/64Zp3tzNbpE?si=SzjD1izoFeWvGCT2 | youtube | All levels
+Distributed Systems - YouTube lesson 08 | https://youtu.be/4r8Mz3MMivY?si=PidpX5gRQlHbpsKL | youtube | All levels
+Distributed Systems - YouTube lesson 09 | https://youtu.be/aDp99WDIM_4?si=dIUNovIhT6obWuYN | youtube | All levels
+Distributed Systems - YouTube lesson 10 | https://youtu.be/4eW5SWBi7vs?si=pwjXK43xZPrGQozi | youtube | All levels

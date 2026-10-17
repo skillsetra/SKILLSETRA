@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: skillsetra-demo
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: DEMO_MODE
+        value: "true"
+      - key: ENVIRONMENT
+        value: demo
+      - key: AI_PROVIDER
+        value: puter
+      - key: PUTER_MODEL
+        value: openai/gpt-oss-20b
+      - key: BACKEND_INTERNAL_URL
+        value: http://127.0.0.1:8000
+      - key: NEXT_PUBLIC_DEMO_MODE
+        value: "true"
+      - key: NEXT_PUBLIC_API_BASE_URL
+        value: ""

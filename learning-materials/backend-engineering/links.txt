@@ -1,0 +1,21 @@
+# Backend Engineering
+# Format: Title | URL | Type | Level
+Backend Engineering - Course / reference 01 | https://github.com/TheDubeyRishabh/backend-tutorial?utm_source=chatgpt.com | course | All levels
+Backend Engineering - Course / reference 02 | https://github.com/shanmuga-priya-tech/NamasteNodeJSNotes?utm_source=chatgpt.com | course | All levels
+Backend Engineering - Course / reference 03 | https://www.digitalbreakdown.net/sandbox/Ebooks/Pro-Express.js.pdf?utm_source=chatgpt.com | course | All levels
+Backend Engineering - Course / reference 04 | https://kpmoran.cs.gmu.edu/swe-432-f22/lectures/Week-4-Lecture-Backend-Development.pdf?utm_source=chatgpt.com | course | All levels
+Backend Engineering - Course / reference 05 | https://github.com/jagratadeb/LearnNodeJS?utm_source=chatgpt.com | course | All levels
+Backend Engineering - Course / reference 06 | https://github.com/Kumaravi-admin/developer-notes/blob/main/MongoDB/MongoDB-v8.0.9-notes.pdf?utm_source=chatgpt.com | course | All levels
+Backend Engineering - Course / reference 07 | https://www.scribd.com/document/1077245535/Pdf4?utm_source=chatgpt.com | course | All levels
+Backend Engineering - Course / reference 08 | https://www.inteliny.com/resources/how-to/building-production-ready-rest-api?utm_source=chatgpt.com | course | All levels
+Backend Engineering - Course / reference 09 | https://book.usmanlive.com/lecture-slides/?utm_source=chatgpt.com | course | All levels
+Backend Engineering - Course / reference 10 | https://www.slideshare.net/slideshow/comprehensive-backend-development-with-node-js-express-and-mongodb/287597978?utm_source=chatgpt.com | course | All levels
+Backend Engineering - YouTube lesson 01 | https://youtu.be/V3ZPPPKEipA?si=Z_--4waCeqybLqnB | youtube | All levels
+Backend Engineering - YouTube lesson 02 | https://youtu.be/i7twT3x5yv8?si=Xr2jT3FvE8MAzuNz | youtube | All levels
+Backend Engineering - YouTube lesson 03 | https://youtu.be/UzLMhqg3_Wc?si=roRubliotgOlGX8h | youtube | All levels
+Backend Engineering - YouTube lesson 04 | https://youtu.be/UmljXZIypDc?si=LibMzst2O3ECk4Kg | youtube | All levels
+Backend Engineering - YouTube lesson 05 | https://youtu.be/t-uAgI-AUxc?si=ynuJo0Zeg5WdZwBq | youtube | All levels
+Backend Engineering - YouTube lesson 06 | https://youtu.be/fgTGADljAeg?si=L6E4p8XDBlvF6BcB | youtube | All levels
+Backend Engineering - YouTube lesson 07 | https://youtu.be/Eafgk0GbEUg?si=r7eiqj7mpZ7jrQPB | youtube | All levels
+Backend Engineering - YouTube lesson 08 | https://youtu.be/pdk60AyhMNM?si=QGff8CNROjapA079 | youtube | All levels
+Backend Engineering - YouTube lesson 09 | https://youtu.be/KOutPbKc9UM?si=74aZom5Lfl45xOqL | youtube | All levels

@@ -1,0 +1,12 @@
+# Cybersecurity
+# Format: Title | URL | Type | Level
+Cybersecurity YouTube learning | https://www.youtube.com/@OWASPGLOBAL | youtube | All levels
+Cybersecurity - PDF YouTube lesson 01 | https://youtu.be/ug8WOsFiVJo | youtube | All levels
+Cybersecurity - PDF YouTube lesson 02 | https://youtu.be/OtcP8c4wZys | youtube | All levels
+Cybersecurity - PDF YouTube lesson 03 | https://youtu.be/uqdYZ5aETTk | youtube | All levels
+Cybersecurity - PDF YouTube lesson 04 | https://youtu.be/2eLJNBroFrg | youtube | All levels
+Cybersecurity - PDF YouTube lesson 01 | https://youtu.be/RgvztOD8bR4 | youtube | All levels
+Cybersecurity - PDF YouTube lesson 02 | https://youtu.be/Dz3IxCVTD1c | youtube | All levels
+Cybersecurity - PDF YouTube lesson 03 | https://youtu.be/XWuP5Yf5ILI | youtube | All levels
+Cybersecurity - PDF YouTube lesson 04 | https://youtu.be/iBy5PdTplYs | youtube | All levels
+Cybersecurity - PDF YouTube lesson 05 | https://youtu.be/WO7wP3QaJ_g | youtube | All levels

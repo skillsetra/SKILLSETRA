@@ -1,0 +1,12 @@
+# Linux Networking
+# Format: Title | URL | Type | Level
+Linux Networking - YouTube lesson 01 | https://youtu.be/8usykf7J30g?si=naHZS85kfq-Hzuyq | youtube | All levels
+Linux Networking - YouTube lesson 02 | https://youtu.be/N3DEyU9j19Y?si=jdXkFVyOXjFKFthO | youtube | All levels
+Linux Networking - YouTube lesson 03 | https://youtu.be/sWbUDq4S6Y8?si=s5i9z48wll3LDHjt | youtube | All levels
+Linux Networking - YouTube lesson 04 | https://youtu.be/2PGnYjbYuUo?si=sCad5Ia2uFDJ_hx6 | youtube | All levels
+Linux Networking - YouTube lesson 05 | https://youtu.be/iSOfkw_YyOU?si=PfP6ThgLMRmEssKv | youtube | All levels
+Linux Networking - YouTube lesson 06 | https://youtu.be/H8W9oMNSuwo?si=aymGyR3kM9hmCp7C | youtube | All levels
+Linux Networking - YouTube lesson 07 | https://youtu.be/0leSQf9ocHw?si=b9CvkLiQQHWpVmOH | youtube | All levels
+Linux Networking - YouTube lesson 08 | https://youtu.be/ldgl9Bd3lLg?si=wQjZd-xPn-UGe1jx | youtube | All levels
+Linux Networking - YouTube lesson 09 | https://youtu.be/TAFBplBYPJs?si=DYTAulJ34dJoStvP | youtube | All levels
+Linux Networking - YouTube lesson 10 | https://youtu.be/ywB7FH2MI9k?si=-aaYz1xo5Vt5v_OK | youtube | All levels

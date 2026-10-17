@@ -1,0 +1,11 @@
+# Docker Containers
+# Format: Title | URL | Type | Level
+Docker & Containers YouTube learning | https://www.youtube.com/@Docker | youtube | All levels
+Docker & Containers - PDF YouTube lesson 01 | https://youtu.be/_1POUqk50Ps | youtube | All levels
+Docker & Containers - PDF YouTube lesson 02 | https://youtu.be/2tagcO5v9aw | youtube | All levels
+Docker & Containers - PDF YouTube lesson 03 | https://youtu.be/OSS6bJczlgs | youtube | All levels
+Docker & Containers - PDF YouTube lesson 04 | https://youtu.be/ri0xt4elxlo | youtube | All levels
+Docker & Containers - PDF YouTube lesson 05 | https://youtu.be/rjjES5IsPdg | youtube | All levels
+Docker & Containers - PDF YouTube lesson 06 | https://youtu.be/17BI31rlnRM | youtube | All levels
+Docker & Containers - PDF YouTube lesson 07 | https://youtu.be/pg19Z8LLO6w | youtube | All levels
+Docker & Containers - PDF YouTube lesson 08 | https://youtu.be/3c-iBn73dDE | youtube | All levels

@@ -1,0 +1,25 @@
+node_modules/
+.next/
+*.log
+backend/.venv/
+backend/__pycache__/
+backend/app/__pycache__/
+backend/.env
+frontend/.env.local
+.env
+.env.local
+.DS_Store
+Thumbs.db
+# Local production secrets and generated workspace state
+**/.env.production*
+*.db
+*.sqlite
+*.sqlite3
+**/tsconfig.tsbuildinfo
+# Python/test/build artifacts and local workspace databases
+**/__pycache__/
+**/.pytest_cache/
+*.py[cod]
+*.db-wal
+*.db-shm
+*.tsbuildinfo

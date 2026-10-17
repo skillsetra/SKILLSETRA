@@ -1,0 +1,12 @@
+# Terraform Iac
+# Format: Title | URL | Type | Level
+Terraform Iac - YouTube lesson 01 | https://youtu.be/4JYtAf4M88Y?si=O_fDwIvsJa4HZCwo | youtube | All levels
+Terraform Iac - YouTube lesson 02 | https://youtu.be/HoAUERBrc1k?si=nkxrR1GyHk_vZULy | youtube | All levels
+Terraform Iac - YouTube lesson 03 | https://youtu.be/7xngnjfIlK4?si=Am9-W7b53LsPugzP | youtube | All levels
+Terraform Iac - YouTube lesson 04 | https://youtu.be/bEXfPzoB4RE?si=qvvfe8cWYT2fl0By | youtube | All levels
+Terraform Iac - YouTube lesson 05 | https://youtu.be/SLB_c_ayRMo?si=RRdRLeU2D2kdY46u | youtube | All levels
+Terraform Iac - YouTube lesson 06 | https://youtu.be/hrwZ-iND3bs?si=RC94_SIYFpg4OFtc | youtube | All levels
+Terraform Iac - YouTube lesson 07 | https://youtu.be/SXYslmGZYTg?si=NJTaQ5bvkRO5vurj | youtube | All levels
+Terraform Iac - YouTube lesson 08 | https://youtu.be/3wKV70Ek85w?si=C4VylF0Ny3XoGXMe | youtube | All levels
+Terraform Iac - YouTube lesson 09 | https://youtu.be/YcJ9IeukJL8?si=AXfDwO0TUiYBDPxJ | youtube | All levels
+Terraform Iac - YouTube lesson 10 | https://youtu.be/Qfg6hRY4Tq0?si=zWpZ09RTQ_9yVvX0 | youtube | All levels

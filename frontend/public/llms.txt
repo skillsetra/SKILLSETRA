@@ -1,0 +1,16 @@
+# SKILLSETRA
+
+> SKILLSETRA is an evidence-first competency intelligence project. It connects a target role to required competencies, submitted evidence, review signals, learning actions, assessments and progress tracking.
+
+## Public pages
+- https://skillsetra-demo-main-1-nbis.onrender.com/: Product overview and workflow
+- https://skillsetra-demo-main-1-nbis.onrender.com/features: Product capabilities
+- https://skillsetra-demo-main-1-nbis.onrender.com/how-it-works: Explanation of the evidence loop
+- https://skillsetra-demo-main-1-nbis.onrender.com/about: Project purpose and limitations
+- https://skillsetra-demo-main-1-nbis.onrender.com/help: Getting started
+- https://skillsetra-demo-main-1-nbis.onrender.com/privacy: Privacy information
+- https://skillsetra-demo-main-1-nbis.onrender.com/terms: Terms of use
+- https://skillsetra-demo-main-1-nbis.onrender.com/contact: Contact information
+
+## Important limitations
+AI-generated summaries, suggestions and scores may be incomplete or incorrect. A self-reported claim is not the same as verified evidence. SKILLSETRA does not issue formal credentials or guarantee employment.

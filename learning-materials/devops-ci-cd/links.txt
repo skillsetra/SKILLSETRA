@@ -1,0 +1,12 @@
+# Devops Ci Cd
+# Format: Title | URL | Type | Level
+DevOps & CI/CD YouTube learning | https://www.youtube.com/@GitHub | youtube | All levels
+Devops Ci Cd - YouTube lesson 01 | https://youtu.be/y4RcDlfYKB8?si=cTe8KWhziuEhSE0- | youtube | All levels
+Devops Ci Cd - YouTube lesson 02 | https://youtu.be/tgmM3_2dZwg?si=-TW19MZq0eW-p8Qc | youtube | All levels
+Devops Ci Cd - YouTube lesson 03 | https://youtu.be/5KtRF4NuUWE?si=cnAHganqyNz_hxFQ | youtube | All levels
+Devops Ci Cd - YouTube lesson 04 | https://youtu.be/OsrPBLCQPFI?si=GsDKrvVwjxRBS-RU | youtube | All levels
+Devops Ci Cd - YouTube lesson 05 | https://www.youtube.com/live/2OHDgGqDIfU?si=ufPPg5gJOjNkMS7x | youtube | All levels
+Devops Ci Cd - YouTube lesson 06 | https://youtu.be/361bfIvXMBI?si=4P4gzXrllWpkgE92 | youtube | All levels
+Devops Ci Cd - YouTube lesson 07 | https://youtu.be/qP8kir2GUgo?si=CE0v9PF0Y9L7RykJ | youtube | All levels
+Devops Ci Cd - YouTube lesson 08 | https://youtu.be/hbeLqL6sjKA?si=Hwwi3H6hIqUobCJ3 | youtube | All levels
+Devops Ci Cd - YouTube lesson 09 | https://www.youtube.com/watch?v=ME06qJ2VeXA&utm_source=chatgpt.com | youtube | All levels

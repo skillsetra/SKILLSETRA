@@ -1,0 +1,12 @@
+# Observability Reliability
+# Format: Title | URL | Type | Level
+Observability Reliability - YouTube lesson 01 | https://youtu.be/9DqOMZrc4PA?si=bZ7OMZeXu4sSPgwS | youtube | All levels
+Observability Reliability - YouTube lesson 02 | https://youtu.be/i-_n7ee_u2E?si=1CBwnumh9NYqvb9D | youtube | All levels
+Observability Reliability - YouTube lesson 03 | https://youtu.be/umm-MyCl3Q4?si=FhdYw9rePSUxC0Gg | youtube | All levels
+Observability Reliability - YouTube lesson 04 | https://youtu.be/h4Sl21AKiDg?si=4DLzBfdOh7xRC8z- | youtube | All levels
+Observability Reliability - YouTube lesson 05 | https://youtu.be/QoDqxm7ybLc?si=3InGRWCb2EX9Fbzd | youtube | All levels
+Observability Reliability - YouTube lesson 06 | https://youtu.be/fLoOSXlst_0?si=3uLCAEgyh-kPCR9K | youtube | All levels
+Observability Reliability - YouTube lesson 07 | https://youtu.be/GFnkHIErvns?si=TuCcQLKuxicrRw4O | youtube | All levels
+Observability Reliability - YouTube lesson 08 | https://youtu.be/vKIwAoQcf3M?si=gE__SMBUpdrqdTFu | youtube | All levels
+Observability Reliability - YouTube lesson 09 | https://youtu.be/Il8fmTzsTEc?si=6nqKB6OY1AWrZu1- | youtube | All levels
+Observability & Reliability - YouTube lesson 02 | https://youtu.be/tgmM3_2dZwg?si=xsqSly05eH1NkYI0 | youtube | All levels

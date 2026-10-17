@@ -1,0 +1,2697 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@500;600;700;800&display=swap');
+.stitch-scope{font-family:Inter,system-ui,-apple-system,sans-serif;background:#0f1321;color:#dfe1f6;min-height:100%;}
+.stitch-scope .material-symbols-outlined{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;font-size:20px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;}
+.stitch-scope ::-webkit-scrollbar{width:6px;height:6px}.stitch-scope ::-webkit-scrollbar-track{background:#090e1c}.stitch-scope ::-webkit-scrollbar-thumb{background:#252939;border-radius:4px}.stitch-scope ::-webkit-scrollbar-thumb:hover{background:#3b494b}
+/*! tailwindcss v4.1.10 | MIT License | https://tailwindcss.com */
+@layer properties;
+:root, :host {
+  --font-sans: Inter,system-ui,-apple-system,sans-serif;
+  --font-display: Manrope,Inter,sans-serif;
+  --font-mono: JetBrains Mono,monospace;
+  --color-amber-300: oklch(87.9% 0.169 91.605);
+  --color-amber-400: oklch(82.8% 0.189 84.429);
+  --color-black: #000;
+  --color-white: #fff;
+  --spacing: 0.25rem;
+  --container-xs: 20rem;
+  --container-md: 28rem;
+  --container-lg: 32rem;
+  --container-xl: 36rem;
+  --container-2xl: 42rem;
+  --container-3xl: 48rem;
+  --container-4xl: 56rem;
+  --container-5xl: 64rem;
+  --container-7xl: 80rem;
+  --text-xs: 0.75rem;
+  --text-xs--line-height: calc(1 / 0.75);
+  --text-sm: 0.875rem;
+  --text-sm--line-height: calc(1.25 / 0.875);
+  --text-base: 1rem;
+  --text-base--line-height: calc(1.5 / 1);
+  --text-lg: 1.125rem;
+  --text-lg--line-height: calc(1.75 / 1.125);
+  --text-xl: 1.25rem;
+  --text-xl--line-height: calc(1.75 / 1.25);
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: calc(2 / 1.5);
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: calc(2.25 / 1.875);
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: calc(2.5 / 2.25);
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1;
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 1;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  --font-weight-black: 900;
+  --tracking-tight: -0.025em;
+  --tracking-wider: 0.05em;
+  --tracking-widest: 0.1em;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-relaxed: 1.625;
+  --radius-sm: 0.25rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
+  --radius-2xl: 1rem;
+  --radius-3xl: 1.5rem;
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --animate-spin: spin 1s linear infinite;
+  --animate-ping: ping 1s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-bounce: bounce 1s infinite;
+  --blur-sm: 8px;
+  --blur-md: 12px;
+  --blur-xl: 24px;
+  --blur-2xl: 40px;
+  --blur-3xl: 64px;
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.stitch-scope .pointer-events-none {
+  pointer-events: none;
+}
+.stitch-scope .absolute {
+  position: absolute;
+}
+.stitch-scope .fixed {
+  position: fixed;
+}
+.stitch-scope .relative {
+  position: relative;
+}
+.stitch-scope .inset-0 {
+  inset: calc(var(--spacing) * 0);
+}
+.stitch-scope .-top-16 {
+  top: calc(var(--spacing) * -16);
+}
+.stitch-scope .-top-20 {
+  top: calc(var(--spacing) * -20);
+}
+.stitch-scope .-top-24 {
+  top: calc(var(--spacing) * -24);
+}
+.stitch-scope .-top-40 {
+  top: calc(var(--spacing) * -40);
+}
+.stitch-scope .top-0 {
+  top: calc(var(--spacing) * 0);
+}
+.stitch-scope .top-1 {
+  top: calc(var(--spacing) * 1);
+}
+.stitch-scope .top-2\.5 {
+  top: calc(var(--spacing) * 2.5);
+}
+.stitch-scope .top-4 {
+  top: calc(var(--spacing) * 4);
+}
+.stitch-scope .top-\[600px\] {
+  top: 600px;
+}
+.stitch-scope .top-\[1400px\] {
+  top: 1400px;
+}
+.stitch-scope .-right-1 {
+  right: calc(var(--spacing) * -1);
+}
+.stitch-scope .-right-2 {
+  right: calc(var(--spacing) * -2);
+}
+.stitch-scope .-right-16 {
+  right: calc(var(--spacing) * -16);
+}
+.stitch-scope .-right-20 {
+  right: calc(var(--spacing) * -20);
+}
+.stitch-scope .-right-24 {
+  right: calc(var(--spacing) * -24);
+}
+.stitch-scope .-right-48 {
+  right: calc(var(--spacing) * -48);
+}
+.stitch-scope .right-0 {
+  right: calc(var(--spacing) * 0);
+}
+.stitch-scope .right-1 {
+  right: calc(var(--spacing) * 1);
+}
+.stitch-scope .right-1\/3 {
+  right: calc(1/3 * 100%);
+}
+.stitch-scope .right-4 {
+  right: calc(var(--spacing) * 4);
+}
+.stitch-scope .right-6 {
+  right: calc(var(--spacing) * 6);
+}
+.stitch-scope .-bottom-1 {
+  bottom: calc(var(--spacing) * -1);
+}
+.stitch-scope .-bottom-2 {
+  bottom: calc(var(--spacing) * -2);
+}
+.stitch-scope .-bottom-24 {
+  bottom: calc(var(--spacing) * -24);
+}
+.stitch-scope .bottom-3 {
+  bottom: calc(var(--spacing) * 3);
+}
+.stitch-scope .bottom-6 {
+  bottom: calc(var(--spacing) * 6);
+}
+.stitch-scope .-left-48 {
+  left: calc(var(--spacing) * -48);
+}
+.stitch-scope .left-0 {
+  left: calc(var(--spacing) * 0);
+}
+.stitch-scope .left-1\/2 {
+  left: calc(1/2 * 100%);
+}
+.stitch-scope .left-3 {
+  left: calc(var(--spacing) * 3);
+}
+.stitch-scope .z-10 {
+  z-index: 10;
+}
+.stitch-scope .z-40 {
+  z-index: 40;
+}
+.stitch-scope .z-50 {
+  z-index: 50;
+}
+.stitch-scope .mx-auto {
+  margin-inline: auto;
+}
+.stitch-scope .my-0\.5 {
+  margin-block: calc(var(--spacing) * 0.5);
+}
+.stitch-scope .-mt-1 {
+  margin-top: calc(var(--spacing) * -1);
+}
+.stitch-scope .mt-0\.5 {
+  margin-top: calc(var(--spacing) * 0.5);
+}
+.stitch-scope .mt-1 {
+  margin-top: calc(var(--spacing) * 1);
+}
+.stitch-scope .mt-1\.5 {
+  margin-top: calc(var(--spacing) * 1.5);
+}
+.stitch-scope .mt-2 {
+  margin-top: calc(var(--spacing) * 2);
+}
+.stitch-scope .mt-2\.5 {
+  margin-top: calc(var(--spacing) * 2.5);
+}
+.stitch-scope .mt-3 {
+  margin-top: calc(var(--spacing) * 3);
+}
+.stitch-scope .mt-4 {
+  margin-top: calc(var(--spacing) * 4);
+}
+.stitch-scope .mt-6 {
+  margin-top: calc(var(--spacing) * 6);
+}
+.stitch-scope .mt-8 {
+  margin-top: calc(var(--spacing) * 8);
+}
+.stitch-scope .mt-16 {
+  margin-top: calc(var(--spacing) * 16);
+}
+.stitch-scope .mt-auto {
+  margin-top: auto;
+}
+.stitch-scope .mr-1 {
+  margin-right: calc(var(--spacing) * 1);
+}
+.stitch-scope .mb-1 {
+  margin-bottom: calc(var(--spacing) * 1);
+}
+.stitch-scope .mb-1\.5 {
+  margin-bottom: calc(var(--spacing) * 1.5);
+}
+.stitch-scope .mb-2 {
+  margin-bottom: calc(var(--spacing) * 2);
+}
+.stitch-scope .mb-3 {
+  margin-bottom: calc(var(--spacing) * 3);
+}
+.stitch-scope .mb-4 {
+  margin-bottom: calc(var(--spacing) * 4);
+}
+.stitch-scope .mb-6 {
+  margin-bottom: calc(var(--spacing) * 6);
+}
+.stitch-scope .ml-1 {
+  margin-left: calc(var(--spacing) * 1);
+}
+.stitch-scope .ml-2 {
+  margin-left: calc(var(--spacing) * 2);
+}
+.stitch-scope .line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.stitch-scope .block {
+  display: block;
+}
+.stitch-scope .flex {
+  display: flex;
+}
+.stitch-scope .grid {
+  display: grid;
+}
+.stitch-scope .hidden {
+  display: none;
+}
+.stitch-scope .inline-flex {
+  display: inline-flex;
+}
+.stitch-scope .aspect-square {
+  aspect-ratio: 1 / 1;
+}
+.stitch-scope .h-0\.5 {
+  height: calc(var(--spacing) * 0.5);
+}
+.stitch-scope .h-1 {
+  height: calc(var(--spacing) * 1);
+}
+.stitch-scope .h-1\.5 {
+  height: calc(var(--spacing) * 1.5);
+}
+.stitch-scope .h-2 {
+  height: calc(var(--spacing) * 2);
+}
+.stitch-scope .h-2\.5 {
+  height: calc(var(--spacing) * 2.5);
+}
+.stitch-scope .h-3 {
+  height: calc(var(--spacing) * 3);
+}
+.stitch-scope .h-3\.5 {
+  height: calc(var(--spacing) * 3.5);
+}
+.stitch-scope .h-4 {
+  height: calc(var(--spacing) * 4);
+}
+.stitch-scope .h-6 {
+  height: calc(var(--spacing) * 6);
+}
+.stitch-scope .h-7 {
+  height: calc(var(--spacing) * 7);
+}
+.stitch-scope .h-8 {
+  height: calc(var(--spacing) * 8);
+}
+.stitch-scope .h-9 {
+  height: calc(var(--spacing) * 9);
+}
+.stitch-scope .h-10 {
+  height: calc(var(--spacing) * 10);
+}
+.stitch-scope .h-12 {
+  height: calc(var(--spacing) * 12);
+}
+.stitch-scope .h-14 {
+  height: calc(var(--spacing) * 14);
+}
+.stitch-scope .h-16 {
+  height: calc(var(--spacing) * 16);
+}
+.stitch-scope .h-24 {
+  height: calc(var(--spacing) * 24);
+}
+.stitch-scope .h-44 {
+  height: calc(var(--spacing) * 44);
+}
+.stitch-scope .h-80 {
+  height: calc(var(--spacing) * 80);
+}
+.stitch-scope .h-96 {
+  height: calc(var(--spacing) * 96);
+}
+.stitch-scope .h-\[380px\] {
+  height: 380px;
+}
+.stitch-scope .h-\[450px\] {
+  height: 450px;
+}
+.stitch-scope .h-\[500px\] {
+  height: 500px;
+}
+.stitch-scope .h-\[560px\] {
+  height: 560px;
+}
+.stitch-scope .h-\[600px\] {
+  height: 600px;
+}
+.stitch-scope .h-full {
+  height: 100%;
+}
+.stitch-scope .max-h-\[90vh\] {
+  max-height: 90vh;
+}
+.stitch-scope .max-h-\[calc\(100vh-230px\)\] {
+  max-height: calc(100vh - 230px);
+}
+.stitch-scope .min-h-\[380px\] {
+  min-height: 380px;
+}
+.stitch-scope .min-h-screen {
+  min-height: 100vh;
+}
+.stitch-scope .w-1\.5 {
+  width: calc(var(--spacing) * 1.5);
+}
+.stitch-scope .w-2 {
+  width: calc(var(--spacing) * 2);
+}
+.stitch-scope .w-2\.5 {
+  width: calc(var(--spacing) * 2.5);
+}
+.stitch-scope .w-2\/3 {
+  width: calc(2/3 * 100%);
+}
+.stitch-scope .w-3 {
+  width: calc(var(--spacing) * 3);
+}
+.stitch-scope .w-3\.5 {
+  width: calc(var(--spacing) * 3.5);
+}
+.stitch-scope .w-3\/4 {
+  width: calc(3/4 * 100%);
+}
+.stitch-scope .w-4 {
+  width: calc(var(--spacing) * 4);
+}
+.stitch-scope .w-6 {
+  width: calc(var(--spacing) * 6);
+}
+.stitch-scope .w-8 {
+  width: calc(var(--spacing) * 8);
+}
+.stitch-scope .w-9 {
+  width: calc(var(--spacing) * 9);
+}
+.stitch-scope .w-10 {
+  width: calc(var(--spacing) * 10);
+}
+.stitch-scope .w-12 {
+  width: calc(var(--spacing) * 12);
+}
+.stitch-scope .w-14 {
+  width: calc(var(--spacing) * 14);
+}
+.stitch-scope .w-16 {
+  width: calc(var(--spacing) * 16);
+}
+.stitch-scope .w-24 {
+  width: calc(var(--spacing) * 24);
+}
+.stitch-scope .w-64 {
+  width: calc(var(--spacing) * 64);
+}
+.stitch-scope .w-80 {
+  width: calc(var(--spacing) * 80);
+}
+.stitch-scope .w-96 {
+  width: calc(var(--spacing) * 96);
+}
+.stitch-scope .w-\[88\%\] {
+  width: 88%;
+}
+.stitch-scope .w-\[500px\] {
+  width: 500px;
+}
+.stitch-scope .w-\[600px\] {
+  width: 600px;
+}
+.stitch-scope .w-\[1000px\] {
+  width: 1000px;
+}
+.stitch-scope .w-auto {
+  width: auto;
+}
+.stitch-scope .w-fit {
+  width: fit-content;
+}
+.stitch-scope .w-full {
+  width: 100%;
+}
+.stitch-scope .max-w-2xl {
+  max-width: var(--container-2xl);
+}
+.stitch-scope .max-w-3xl {
+  max-width: var(--container-3xl);
+}
+.stitch-scope .max-w-4xl {
+  max-width: var(--container-4xl);
+}
+.stitch-scope .max-w-5xl {
+  max-width: var(--container-5xl);
+}
+.stitch-scope .max-w-7xl {
+  max-width: var(--container-7xl);
+}
+.stitch-scope .max-w-\[140px\] {
+  max-width: 140px;
+}
+.stitch-scope .max-w-\[360px\] {
+  max-width: 360px;
+}
+.stitch-scope .max-w-\[1200px\] {
+  max-width: 1200px;
+}
+.stitch-scope .max-w-\[1600px\] {
+  max-width: 1600px;
+}
+.stitch-scope .max-w-lg {
+  max-width: var(--container-lg);
+}
+.stitch-scope .max-w-md {
+  max-width: var(--container-md);
+}
+.stitch-scope .max-w-xl {
+  max-width: var(--container-xl);
+}
+.stitch-scope .min-w-0 {
+  min-width: calc(var(--spacing) * 0);
+}
+.stitch-scope .min-w-\[260px\] {
+  min-width: 260px;
+}
+.stitch-scope .flex-1 {
+  flex: 1;
+}
+.stitch-scope .shrink-0 {
+  flex-shrink: 0;
+}
+.stitch-scope .flex-grow {
+  flex-grow: 1;
+}
+.stitch-scope .-translate-x-1\/2 {
+  --tw-translate-x: calc(calc(1/2 * 100%) * -1);
+  translate: var(--tw-translate-x) var(--tw-translate-y);
+}
+.stitch-scope .translate-x-3\.5 {
+  --tw-translate-x: calc(var(--spacing) * 3.5);
+  translate: var(--tw-translate-x) var(--tw-translate-y);
+}
+.stitch-scope .transform {
+  transform: var(--tw-rotate-x,) var(--tw-rotate-y,) var(--tw-rotate-z,) var(--tw-skew-x,) var(--tw-skew-y,);
+}
+.stitch-scope .animate-bounce {
+  animation: var(--animate-bounce);
+}
+.stitch-scope .animate-ping {
+  animation: var(--animate-ping);
+}
+.stitch-scope .animate-pulse {
+  animation: var(--animate-pulse);
+}
+.stitch-scope .animate-spin {
+  animation: var(--animate-spin);
+}
+.stitch-scope .cursor-not-allowed {
+  cursor: not-allowed;
+}
+.stitch-scope .cursor-pointer {
+  cursor: pointer;
+}
+.stitch-scope .resize-none {
+  resize: none;
+}
+.stitch-scope .grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.stitch-scope .grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.stitch-scope .flex-col {
+  flex-direction: column;
+}
+.stitch-scope .flex-wrap {
+  flex-wrap: wrap;
+}
+.stitch-scope .items-baseline {
+  align-items: baseline;
+}
+.stitch-scope .items-center {
+  align-items: center;
+}
+.stitch-scope .items-start {
+  align-items: flex-start;
+}
+.stitch-scope .items-stretch {
+  align-items: stretch;
+}
+.stitch-scope .justify-between {
+  justify-content: space-between;
+}
+.stitch-scope .justify-center {
+  justify-content: center;
+}
+.stitch-scope .justify-end {
+  justify-content: flex-end;
+}
+.stitch-scope .gap-1 {
+  gap: calc(var(--spacing) * 1);
+}
+.stitch-scope .gap-1\.5 {
+  gap: calc(var(--spacing) * 1.5);
+}
+.stitch-scope .gap-2 {
+  gap: calc(var(--spacing) * 2);
+}
+.stitch-scope .gap-2\.5 {
+  gap: calc(var(--spacing) * 2.5);
+}
+.stitch-scope .gap-3 {
+  gap: calc(var(--spacing) * 3);
+}
+.stitch-scope .gap-4 {
+  gap: calc(var(--spacing) * 4);
+}
+.stitch-scope .gap-5 {
+  gap: calc(var(--spacing) * 5);
+}
+.stitch-scope .gap-6 {
+  gap: calc(var(--spacing) * 6);
+}
+.stitch-scope .gap-8 {
+  gap: calc(var(--spacing) * 8);
+}
+.stitch-scope .gap-12 {
+  gap: calc(var(--spacing) * 12);
+}
+.stitch-scope .space-y-1 {
+  .stitch-scope :where(& > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 1) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 1) * calc(1 - var(--tw-space-y-reverse)));
+  }
+}
+.stitch-scope .space-y-1\.5 {
+  .stitch-scope :where(& > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 1.5) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 1.5) * calc(1 - var(--tw-space-y-reverse)));
+  }
+}
+.stitch-scope .space-y-2 {
+  .stitch-scope :where(& > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 2) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 2) * calc(1 - var(--tw-space-y-reverse)));
+  }
+}
+.stitch-scope .space-y-2\.5 {
+  .stitch-scope :where(& > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 2.5) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 2.5) * calc(1 - var(--tw-space-y-reverse)));
+  }
+}
+.stitch-scope .space-y-3 {
+  .stitch-scope :where(& > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 3) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 3) * calc(1 - var(--tw-space-y-reverse)));
+  }
+}
+.stitch-scope .space-y-4 {
+  .stitch-scope :where(& > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 4) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 4) * calc(1 - var(--tw-space-y-reverse)));
+  }
+}
+.stitch-scope .space-y-5 {
+  .stitch-scope :where(& > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 5) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 5) * calc(1 - var(--tw-space-y-reverse)));
+  }
+}
+.stitch-scope .space-y-6 {
+  .stitch-scope :where(& > :not(:last-child)) {
+    --tw-space-y-reverse: 0;
+    margin-block-start: calc(calc(var(--spacing) * 6) * var(--tw-space-y-reverse));
+    margin-block-end: calc(calc(var(--spacing) * 6) * calc(1 - var(--tw-space-y-reverse)));
+  }
+}
+.stitch-scope .-space-x-2 {
+  .stitch-scope :where(& > :not(:last-child)) {
+    --tw-space-x-reverse: 0;
+    margin-inline-start: calc(calc(var(--spacing) * -2) * var(--tw-space-x-reverse));
+    margin-inline-end: calc(calc(var(--spacing) * -2) * calc(1 - var(--tw-space-x-reverse)));
+  }
+}
+.stitch-scope .divide-y {
+  .stitch-scope :where(& > :not(:last-child)) {
+    --tw-divide-y-reverse: 0;
+    border-bottom-style: var(--tw-border-style);
+    border-top-style: var(--tw-border-style);
+    border-top-width: calc(1px * var(--tw-divide-y-reverse));
+    border-bottom-width: calc(1px * calc(1 - var(--tw-divide-y-reverse)));
+  }
+}
+.stitch-scope .divide-\[\#252939\]\/80 {
+  .stitch-scope :where(& > :not(:last-child)) {
+    border-color: color-mix(in oklab, #252939 80%, transparent);
+  }
+}
+.stitch-scope .self-start {
+  align-self: flex-start;
+}
+.stitch-scope .truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.stitch-scope .overflow-hidden {
+  overflow: hidden;
+}
+.stitch-scope .overflow-x-auto {
+  overflow-x: auto;
+}
+.stitch-scope .overflow-y-auto {
+  overflow-y: auto;
+}
+.stitch-scope .rounded {
+  border-radius: 0.25rem;
+}
+.stitch-scope .rounded-2xl {
+  border-radius: var(--radius-2xl);
+}
+.stitch-scope .rounded-3xl {
+  border-radius: var(--radius-3xl);
+}
+.stitch-scope .rounded-full {
+  border-radius: calc(infinity * 1px);
+}
+.stitch-scope .rounded-lg {
+  border-radius: var(--radius-lg);
+}
+.stitch-scope .rounded-sm {
+  border-radius: var(--radius-sm);
+}
+.stitch-scope .rounded-xl {
+  border-radius: var(--radius-xl);
+}
+.stitch-scope .border {
+  border-style: var(--tw-border-style);
+  border-width: 1px;
+}
+.stitch-scope .border-2 {
+  border-style: var(--tw-border-style);
+  border-width: 2px;
+}
+.stitch-scope .border-t {
+  border-top-style: var(--tw-border-style);
+  border-top-width: 1px;
+}
+.stitch-scope .border-r {
+  border-right-style: var(--tw-border-style);
+  border-right-width: 1px;
+}
+.stitch-scope .border-b {
+  border-bottom-style: var(--tw-border-style);
+  border-bottom-width: 1px;
+}
+.stitch-scope .border-l {
+  border-left-style: var(--tw-border-style);
+  border-left-width: 1px;
+}
+.stitch-scope .border-dashed {
+  --tw-border-style: dashed;
+  border-style: dashed;
+}
+.stitch-scope .border-\[\#00f0ff\] {
+  border-color: #00f0ff;
+}
+.stitch-scope .border-\[\#00f0ff\]\/20 {
+  border-color: color-mix(in oklab, #00f0ff 20%, transparent);
+}
+.stitch-scope .border-\[\#00f0ff\]\/30 {
+  border-color: color-mix(in oklab, #00f0ff 30%, transparent);
+}
+.stitch-scope .border-\[\#00f0ff\]\/40 {
+  border-color: color-mix(in oklab, #00f0ff 40%, transparent);
+}
+.stitch-scope .border-\[\#3b494b\] {
+  border-color: #3b494b;
+}
+.stitch-scope .border-\[\#3b494b\]\/30 {
+  border-color: color-mix(in oklab, #3b494b 30%, transparent);
+}
+.stitch-scope .border-\[\#3b494b\]\/40 {
+  border-color: color-mix(in oklab, #3b494b 40%, transparent);
+}
+.stitch-scope .border-\[\#65f2b5\]\/20 {
+  border-color: color-mix(in oklab, #65f2b5 20%, transparent);
+}
+.stitch-scope .border-\[\#65f2b5\]\/30 {
+  border-color: color-mix(in oklab, #65f2b5 30%, transparent);
+}
+.stitch-scope .border-\[\#65f2b5\]\/40 {
+  border-color: color-mix(in oklab, #65f2b5 40%, transparent);
+}
+.stitch-scope .border-\[\#3131c0\]\/40 {
+  border-color: color-mix(in oklab, #3131c0 40%, transparent);
+}
+.stitch-scope .border-\[\#252939\] {
+  border-color: #252939;
+}
+.stitch-scope .border-\[\#252939\]\/40 {
+  border-color: color-mix(in oklab, #252939 40%, transparent);
+}
+.stitch-scope .border-\[\#252939\]\/50 {
+  border-color: color-mix(in oklab, #252939 50%, transparent);
+}
+.stitch-scope .border-\[\#252939\]\/60 {
+  border-color: color-mix(in oklab, #252939 60%, transparent);
+}
+.stitch-scope .border-\[\#252939\]\/80 {
+  border-color: color-mix(in oklab, #252939 80%, transparent);
+}
+.stitch-scope .border-\[\#c0c1ff\]\/40 {
+  border-color: color-mix(in oklab, #c0c1ff 40%, transparent);
+}
+.stitch-scope .border-\[\#ffb4ab\]\/20 {
+  border-color: color-mix(in oklab, #ffb4ab 20%, transparent);
+}
+.stitch-scope .border-\[\#ffb4ab\]\/30 {
+  border-color: color-mix(in oklab, #ffb4ab 30%, transparent);
+}
+.stitch-scope .border-\[\#ffb4ab\]\/40 {
+  border-color: color-mix(in oklab, #ffb4ab 40%, transparent);
+}
+.stitch-scope .border-\[\#ffd700\]\/20 {
+  border-color: color-mix(in oklab, #ffd700 20%, transparent);
+}
+.stitch-scope .border-\[\#ffd700\]\/30 {
+  border-color: color-mix(in oklab, #ffd700 30%, transparent);
+}
+.stitch-scope .border-current\/20 {
+  border-color: currentcolor;
+  @supports (color: color-mix(in lab, red, red)) {
+    border-color: color-mix(in oklab, currentcolor 20%, transparent);
+  }
+}
+.stitch-scope .bg-\[\#0f1321\] {
+  background-color: #0f1321;
+}
+.stitch-scope .bg-\[\#00f0ff\] {
+  background-color: #00f0ff;
+}
+.stitch-scope .bg-\[\#00f0ff\]\/5 {
+  background-color: color-mix(in oklab, #00f0ff 5%, transparent);
+}
+.stitch-scope .bg-\[\#00f0ff\]\/10 {
+  background-color: color-mix(in oklab, #00f0ff 10%, transparent);
+}
+.stitch-scope .bg-\[\#00f0ff\]\/15 {
+  background-color: color-mix(in oklab, #00f0ff 15%, transparent);
+}
+.stitch-scope .bg-\[\#00f0ff\]\/20 {
+  background-color: color-mix(in oklab, #00f0ff 20%, transparent);
+}
+.stitch-scope .bg-\[\#1b1f2e\] {
+  background-color: #1b1f2e;
+}
+.stitch-scope .bg-\[\#1b1f2e\]\/80 {
+  background-color: color-mix(in oklab, #1b1f2e 80%, transparent);
+}
+.stitch-scope .bg-\[\#1b1f2e\]\/90 {
+  background-color: color-mix(in oklab, #1b1f2e 90%, transparent);
+}
+.stitch-scope .bg-\[\#3b494b\] {
+  background-color: #3b494b;
+}
+.stitch-scope .bg-\[\#65f2b5\] {
+  background-color: #65f2b5;
+}
+.stitch-scope .bg-\[\#65f2b5\]\/10 {
+  background-color: color-mix(in oklab, #65f2b5 10%, transparent);
+}
+.stitch-scope .bg-\[\#65f2b5\]\/15 {
+  background-color: color-mix(in oklab, #65f2b5 15%, transparent);
+}
+.stitch-scope .bg-\[\#65f2b5\]\/20 {
+  background-color: color-mix(in oklab, #65f2b5 20%, transparent);
+}
+.stitch-scope .bg-\[\#090e1c\] {
+  background-color: #090e1c;
+}
+.stitch-scope .bg-\[\#090e1c\]\/40 {
+  background-color: color-mix(in oklab, #090e1c 40%, transparent);
+}
+.stitch-scope .bg-\[\#090e1c\]\/60 {
+  background-color: color-mix(in oklab, #090e1c 60%, transparent);
+}
+.stitch-scope .bg-\[\#090e1c\]\/70 {
+  background-color: color-mix(in oklab, #090e1c 70%, transparent);
+}
+.stitch-scope .bg-\[\#090e1c\]\/80 {
+  background-color: color-mix(in oklab, #090e1c 80%, transparent);
+}
+.stitch-scope .bg-\[\#090e1c\]\/85 {
+  background-color: color-mix(in oklab, #090e1c 85%, transparent);
+}
+.stitch-scope .bg-\[\#090e1c\]\/90 {
+  background-color: color-mix(in oklab, #090e1c 90%, transparent);
+}
+.stitch-scope .bg-\[\#090e1c\]\/95 {
+  background-color: color-mix(in oklab, #090e1c 95%, transparent);
+}
+.stitch-scope .bg-\[\#171b2a\] {
+  background-color: #171b2a;
+}
+.stitch-scope .bg-\[\#171b2a\]\/40 {
+  background-color: color-mix(in oklab, #171b2a 40%, transparent);
+}
+.stitch-scope .bg-\[\#171b2a\]\/50 {
+  background-color: color-mix(in oklab, #171b2a 50%, transparent);
+}
+.stitch-scope .bg-\[\#171b2a\]\/60 {
+  background-color: color-mix(in oklab, #171b2a 60%, transparent);
+}
+.stitch-scope .bg-\[\#171b2a\]\/80 {
+  background-color: color-mix(in oklab, #171b2a 80%, transparent);
+}
+.stitch-scope .bg-\[\#171b2a\]\/90 {
+  background-color: color-mix(in oklab, #171b2a 90%, transparent);
+}
+.stitch-scope .bg-\[\#3131c0\] {
+  background-color: #3131c0;
+}
+.stitch-scope .bg-\[\#3131c0\]\/10 {
+  background-color: color-mix(in oklab, #3131c0 10%, transparent);
+}
+.stitch-scope .bg-\[\#3131c0\]\/20 {
+  background-color: color-mix(in oklab, #3131c0 20%, transparent);
+}
+.stitch-scope .bg-\[\#3131c0\]\/25 {
+  background-color: color-mix(in oklab, #3131c0 25%, transparent);
+}
+.stitch-scope .bg-\[\#93000a\]\/20 {
+  background-color: color-mix(in oklab, #93000a 20%, transparent);
+}
+.stitch-scope .bg-\[\#93000a\]\/30 {
+  background-color: color-mix(in oklab, #93000a 30%, transparent);
+}
+.stitch-scope .bg-\[\#93000a\]\/40 {
+  background-color: color-mix(in oklab, #93000a 40%, transparent);
+}
+.stitch-scope .bg-\[\#93000a\]\/50 {
+  background-color: color-mix(in oklab, #93000a 50%, transparent);
+}
+.stitch-scope .bg-\[\#252939\] {
+  background-color: #252939;
+}
+.stitch-scope .bg-\[\#252939\]\/70 {
+  background-color: color-mix(in oklab, #252939 70%, transparent);
+}
+.stitch-scope .bg-\[\#303444\] {
+  background-color: #303444;
+}
+.stitch-scope .bg-\[\#303444\]\/40 {
+  background-color: color-mix(in oklab, #303444 40%, transparent);
+}
+.stitch-scope .bg-\[\#849495\] {
+  background-color: #849495;
+}
+.stitch-scope .bg-\[\#b0b2ff\] {
+  background-color: #b0b2ff;
+}
+.stitch-scope .bg-\[\#c0c1ff\] {
+  background-color: #c0c1ff;
+}
+.stitch-scope .bg-\[\#e1e0ff\] {
+  background-color: #e1e0ff;
+}
+.stitch-scope .bg-\[\#ffb4ab\] {
+  background-color: #ffb4ab;
+}
+.stitch-scope .bg-\[\#ffb4ab\]\/10 {
+  background-color: color-mix(in oklab, #ffb4ab 10%, transparent);
+}
+.stitch-scope .bg-\[\#ffd700\] {
+  background-color: #ffd700;
+}
+.stitch-scope .bg-\[\#ffd700\]\/10 {
+  background-color: color-mix(in oklab, #ffd700 10%, transparent);
+}
+.stitch-scope .bg-amber-400 {
+  background-color: var(--color-amber-400);
+}
+.stitch-scope .bg-amber-400\/10 {
+  background-color: color-mix(in srgb, oklch(82.8% 0.189 84.429) 10%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-amber-400) 10%, transparent);
+  }
+}
+.stitch-scope .bg-black\/60 {
+  background-color: color-mix(in srgb, #000 60%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-black) 60%, transparent);
+  }
+}
+.stitch-scope .bg-black\/70 {
+  background-color: color-mix(in srgb, #000 70%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-black) 70%, transparent);
+  }
+}
+.stitch-scope .bg-black\/75 {
+  background-color: color-mix(in srgb, #000 75%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    background-color: color-mix(in oklab, var(--color-black) 75%, transparent);
+  }
+}
+.stitch-scope .bg-transparent {
+  background-color: transparent;
+}
+.stitch-scope .bg-gradient-to-b {
+  --tw-gradient-position: to bottom in oklab;
+  background-image: none;
+}
+.stitch-scope .bg-gradient-to-br {
+  --tw-gradient-position: to bottom right in oklab;
+  background-image: none;
+}
+.stitch-scope .bg-gradient-to-r {
+  --tw-gradient-position: to right in oklab;
+  background-image: none;
+}
+.stitch-scope .from-\[\#00f0ff\] {
+  --tw-gradient-from: #00f0ff;
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+.stitch-scope .from-\[\#00f0ff\]\/15 {
+  --tw-gradient-from: color-mix(in oklab, #00f0ff 15%, transparent);
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+.stitch-scope .from-\[\#090e1c\] {
+  --tw-gradient-from: #090e1c;
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+.stitch-scope .from-\[\#252939\] {
+  --tw-gradient-from: #252939;
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+.stitch-scope .via-\[\#7df4ff\] {
+  --tw-gradient-via: #7df4ff;
+  --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-via-stops);
+}
+.stitch-scope .via-\[\#171b2a\] {
+  --tw-gradient-via: #171b2a;
+  --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-via-stops);
+}
+.stitch-scope .via-\[\#3131c0\]\/20 {
+  --tw-gradient-via: color-mix(in oklab, #3131c0 20%, transparent);
+  --tw-gradient-via-stops: var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-via) var(--tw-gradient-via-position), var(--tw-gradient-to) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-via-stops);
+}
+.stitch-scope .to-\[\#1b1f2e\] {
+  --tw-gradient-to: #1b1f2e;
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+.stitch-scope .to-\[\#65f2b5\] {
+  --tw-gradient-to: #65f2b5;
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+.stitch-scope .to-\[\#090e1c\] {
+  --tw-gradient-to: #090e1c;
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+.stitch-scope .to-\[\#c0c1ff\] {
+  --tw-gradient-to: #c0c1ff;
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+.stitch-scope .to-transparent {
+  --tw-gradient-to: transparent;
+  --tw-gradient-stops: var(--tw-gradient-via-stops, var(--tw-gradient-position), var(--tw-gradient-from) var(--tw-gradient-from-position), var(--tw-gradient-to) var(--tw-gradient-to-position));
+}
+.stitch-scope .bg-clip-text {
+  background-clip: text;
+}
+.stitch-scope .fill-\[\#b9cacb\] {
+  fill: #b9cacb;
+}
+.stitch-scope .object-contain {
+  object-fit: contain;
+}
+.stitch-scope .object-cover {
+  object-fit: cover;
+}
+.stitch-scope .p-0\.5 {
+  padding: calc(var(--spacing) * 0.5);
+}
+.stitch-scope .p-1 {
+  padding: calc(var(--spacing) * 1);
+}
+.stitch-scope .p-1\.5 {
+  padding: calc(var(--spacing) * 1.5);
+}
+.stitch-scope .p-2 {
+  padding: calc(var(--spacing) * 2);
+}
+.stitch-scope .p-2\.5 {
+  padding: calc(var(--spacing) * 2.5);
+}
+.stitch-scope .p-3 {
+  padding: calc(var(--spacing) * 3);
+}
+.stitch-scope .p-3\.5 {
+  padding: calc(var(--spacing) * 3.5);
+}
+.stitch-scope .p-4 {
+  padding: calc(var(--spacing) * 4);
+}
+.stitch-scope .p-5 {
+  padding: calc(var(--spacing) * 5);
+}
+.stitch-scope .p-6 {
+  padding: calc(var(--spacing) * 6);
+}
+.stitch-scope .p-8 {
+  padding: calc(var(--spacing) * 8);
+}
+.stitch-scope .px-0\.5 {
+  padding-inline: calc(var(--spacing) * 0.5);
+}
+.stitch-scope .px-1\.5 {
+  padding-inline: calc(var(--spacing) * 1.5);
+}
+.stitch-scope .px-2 {
+  padding-inline: calc(var(--spacing) * 2);
+}
+.stitch-scope .px-2\.5 {
+  padding-inline: calc(var(--spacing) * 2.5);
+}
+.stitch-scope .px-3 {
+  padding-inline: calc(var(--spacing) * 3);
+}
+.stitch-scope .px-3\.5 {
+  padding-inline: calc(var(--spacing) * 3.5);
+}
+.stitch-scope .px-4 {
+  padding-inline: calc(var(--spacing) * 4);
+}
+.stitch-scope .px-5 {
+  padding-inline: calc(var(--spacing) * 5);
+}
+.stitch-scope .px-6 {
+  padding-inline: calc(var(--spacing) * 6);
+}
+.stitch-scope .px-8 {
+  padding-inline: calc(var(--spacing) * 8);
+}
+.stitch-scope .py-0\.5 {
+  padding-block: calc(var(--spacing) * 0.5);
+}
+.stitch-scope .py-1 {
+  padding-block: calc(var(--spacing) * 1);
+}
+.stitch-scope .py-1\.5 {
+  padding-block: calc(var(--spacing) * 1.5);
+}
+.stitch-scope .py-2 {
+  padding-block: calc(var(--spacing) * 2);
+}
+.stitch-scope .py-2\.5 {
+  padding-block: calc(var(--spacing) * 2.5);
+}
+.stitch-scope .py-3 {
+  padding-block: calc(var(--spacing) * 3);
+}
+.stitch-scope .py-3\.5 {
+  padding-block: calc(var(--spacing) * 3.5);
+}
+.stitch-scope .py-4 {
+  padding-block: calc(var(--spacing) * 4);
+}
+.stitch-scope .py-6 {
+  padding-block: calc(var(--spacing) * 6);
+}
+.stitch-scope .py-8 {
+  padding-block: calc(var(--spacing) * 8);
+}
+.stitch-scope .py-20 {
+  padding-block: calc(var(--spacing) * 20);
+}
+.stitch-scope .py-24 {
+  padding-block: calc(var(--spacing) * 24);
+}
+.stitch-scope .pt-1 {
+  padding-top: calc(var(--spacing) * 1);
+}
+.stitch-scope .pt-2 {
+  padding-top: calc(var(--spacing) * 2);
+}
+.stitch-scope .pt-3 {
+  padding-top: calc(var(--spacing) * 3);
+}
+.stitch-scope .pt-4 {
+  padding-top: calc(var(--spacing) * 4);
+}
+.stitch-scope .pt-6 {
+  padding-top: calc(var(--spacing) * 6);
+}
+.stitch-scope .pt-12 {
+  padding-top: calc(var(--spacing) * 12);
+}
+.stitch-scope .pt-16 {
+  padding-top: calc(var(--spacing) * 16);
+}
+.stitch-scope .pr-3 {
+  padding-right: calc(var(--spacing) * 3);
+}
+.stitch-scope .pb-1 {
+  padding-bottom: calc(var(--spacing) * 1);
+}
+.stitch-scope .pb-2 {
+  padding-bottom: calc(var(--spacing) * 2);
+}
+.stitch-scope .pb-3 {
+  padding-bottom: calc(var(--spacing) * 3);
+}
+.stitch-scope .pb-4 {
+  padding-bottom: calc(var(--spacing) * 4);
+}
+.stitch-scope .pb-20 {
+  padding-bottom: calc(var(--spacing) * 20);
+}
+.stitch-scope .pl-2 {
+  padding-left: calc(var(--spacing) * 2);
+}
+.stitch-scope .pl-9 {
+  padding-left: calc(var(--spacing) * 9);
+}
+.stitch-scope .text-center {
+  text-align: center;
+}
+.stitch-scope .text-left {
+  text-align: left;
+}
+.stitch-scope .text-right {
+  text-align: right;
+}
+.stitch-scope .font-display {
+  font-family: var(--font-display);
+}
+.stitch-scope .font-mono {
+  font-family: var(--font-mono);
+}
+.stitch-scope .font-sans {
+  font-family: var(--font-sans);
+}
+.stitch-scope .text-2xl {
+  font-size: var(--text-2xl);
+  line-height: var(--tw-leading, var(--text-2xl--line-height));
+}
+.stitch-scope .text-3xl {
+  font-size: var(--text-3xl);
+  line-height: var(--tw-leading, var(--text-3xl--line-height));
+}
+.stitch-scope .text-4xl {
+  font-size: var(--text-4xl);
+  line-height: var(--tw-leading, var(--text-4xl--line-height));
+}
+.stitch-scope .text-base {
+  font-size: var(--text-base);
+  line-height: var(--tw-leading, var(--text-base--line-height));
+}
+.stitch-scope .text-lg {
+  font-size: var(--text-lg);
+  line-height: var(--tw-leading, var(--text-lg--line-height));
+}
+.stitch-scope .text-sm {
+  font-size: var(--text-sm);
+  line-height: var(--tw-leading, var(--text-sm--line-height));
+}
+.stitch-scope .text-xl {
+  font-size: var(--text-xl);
+  line-height: var(--tw-leading, var(--text-xl--line-height));
+}
+.stitch-scope .text-xs {
+  font-size: var(--text-xs);
+  line-height: var(--tw-leading, var(--text-xs--line-height));
+}
+.stitch-scope .text-\[9px\] {
+  font-size: 9px;
+}
+.stitch-scope .text-\[10px\] {
+  font-size: 10px;
+}
+.stitch-scope .text-\[11px\] {
+  font-size: 11px;
+}
+.stitch-scope .text-\[13px\] {
+  font-size: 13px;
+}
+.stitch-scope .text-\[19px\] {
+  font-size: 19px;
+}
+.stitch-scope .text-\[20px\] {
+  font-size: 20px;
+}
+.stitch-scope .text-\[22px\] {
+  font-size: 22px;
+}
+.stitch-scope .leading-\[1\.1\] {
+  --tw-leading: 1.1;
+  line-height: 1.1;
+}
+.stitch-scope .leading-relaxed {
+  --tw-leading: var(--leading-relaxed);
+  line-height: var(--leading-relaxed);
+}
+.stitch-scope .leading-snug {
+  --tw-leading: var(--leading-snug);
+  line-height: var(--leading-snug);
+}
+.stitch-scope .leading-tight {
+  --tw-leading: var(--leading-tight);
+  line-height: var(--leading-tight);
+}
+.stitch-scope .font-black {
+  --tw-font-weight: var(--font-weight-black);
+  font-weight: var(--font-weight-black);
+}
+.stitch-scope .font-bold {
+  --tw-font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-bold);
+}
+.stitch-scope .font-extrabold {
+  --tw-font-weight: var(--font-weight-extrabold);
+  font-weight: var(--font-weight-extrabold);
+}
+.stitch-scope .font-medium {
+  --tw-font-weight: var(--font-weight-medium);
+  font-weight: var(--font-weight-medium);
+}
+.stitch-scope .font-semibold {
+  --tw-font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-semibold);
+}
+.stitch-scope .tracking-tight {
+  --tw-tracking: var(--tracking-tight);
+  letter-spacing: var(--tracking-tight);
+}
+.stitch-scope .tracking-wider {
+  --tw-tracking: var(--tracking-wider);
+  letter-spacing: var(--tracking-wider);
+}
+.stitch-scope .tracking-widest {
+  --tw-tracking: var(--tracking-widest);
+  letter-spacing: var(--tracking-widest);
+}
+.stitch-scope .whitespace-pre-line {
+  white-space: pre-line;
+}
+.stitch-scope .text-\[\#00f0ff\] {
+  color: #00f0ff;
+}
+.stitch-scope .text-\[\#3b494b\] {
+  color: #3b494b;
+}
+.stitch-scope .text-\[\#6ffbbe\] {
+  color: #6ffbbe;
+}
+.stitch-scope .text-\[\#7df4ff\] {
+  color: #7df4ff;
+}
+.stitch-scope .text-\[\#65f2b5\] {
+  color: #65f2b5;
+}
+.stitch-scope .text-\[\#00363a\] {
+  color: #00363a;
+}
+.stitch-scope .text-\[\#002022\] {
+  color: #002022;
+}
+.stitch-scope .text-\[\#003824\] {
+  color: #003824;
+}
+.stitch-scope .text-\[\#690005\] {
+  color: #690005;
+}
+.stitch-scope .text-\[\#849495\] {
+  color: #849495;
+}
+.stitch-scope .text-\[\#b0b2ff\] {
+  color: #b0b2ff;
+}
+.stitch-scope .text-\[\#b9cacb\] {
+  color: #b9cacb;
+}
+.stitch-scope .text-\[\#c0c1ff\] {
+  color: #c0c1ff;
+}
+.stitch-scope .text-\[\#d8ffe7\] {
+  color: #d8ffe7;
+}
+.stitch-scope .text-\[\#dbfcff\] {
+  color: #dbfcff;
+}
+.stitch-scope .text-\[\#dfe1f6\] {
+  color: #dfe1f6;
+}
+.stitch-scope .text-\[\#e1e0ff\] {
+  color: #e1e0ff;
+}
+.stitch-scope .text-\[\#ffb4ab\] {
+  color: #ffb4ab;
+}
+.stitch-scope .text-\[\#ffd700\] {
+  color: #ffd700;
+}
+.stitch-scope .text-\[\#ffdad6\] {
+  color: #ffdad6;
+}
+.stitch-scope .text-amber-300 {
+  color: var(--color-amber-300);
+}
+.stitch-scope .text-transparent {
+  color: transparent;
+}
+.stitch-scope .text-white {
+  color: var(--color-white);
+}
+.stitch-scope .uppercase {
+  text-transform: uppercase;
+}
+.stitch-scope .italic {
+  font-style: italic;
+}
+.stitch-scope .placeholder-\[\#849495\] {
+  .stitch-scope &::placeholder {
+    color: #849495;
+  }
+}
+.stitch-scope .accent-\[\#00f0ff\] {
+  accent-color: #00f0ff;
+}
+.stitch-scope .opacity-60 {
+  opacity: 60%;
+}
+.stitch-scope .opacity-75 {
+  opacity: 75%;
+}
+.stitch-scope .shadow-2xl {
+  --tw-shadow: 0 25px 50px -12px var(--tw-shadow-color, rgb(0 0 0 / 0.25));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_0_6px_rgba\(101\,242\,181\,0\.6\)\] {
+  --tw-shadow: 0 0 6px var(--tw-shadow-color, rgba(101,242,181,0.6));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_0_6px_rgba\(101\,242\,181\,0\.8\)\] {
+  --tw-shadow: 0 0 6px var(--tw-shadow-color, rgba(101,242,181,0.8));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_0_6px_rgba\(176\,178\,255\,0\.8\)\] {
+  --tw-shadow: 0 0 6px var(--tw-shadow-color, rgba(176,178,255,0.8));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_0_6px_rgba\(225\,224\,255\,0\.8\)\] {
+  --tw-shadow: 0 0 6px var(--tw-shadow-color, rgba(225,224,255,0.8));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_0_6px_rgba\(255\,180\,171\,0\.8\)\] {
+  --tw-shadow: 0 0 6px var(--tw-shadow-color, rgba(255,180,171,0.8));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_0_8px_rgba\(0\,240\,255\,0\.6\)\] {
+  --tw-shadow: 0 0 8px var(--tw-shadow-color, rgba(0,240,255,0.6));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_0_8px_rgba\(101\,242\,181\,0\.6\)\] {
+  --tw-shadow: 0 0 8px var(--tw-shadow-color, rgba(101,242,181,0.6));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_0_20px_rgba\(0\,240\,255\,0\.3\)\] {
+  --tw-shadow: 0 0 20px var(--tw-shadow-color, rgba(0,240,255,0.3));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_0_25px_rgba\(0\,240\,255\,0\.3\)\] {
+  --tw-shadow: 0 0 25px var(--tw-shadow-color, rgba(0,240,255,0.3));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_1px_8px_rgba\(0\,0\,0\,0\.15\)\] {
+  --tw-shadow: 0 1px 8px var(--tw-shadow-color, rgba(0,0,0,0.15));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[0_1px_12px_rgba\(0\,0\,0\,0\.4\)\] {
+  --tw-shadow: 0 1px 12px var(--tw-shadow-color, rgba(0,0,0,0.4));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-inner {
+  --tw-shadow: inset 0 2px 4px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.05));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-lg {
+  --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-md {
+  --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-sm {
+  --tw-shadow: 0 1px 3px 0 var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 1px 2px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-xl {
+  --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 8px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .ring-1 {
+  --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .ring-2 {
+  --tw-ring-shadow: var(--tw-ring-inset,) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color, currentcolor);
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+}
+.stitch-scope .shadow-\[\#00f0ff\]\/20 {
+  --tw-shadow-color: color-mix(in srgb, #00f0ff 20%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, #00f0ff 20%, transparent) var(--tw-shadow-alpha), transparent);
+  }
+}
+.stitch-scope .shadow-\[\#00f0ff\]\/25 {
+  --tw-shadow-color: color-mix(in srgb, #00f0ff 25%, transparent);
+  @supports (color: color-mix(in lab, red, red)) {
+    --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, #00f0ff 25%, transparent) var(--tw-shadow-alpha), transparent);
+  }
+}
+.stitch-scope .ring-\[\#0f1321\] {
+  --tw-ring-color: #0f1321;
+}
+.stitch-scope .ring-\[\#00f0ff\]\/30 {
+  --tw-ring-color: color-mix(in oklab, #00f0ff 30%, transparent);
+}
+.stitch-scope .ring-\[\#00f0ff\]\/40 {
+  --tw-ring-color: color-mix(in oklab, #00f0ff 40%, transparent);
+}
+.stitch-scope .ring-\[\#090e1c\] {
+  --tw-ring-color: #090e1c;
+}
+.stitch-scope .blur-3xl {
+  --tw-blur: blur(var(--blur-3xl));
+  filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+}
+.stitch-scope .blur-\[90px\] {
+  --tw-blur: blur(90px);
+  filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+}
+.stitch-scope .blur-\[120px\] {
+  --tw-blur: blur(120px);
+  filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+}
+.stitch-scope .blur-\[130px\] {
+  --tw-blur: blur(130px);
+  filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+}
+.stitch-scope .blur-\[140px\] {
+  --tw-blur: blur(140px);
+  filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+}
+.stitch-scope .drop-shadow-\[0_0_24px_rgba\(0\,240\,255\,0\.12\)\] {
+  --tw-drop-shadow-size: drop-shadow(0 0 24px var(--tw-drop-shadow-color, rgba(0,240,255,0.12)));
+  --tw-drop-shadow: var(--tw-drop-shadow-size);
+  filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);
+}
+.stitch-scope .backdrop-blur-2xl {
+  --tw-backdrop-blur: blur(var(--blur-2xl));
+  -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+}
+.stitch-scope .backdrop-blur-md {
+  --tw-backdrop-blur: blur(var(--blur-md));
+  -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+}
+.stitch-scope .backdrop-blur-sm {
+  --tw-backdrop-blur: blur(var(--blur-sm));
+  -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+}
+.stitch-scope .backdrop-blur-xl {
+  --tw-backdrop-blur: blur(var(--blur-xl));
+  -webkit-backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+  backdrop-filter: var(--tw-backdrop-blur,) var(--tw-backdrop-brightness,) var(--tw-backdrop-contrast,) var(--tw-backdrop-grayscale,) var(--tw-backdrop-hue-rotate,) var(--tw-backdrop-invert,) var(--tw-backdrop-opacity,) var(--tw-backdrop-saturate,) var(--tw-backdrop-sepia,);
+}
+.stitch-scope .transition-all {
+  transition-property: all;
+  transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
+.stitch-scope .transition-colors {
+  transition-property: color, background-color, border-color, outline-color, text-decoration-color, fill, stroke, --tw-gradient-from, --tw-gradient-via, --tw-gradient-to;
+  transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
+.stitch-scope .transition-transform {
+  transition-property: transform, translate, scale, rotate;
+  transition-timing-function: var(--tw-ease, var(--default-transition-timing-function));
+  transition-duration: var(--tw-duration, var(--default-transition-duration));
+}
+.stitch-scope .duration-200 {
+  --tw-duration: 200ms;
+  transition-duration: 200ms;
+}
+.stitch-scope .duration-500 {
+  --tw-duration: 500ms;
+  transition-duration: 500ms;
+}
+.stitch-scope .duration-700 {
+  --tw-duration: 700ms;
+  transition-duration: 700ms;
+}
+.stitch-scope .ease-out {
+  --tw-ease: var(--ease-out);
+  transition-timing-function: var(--ease-out);
+}
+.stitch-scope .outline-none {
+  --tw-outline-style: none;
+  outline-style: none;
+}
+.stitch-scope .select-none {
+  -webkit-user-select: none;
+  user-select: none;
+}
+.stitch-scope .\[writing-mode\:vertical-rl\] {
+  writing-mode: vertical-rl;
+}
+.stitch-scope .group-hover\:translate-x-1 {
+  .stitch-scope &:is(:where(.group):hover *) {
+    @media (hover: hover) {
+      --tw-translate-x: calc(var(--spacing) * 1);
+      translate: var(--tw-translate-x) var(--tw-translate-y);
+    }
+  }
+}
+.stitch-scope .group-hover\:scale-110 {
+  .stitch-scope &:is(:where(.group):hover *) {
+    @media (hover: hover) {
+      --tw-scale-x: 110%;
+      --tw-scale-y: 110%;
+      --tw-scale-z: 110%;
+      scale: var(--tw-scale-x) var(--tw-scale-y);
+    }
+  }
+}
+.stitch-scope .group-hover\:text-\[\#00f0ff\] {
+  .stitch-scope &:is(:where(.group):hover *) {
+    @media (hover: hover) {
+      color: #00f0ff;
+    }
+  }
+}
+.stitch-scope .group-hover\:ring-\[\#00f0ff\] {
+  .stitch-scope &:is(:where(.group):hover *) {
+    @media (hover: hover) {
+      --tw-ring-color: #00f0ff;
+    }
+  }
+}
+.stitch-scope .selection\:bg-\[\#00f0ff\] {
+  .stitch-scope & *::selection {
+    background-color: #00f0ff;
+  }
+  .stitch-scope &::selection {
+    background-color: #00f0ff;
+  }
+}
+.stitch-scope .selection\:bg-\[\#00f0ff\]\/20 {
+  .stitch-scope & *::selection {
+    background-color: color-mix(in oklab, #00f0ff 20%, transparent);
+  }
+  .stitch-scope &::selection {
+    background-color: color-mix(in oklab, #00f0ff 20%, transparent);
+  }
+}
+.stitch-scope .selection\:text-\[\#00363a\] {
+  .stitch-scope & *::selection {
+    color: #00363a;
+  }
+  .stitch-scope &::selection {
+    color: #00363a;
+  }
+}
+.stitch-scope .placeholder\:text-\[\#3b494b\] {
+  .stitch-scope &::placeholder {
+    color: #3b494b;
+  }
+}
+.stitch-scope .hover\:border-\[\#00f0ff\]\/40 {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      border-color: color-mix(in oklab, #00f0ff 40%, transparent);
+    }
+  }
+}
+.stitch-scope .hover\:border-\[\#00f0ff\]\/50 {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      border-color: color-mix(in oklab, #00f0ff 50%, transparent);
+    }
+  }
+}
+.stitch-scope .hover\:border-\[\#3b494b\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      border-color: #3b494b;
+    }
+  }
+}
+.stitch-scope .hover\:border-\[\#6ffbbe\]\/50 {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      border-color: color-mix(in oklab, #6ffbbe 50%, transparent);
+    }
+  }
+}
+.stitch-scope .hover\:border-\[\#c0c1ff\]\/50 {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      border-color: color-mix(in oklab, #c0c1ff 50%, transparent);
+    }
+  }
+}
+.stitch-scope .hover\:bg-\[\#00f0ff\]\/20 {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      background-color: color-mix(in oklab, #00f0ff 20%, transparent);
+    }
+  }
+}
+.stitch-scope .hover\:bg-\[\#1b1f2e\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      background-color: #1b1f2e;
+    }
+  }
+}
+.stitch-scope .hover\:bg-\[\#7df4ff\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      background-color: #7df4ff;
+    }
+  }
+}
+.stitch-scope .hover\:bg-\[\#3131c0\]\/80 {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      background-color: color-mix(in oklab, #3131c0 80%, transparent);
+    }
+  }
+}
+.stitch-scope .hover\:bg-\[\#252939\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      background-color: #252939;
+    }
+  }
+}
+.stitch-scope .hover\:bg-\[\#252939\]\/30 {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      background-color: color-mix(in oklab, #252939 30%, transparent);
+    }
+  }
+}
+.stitch-scope .hover\:bg-\[\#252939\]\/80 {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      background-color: color-mix(in oklab, #252939 80%, transparent);
+    }
+  }
+}
+.stitch-scope .hover\:bg-\[\#303444\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      background-color: #303444;
+    }
+  }
+}
+.stitch-scope .hover\:bg-\[\#353948\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      background-color: #353948;
+    }
+  }
+}
+.stitch-scope .hover\:bg-\[\#a6ffd4\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      background-color: #a6ffd4;
+    }
+  }
+}
+.stitch-scope .hover\:text-\[\#dbfcff\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      color: #dbfcff;
+    }
+  }
+}
+.stitch-scope .hover\:text-\[\#dfe1f6\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      color: #dfe1f6;
+    }
+  }
+}
+.stitch-scope .hover\:text-white {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      color: var(--color-white);
+    }
+  }
+}
+.stitch-scope .hover\:underline {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      text-decoration-line: underline;
+    }
+  }
+}
+.stitch-scope .hover\:shadow-\[0_0_16px_rgba\(0\,240\,255\,0\.4\)\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      --tw-shadow: 0 0 16px var(--tw-shadow-color, rgba(0,240,255,0.4));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+}
+.stitch-scope .hover\:shadow-\[0_0_24px_rgba\(0\,240\,255\,0\.4\)\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      --tw-shadow: 0 0 24px var(--tw-shadow-color, rgba(0,240,255,0.4));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+}
+.stitch-scope .hover\:shadow-\[0_4px_24px_rgba\(0\,0\,0\,0\.5\)\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      --tw-shadow: 0 4px 24px var(--tw-shadow-color, rgba(0,0,0,0.5));
+      box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+  }
+}
+.stitch-scope .hover\:ring-\[\#00f0ff\] {
+  .stitch-scope &:hover {
+    @media (hover: hover) {
+      --tw-ring-color: #00f0ff;
+    }
+  }
+}
+.stitch-scope .focus\:border-\[\#00f0ff\] {
+  .stitch-scope &:focus {
+    border-color: #00f0ff;
+  }
+}
+.stitch-scope .focus\:outline-none {
+  .stitch-scope &:focus {
+    --tw-outline-style: none;
+    outline-style: none;
+  }
+}
+.stitch-scope .disabled\:opacity-50 {
+  .stitch-scope &:disabled {
+    opacity: 50%;
+  }
+}
+.stitch-scope .sm\:flex {
+  @media (width >= 40rem) {
+    display: flex;
+  }
+}
+.stitch-scope .sm\:inline {
+  @media (width >= 40rem) {
+    display: inline;
+  }
+}
+.stitch-scope .sm\:inline-flex {
+  @media (width >= 40rem) {
+    display: inline-flex;
+  }
+}
+.stitch-scope .sm\:w-auto {
+  @media (width >= 40rem) {
+    width: auto;
+  }
+}
+.stitch-scope .sm\:max-w-xs {
+  @media (width >= 40rem) {
+    max-width: var(--container-xs);
+  }
+}
+.stitch-scope .sm\:grid-cols-2 {
+  @media (width >= 40rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.stitch-scope .sm\:flex-row {
+  @media (width >= 40rem) {
+    flex-direction: row;
+  }
+}
+.stitch-scope .sm\:items-center {
+  @media (width >= 40rem) {
+    align-items: center;
+  }
+}
+.stitch-scope .sm\:items-end {
+  @media (width >= 40rem) {
+    align-items: flex-end;
+  }
+}
+.stitch-scope .sm\:self-auto {
+  @media (width >= 40rem) {
+    align-self: auto;
+  }
+}
+.stitch-scope .sm\:p-6 {
+  @media (width >= 40rem) {
+    padding: calc(var(--spacing) * 6);
+  }
+}
+.stitch-scope .sm\:text-3xl {
+  @media (width >= 40rem) {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+  }
+}
+.stitch-scope .sm\:text-4xl {
+  @media (width >= 40rem) {
+    font-size: var(--text-4xl);
+    line-height: var(--tw-leading, var(--text-4xl--line-height));
+  }
+}
+.stitch-scope .sm\:text-5xl {
+  @media (width >= 40rem) {
+    font-size: var(--text-5xl);
+    line-height: var(--tw-leading, var(--text-5xl--line-height));
+  }
+}
+.stitch-scope .sm\:text-base {
+  @media (width >= 40rem) {
+    font-size: var(--text-base);
+    line-height: var(--tw-leading, var(--text-base--line-height));
+  }
+}
+.stitch-scope .sm\:text-lg {
+  @media (width >= 40rem) {
+    font-size: var(--text-lg);
+    line-height: var(--tw-leading, var(--text-lg--line-height));
+  }
+}
+.stitch-scope .md\:col-span-4 {
+  @media (width >= 48rem) {
+    grid-column: span 4 / span 4;
+  }
+}
+.stitch-scope .md\:col-span-5 {
+  @media (width >= 48rem) {
+    grid-column: span 5 / span 5;
+  }
+}
+.stitch-scope .md\:col-span-7 {
+  @media (width >= 48rem) {
+    grid-column: span 7 / span 7;
+  }
+}
+.stitch-scope .md\:flex {
+  @media (width >= 48rem) {
+    display: flex;
+  }
+}
+.stitch-scope .md\:w-72 {
+  @media (width >= 48rem) {
+    width: calc(var(--spacing) * 72);
+  }
+}
+.stitch-scope .md\:grid-cols-2 {
+  @media (width >= 48rem) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+.stitch-scope .md\:grid-cols-3 {
+  @media (width >= 48rem) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.stitch-scope .md\:grid-cols-4 {
+  @media (width >= 48rem) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.stitch-scope .md\:grid-cols-12 {
+  @media (width >= 48rem) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+.stitch-scope .md\:flex-row {
+  @media (width >= 48rem) {
+    flex-direction: row;
+  }
+}
+.stitch-scope .md\:items-center {
+  @media (width >= 48rem) {
+    align-items: center;
+  }
+}
+.stitch-scope .md\:items-end {
+  @media (width >= 48rem) {
+    align-items: flex-end;
+  }
+}
+.stitch-scope .md\:border-t-0 {
+  @media (width >= 48rem) {
+    border-top-style: var(--tw-border-style);
+    border-top-width: 0px;
+  }
+}
+.stitch-scope .md\:border-l {
+  @media (width >= 48rem) {
+    border-left-style: var(--tw-border-style);
+    border-left-width: 1px;
+  }
+}
+.stitch-scope .md\:pt-0 {
+  @media (width >= 48rem) {
+    padding-top: calc(var(--spacing) * 0);
+  }
+}
+.stitch-scope .md\:pl-5 {
+  @media (width >= 48rem) {
+    padding-left: calc(var(--spacing) * 5);
+  }
+}
+.stitch-scope .md\:pl-6 {
+  @media (width >= 48rem) {
+    padding-left: calc(var(--spacing) * 6);
+  }
+}
+.stitch-scope .lg\:left-64 {
+  @media (width >= 64rem) {
+    left: calc(var(--spacing) * 64);
+  }
+}
+.stitch-scope .lg\:col-span-4 {
+  @media (width >= 64rem) {
+    grid-column: span 4 / span 4;
+  }
+}
+.stitch-scope .lg\:col-span-5 {
+  @media (width >= 64rem) {
+    grid-column: span 5 / span 5;
+  }
+}
+.stitch-scope .lg\:col-span-6 {
+  @media (width >= 64rem) {
+    grid-column: span 6 / span 6;
+  }
+}
+.stitch-scope .lg\:col-span-7 {
+  @media (width >= 64rem) {
+    grid-column: span 7 / span 7;
+  }
+}
+.stitch-scope .lg\:col-span-8 {
+  @media (width >= 64rem) {
+    grid-column: span 8 / span 8;
+  }
+}
+.stitch-scope .lg\:flex {
+  @media (width >= 64rem) {
+    display: flex;
+  }
+}
+.stitch-scope .lg\:hidden {
+  @media (width >= 64rem) {
+    display: none;
+  }
+}
+.stitch-scope .lg\:grid-cols-3 {
+  @media (width >= 64rem) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.stitch-scope .lg\:grid-cols-4 {
+  @media (width >= 64rem) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+.stitch-scope .lg\:grid-cols-7 {
+  @media (width >= 64rem) {
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+  }
+}
+.stitch-scope .lg\:grid-cols-12 {
+  @media (width >= 64rem) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+.stitch-scope .lg\:flex-row {
+  @media (width >= 64rem) {
+    flex-direction: row;
+  }
+}
+.stitch-scope .lg\:items-center {
+  @media (width >= 64rem) {
+    align-items: center;
+  }
+}
+.stitch-scope .lg\:gap-12 {
+  @media (width >= 64rem) {
+    gap: calc(var(--spacing) * 12);
+  }
+}
+.stitch-scope .lg\:self-auto {
+  @media (width >= 64rem) {
+    align-self: auto;
+  }
+}
+.stitch-scope .lg\:p-6 {
+  @media (width >= 64rem) {
+    padding: calc(var(--spacing) * 6);
+  }
+}
+.stitch-scope .lg\:p-8 {
+  @media (width >= 64rem) {
+    padding: calc(var(--spacing) * 8);
+  }
+}
+.stitch-scope .lg\:p-12 {
+  @media (width >= 64rem) {
+    padding: calc(var(--spacing) * 12);
+  }
+}
+.stitch-scope .lg\:p-16 {
+  @media (width >= 64rem) {
+    padding: calc(var(--spacing) * 16);
+  }
+}
+.stitch-scope .lg\:px-6 {
+  @media (width >= 64rem) {
+    padding-inline: calc(var(--spacing) * 6);
+  }
+}
+.stitch-scope .lg\:px-10 {
+  @media (width >= 64rem) {
+    padding-inline: calc(var(--spacing) * 10);
+  }
+}
+.stitch-scope .lg\:px-12 {
+  @media (width >= 64rem) {
+    padding-inline: calc(var(--spacing) * 12);
+  }
+}
+.stitch-scope .lg\:pt-20 {
+  @media (width >= 64rem) {
+    padding-top: calc(var(--spacing) * 20);
+  }
+}
+.stitch-scope .lg\:pl-64 {
+  @media (width >= 64rem) {
+    padding-left: calc(var(--spacing) * 64);
+  }
+}
+.stitch-scope .lg\:text-2xl {
+  @media (width >= 64rem) {
+    font-size: var(--text-2xl);
+    line-height: var(--tw-leading, var(--text-2xl--line-height));
+  }
+}
+.stitch-scope .lg\:text-3xl {
+  @media (width >= 64rem) {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+  }
+}
+.stitch-scope .lg\:text-6xl {
+  @media (width >= 64rem) {
+    font-size: var(--text-6xl);
+    line-height: var(--tw-leading, var(--text-6xl--line-height));
+  }
+}
+.stitch-scope .xl\:col-span-5 {
+  @media (width >= 80rem) {
+    grid-column: span 5 / span 5;
+  }
+}
+.stitch-scope .xl\:col-span-7 {
+  @media (width >= 80rem) {
+    grid-column: span 7 / span 7;
+  }
+}
+.stitch-scope .xl\:grid-cols-12 {
+  @media (width >= 80rem) {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+}
+.stitch-scope .xl\:flex-row {
+  @media (width >= 80rem) {
+    flex-direction: row;
+  }
+}
+.stitch-scope .xl\:items-center {
+  @media (width >= 80rem) {
+    align-items: center;
+  }
+}
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-rotate-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-rotate-z {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-x {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-skew-y {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-space-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-space-x-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-divide-y-reverse {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-gradient-position {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-from {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-via {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-to {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: #0000;
+}
+@property --tw-gradient-stops {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-via-stops {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-gradient-from-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+@property --tw-gradient-via-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 50%;
+}
+@property --tw-gradient-to-position {
+  syntax: "<length-percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-tracking {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 #0000;
+}
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-backdrop-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ease {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-scale-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@property --tw-scale-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 1;
+}
+@keyframes spin {
+  .stitch-scope to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes ping {
+  .stitch-scope 75%, .stitch-scope 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+@keyframes pulse {
+  .stitch-scope 50% {
+    opacity: 0.5;
+  }
+}
+@keyframes bounce {
+  .stitch-scope 0%, .stitch-scope 100% {
+    transform: translateY(-25%);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  .stitch-scope 50% {
+    transform: none;
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color:rgb(from red r g b)))) {
+    .stitch-scope *, .stitch-scope ::before, .stitch-scope ::after, .stitch-scope ::backdrop {
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
+      --tw-rotate-x: initial;
+      --tw-rotate-y: initial;
+      --tw-rotate-z: initial;
+      --tw-skew-x: initial;
+      --tw-skew-y: initial;
+      --tw-space-y-reverse: 0;
+      --tw-space-x-reverse: 0;
+      --tw-divide-y-reverse: 0;
+      --tw-border-style: solid;
+      --tw-gradient-position: initial;
+      --tw-gradient-from: #0000;
+      --tw-gradient-via: #0000;
+      --tw-gradient-to: #0000;
+      --tw-gradient-stops: initial;
+      --tw-gradient-via-stops: initial;
+      --tw-gradient-from-position: 0%;
+      --tw-gradient-via-position: 50%;
+      --tw-gradient-to-position: 100%;
+      --tw-leading: initial;
+      --tw-font-weight: initial;
+      --tw-tracking: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
+      --tw-backdrop-blur: initial;
+      --tw-backdrop-brightness: initial;
+      --tw-backdrop-contrast: initial;
+      --tw-backdrop-grayscale: initial;
+      --tw-backdrop-hue-rotate: initial;
+      --tw-backdrop-invert: initial;
+      --tw-backdrop-opacity: initial;
+      --tw-backdrop-saturate: initial;
+      --tw-backdrop-sepia: initial;
+      --tw-duration: initial;
+      --tw-ease: initial;
+      --tw-scale-x: 1;
+      --tw-scale-y: 1;
+      --tw-scale-z: 1;
+    }
+  }
+}
+
+/* SKILLSETRA UI HARDENING
+   Keeps Stitch styling isolated from the legacy application stylesheet.
+   These utilities cover fractional spacing/opacity and responsive grid classes
+   used by the Stitch screens but not emitted by the original extracted bundle. */
+.stitch-scope { color-scheme: dark; color: #dfe1f6; }
+.stitch-scope *, .stitch-scope *::before, .stitch-scope *::after { box-sizing: border-box; }
+.stitch-scope button:not([class*="text-"]), .stitch-scope input:not([class*="text-"]), .stitch-scope textarea:not([class*="text-"]), .stitch-scope select:not([class*="text-"]) { color: inherit; }
+.stitch-scope button:not([class*="bg-"]) { background-color: transparent; }
+.stitch-scope button:not([class*="border-"]) { border-color: transparent; }
+.stitch-scope h1,.stitch-scope h2,.stitch-scope h3,.stitch-scope h4,.stitch-scope h5,.stitch-scope h6,
+.stitch-scope p,.stitch-scope span,.stitch-scope label,.stitch-scope li { text-rendering: optimizeLegibility; }
+.stitch-scope .stitch-main { margin-left: 256px; width: calc(100% - 256px); }
+.stitch-scope.stitch-sidebar-collapsed .stitch-main { margin-left: 88px; width: calc(100% - 88px); }
+.stitch-scope .stitch-top-header { left: 256px; }
+.stitch-scope.stitch-sidebar-collapsed .stitch-top-header { left: 88px; }
+.stitch-scope .stitch-sidebar-mini { width: 88px; }
+.stitch-scope .stitch-sidebar-mini .stitch-sidebar-label,
+.stitch-scope .stitch-sidebar-mini nav button > div > span:last-child,
+.stitch-scope .stitch-sidebar-mini nav button > span:last-child,
+.stitch-scope .stitch-sidebar-mini .stitch-telemetry { display:none; }
+.stitch-scope .stitch-sidebar-mini nav button { justify-content:center; padding-left:8px; padding-right:8px; }
+.stitch-scope .stitch-sidebar-mini .stitch-sidebar-brand-text { display:none; }
+.stitch-scope .stitch-sidebar-mini .stitch-sidebar-toggle { margin-left:auto; }
+.stitch-scope .stitch-sidebar-toggle { cursor:pointer; }
+.stitch-scope .stitch-top-header { transition:left .2s ease; }
+
+/* fractional Tailwind utilities needed by Stitch screens */
+.stitch-scope .gap-1\.5{gap:.375rem}.stitch-scope .gap-2\.5{gap:.625rem}
+.stitch-scope .p-0\.5{padding:.125rem}.stitch-scope .p-1\.5{padding:.375rem}.stitch-scope .p-2\.5{padding:.625rem}.stitch-scope .p-3\.5{padding:.875rem}
+.stitch-scope .px-0\.5{padding-left:.125rem;padding-right:.125rem}.stitch-scope .px-1\.5{padding-left:.375rem;padding-right:.375rem}.stitch-scope .px-2\.5{padding-left:.625rem;padding-right:.625rem}.stitch-scope .px-3\.5{padding-left:.875rem;padding-right:.875rem}
+.stitch-scope .py-0\.2{padding-top:.05rem;padding-bottom:.05rem}.stitch-scope .py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.stitch-scope .py-1\.5{padding-top:.375rem;padding-bottom:.375rem}.stitch-scope .py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.stitch-scope .py-3\.5{padding-top:.875rem;padding-bottom:.875rem}
+.stitch-scope .mt-0\.5{margin-top:.125rem}.stitch-scope .mt-1\.5{margin-top:.375rem}.stitch-scope .mt-2\.5{margin-top:.625rem}.stitch-scope .mb-1\.5{margin-bottom:.375rem}
+.stitch-scope .h-0\.5{height:.125rem}.stitch-scope .h-1\.5{height:.375rem}.stitch-scope .h-2\.5{height:.625rem}.stitch-scope .h-3\.5{height:.875rem}
+.stitch-scope .w-1\.5{width:.375rem}.stitch-scope .w-2\.5{width:.625rem}.stitch-scope .w-3\.5{width:.875rem}
+.stitch-scope .left-1\/2{left:50%}.stitch-scope .right-1\/3{right:33.333333%}.stitch-scope .w-2\/3{width:66.666667%}.stitch-scope .w-3\/4{width:75%}
+.stitch-scope .bg-black\/60{background-color:rgb(0 0 0 / .6)}.stitch-scope .bg-black\/70{background-color:rgb(0 0 0 / .7)}.stitch-scope .bg-black\/75{background-color:rgb(0 0 0 / .75)}.stitch-scope .bg-amber-400\/10{background-color:rgb(251 191 36 / .1)}
+.stitch-scope .space-y-1\.5 > :not([hidden]) ~ :not([hidden]){margin-top:.375rem}.stitch-scope .space-y-2\.5 > :not([hidden]) ~ :not([hidden]){margin-top:.625rem}
+.stitch-scope .hover\:underline:hover{text-decoration:underline}
+
+/* responsive layout utilities used by the Stitch source */
+@media (min-width:640px){
+ .stitch-scope .sm\:flex-row{flex-direction:row}.stitch-scope .sm\:items-end{align-items:flex-end}.stitch-scope .sm\:max-w-xs{max-width:20rem}.stitch-scope .sm\:self-auto{align-self:auto}.stitch-scope .sm\:text-5xl{font-size:3rem;line-height:1}
+}
+@media (min-width:768px){
+ .stitch-scope .md\:border-t-0{border-top-width:0}.stitch-scope .md\:flex-row{flex-direction:row}.stitch-scope .md\:items-end{align-items:flex-end}.stitch-scope .md\:pl-5{padding-left:1.25rem}.stitch-scope .md\:pl-6{padding-left:1.5rem}.stitch-scope .md\:pt-0{padding-top:0}.stitch-scope .md\:w-72{width:18rem}.stitch-scope .md\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.stitch-scope .md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.stitch-scope .md\:grid-cols-12{grid-template-columns:repeat(12,minmax(0,1fr))}
+ .stitch-scope .md\:col-span-4{grid-column:span 4 / span 4}.stitch-scope .md\:col-span-5{grid-column:span 5 / span 5}.stitch-scope .md\:col-span-7{grid-column:span 7 / span 7}
+}
+@media (min-width:1024px){
+ .stitch-scope .lg\:flex-row{flex-direction:row}.stitch-scope .lg\:self-auto{align-self:auto}.stitch-scope .lg\:p-12{padding:3rem}.stitch-scope .lg\:p-16{padding:4rem}.stitch-scope .lg\:pt-20{padding-top:5rem}.stitch-scope .lg\:px-10{padding-left:2.5rem;padding-right:2.5rem}.stitch-scope .lg\:px-12{padding-left:3rem;padding-right:3rem}.stitch-scope .lg\:text-6xl{font-size:3.75rem;line-height:1}.stitch-scope .lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.stitch-scope .lg\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.stitch-scope .lg\:grid-cols-7{grid-template-columns:repeat(7,minmax(0,1fr))}.stitch-scope .lg\:grid-cols-12{grid-template-columns:repeat(12,minmax(0,1fr))}
+ .stitch-scope .lg\:col-span-4{grid-column:span 4 / span 4}.stitch-scope .lg\:col-span-5{grid-column:span 5 / span 5}.stitch-scope .lg\:col-span-6{grid-column:span 6 / span 6}.stitch-scope .lg\:col-span-7{grid-column:span 7 / span 7}.stitch-scope .lg\:col-span-8{grid-column:span 8 / span 8}
+ .stitch-scope .lg\:left-64{left:16rem}
+}
+@media (min-width:1280px){
+ .stitch-scope .xl\:flex-row{flex-direction:row}.stitch-scope .xl\:grid-cols-12{grid-template-columns:repeat(12,minmax(0,1fr))}.stitch-scope .xl\:col-span-5{grid-column:span 5 / span 5}.stitch-scope .xl\:col-span-7{grid-column:span 7 / span 7}
+}
+@media (max-width:1023px){
+ .stitch-scope .stitch-main { margin-left:0; width:100%; }
+ .stitch-scope .stitch-top-header { left:0; }
+ .stitch-scope .stitch-sidebar-mini { width:16rem; }
+}
+@media (max-width:640px){
+ .stitch-scope .stitch-main{padding-left:1rem;padding-right:1rem}
+}
+
+.stitch-scope button:focus-visible,.stitch-scope a:focus-visible,.stitch-scope input:focus-visible,.stitch-scope textarea:focus-visible,.stitch-scope select:focus-visible{outline:2px solid #00f0ff;outline-offset:2px}
+
+
+/* SKILLSETRA THEME + DOM HARDENING
+   Explicitly fixes legacy global button styles, contrast regressions, and provides
+   a persistent light/dark theme without changing application behavior. */
+.stitch-scope.stitch-theme-dark { color-scheme: dark; background:#0f1321; color:#dfe1f6; }
+.stitch-scope.stitch-theme-light { color-scheme: light; background:#f5f7fb; color:#182033; }
+
+/* Light theme palette: map the Stitch source palette to readable light surfaces. */
+.stitch-theme-light [class*="bg-[#0f1321]"],
+.stitch-theme-light [class*="bg-[#090e1c]"],
+.stitch-theme-light [class*="bg-[#171b2a]"],
+.stitch-theme-light [class*="bg-[#1b1f2e]"],
+.stitch-theme-light [class*="bg-[#252939]"],
+.stitch-theme-light [class*="bg-[#101522]"] { background-color:#ffffff !important; }
+.stitch-theme-light [class*="bg-[#090e1c]"] { background-color:#eef2f7 !important; }
+.stitch-theme-light [class*="bg-[#171b2a]"] { background-color:#f8fafc !important; }
+.stitch-theme-light [class*="bg-[#1b1f2e]"] { background-color:#edf2f7 !important; }
+.stitch-theme-light [class*="bg-[#252939]"] { background-color:#e6ebf2 !important; }
+.stitch-theme-light [class*="bg-[#0f1321]"] { background-color:#f5f7fb !important; }
+
+.stitch-theme-light [class*="text-[#dfe1f6]"],
+.stitch-theme-light [class*="text-[#dbfcff]"],
+.stitch-theme-light [class*="text-[#b9cacb]"],
+.stitch-theme-light [class*="text-[#849495]"] { color:#263247 !important; }
+.stitch-theme-light [class*="text-[#849495]"] { color:#5d6b7e !important; }
+.stitch-theme-light [class*="text-[#00f0ff]"] { color:#007f92 !important; }
+.stitch-theme-light [class*="text-[#65f2b5]"],
+.stitch-theme-light [class*="text-[#6ffbbe]"],
+.stitch-theme-light [class*="text-[#a6ffd4]"] { color:#087a55 !important; }
+.stitch-theme-light [class*="text-[#c0c1ff]"],
+.stitch-theme-light [class*="text-[#b0b2ff]"],
+.stitch-theme-light [class*="text-[#e1e0ff]"] { color:#5148a8 !important; }
+.stitch-theme-light [class*="text-[#ffb4ab]"],
+.stitch-theme-light [class*="text-[#ffdad6]"] { color:#b42318 !important; }
+.stitch-theme-light [class*="text-[#3b494b]"] { color:#7a8798 !important; }
+.stitch-theme-light [class*="text-[#fff"]] { color:#172033 !important; }
+
+.stitch-theme-light [class*="border-[#252939]"],
+.stitch-theme-light [class*="border-[#3b494b]"],
+.stitch-theme-light [class*="border-[#303444]"],
+.stitch-theme-light [class*="border-[#353948"]] { border-color:#d5dce6 !important; }
+.stitch-theme-light [class*="border-[#00f0ff]"] { border-color:#00a6ba !important; }
+
+/* Prevent the legacy application's white button/input defaults from leaking into Stitch. */
+.stitch-scope button:not([class*="bg-"]) { background:transparent; }
+.stitch-scope button:not([class*="text-"]) { color:inherit; }
+.stitch-scope input:not([class*="text-"]),
+.stitch-scope textarea:not([class*="text-"]),
+.stitch-scope select:not([class*="text-"]) { color:inherit; background:transparent; }
+.stitch-scope input::placeholder,.stitch-scope textarea::placeholder { color:#849495; opacity:1; }
+.stitch-theme-light input::placeholder,.stitch-theme-light textarea::placeholder { color:#68778a; }
+
+/* Keep accents readable on light surfaces. */
+.stitch-theme-light [class*="bg-[#00f0ff]"] { background-color:#00a6ba !important; color:#ffffff !important; }
+.stitch-theme-light [class*="bg-[#3131c0]"] { background-color:#5148a8 !important; }
+.stitch-theme-light [class*="bg-[#65f2b5]"] { background-color:#0f9f70 !important; }
+.stitch-theme-light [class*="bg-black/"] { background-color:rgb(15 23 42 / .35) !important; }
+
+/* Theme toggle is always visible and never inherits an accidental white background. */
+.stitch-theme-toggle { min-width:34px; min-height:34px; }
+.stitch-theme-light .stitch-theme-toggle { background:#ffffff !important; color:#344054 !important; border-color:#d5dce6 !important; }
+
+/* Avoid horizontal overflow caused by wide Stitch cards on smaller screens. */
+.stitch-scope { overflow-x:hidden; }
+.stitch-scope img { max-width:100%; }

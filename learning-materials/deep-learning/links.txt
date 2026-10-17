@@ -1,0 +1,11 @@
+# Deep Learning
+# Format: Title | URL | Type | Level
+Deep Learning - YouTube lesson 01 | https://youtu.be/YFNKnUhm_-s?si=CmKpkp5STm5yfEoV | youtube | All levels
+Deep Learning - YouTube lesson 02 | https://youtu.be/d2kxUVwWWwU?si=gyLYvfYbWf_xxXFt | youtube | All levels
+Deep Learning - YouTube lesson 03 | https://www.youtube.com/live/u3V-a8Gf_4E?si=AXG_Mi6FJbwPdIZN | youtube | All levels
+Deep Learning - YouTube lesson 04 | https://youtu.be/tPYj3fFJGjk?si=wSaFLstOIuMDl3h0 | youtube | All levels
+Deep Learning - YouTube lesson 05 | https://youtu.be/V_xro1bcAuA?si=jCt78BsxUL9_5m8p | youtube | All levels
+Deep Learning - YouTube lesson 06 | https://youtu.be/CNuI8OWsppg?si=0Qnp7rbtDih85Tqs | youtube | All levels
+Deep Learning - YouTube lesson 07 | https://youtu.be/7sB052Pz0sQ?si=t9Yzpn6xjXCAIyHK | youtube | All levels
+Deep Learning - YouTube lesson 08 | https://www.youtube.com/live/9aXdAffcL0o?si=r_t9gP9hfsiAJCWv | youtube | All levels
+Deep Learning - YouTube lesson 09 | https://youtu.be/G1P2IaBcXx8?si=fVBgwFhv_OfJS1dQ | youtube | All levels

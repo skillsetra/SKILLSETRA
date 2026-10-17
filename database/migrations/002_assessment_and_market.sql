@@ -1,0 +1,1 @@
+-- Assessment and job-market tables are included in schema.sql for a clean first-time Supabase setup.
