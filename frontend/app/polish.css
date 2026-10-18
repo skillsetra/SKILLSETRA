@@ -1334,3 +1334,17 @@ html[data-theme="dark"] .notification-popover .notification-item b { color: #f0f
 html[data-theme="dark"] .notification-popover .notification-item span,
 html[data-theme="dark"] .notification-popover .search-empty { color: #aebdd0 !important; }
 html[data-theme="dark"] .notification-popover .notification-item:hover { background: #1b2634 !important; }
+
+/* AI Coach voice visual repair: keep the pictorial AI indicator visible in dark mode. */
+.voice-face-wrap{position:relative;isolation:isolate}
+.voice-face{position:relative;z-index:2;width:132px;height:132px;background:radial-gradient(circle at 50% 42%,#1b2940 0,#101827 52%,#0a0f17 100%)!important;border:1px solid rgba(92,154,255,.48)!important;box-shadow:0 0 0 1px rgba(92,154,255,.12),0 14px 38px rgba(0,0,0,.35),0 0 34px rgba(59,130,246,.18)!important;transition:transform .18s ease,box-shadow .18s ease,filter .18s ease}
+.voice-face img{width:82%;height:82%;object-fit:contain;display:block;filter:drop-shadow(0 0 10px rgba(61,153,255,.42)) drop-shadow(0 0 18px rgba(168,85,247,.20))!important}
+.voice-face-wrap.is-listening .voice-face{transform:scale(1.045);box-shadow:0 0 0 5px rgba(16,185,129,.18),0 0 0 11px rgba(16,185,129,.06),0 0 44px rgba(16,185,129,.34)!important}
+.voice-face-wrap.is-thinking .voice-face{transform:scale(1.02);box-shadow:0 0 0 5px rgba(96,165,250,.15),0 0 40px rgba(96,165,250,.30)!important}
+.voice-face-wrap.is-speaking .voice-face{transform:scale(1.06);box-shadow:0 0 0 6px rgba(168,85,247,.18),0 0 0 12px rgba(59,130,246,.08),0 0 52px rgba(96,165,250,.42)!important}
+.voice-face-wrap.is-typing .voice-face{box-shadow:0 0 0 4px rgba(148,163,184,.12),0 0 28px rgba(96,165,250,.16)!important}
+html[data-theme="light"] .voice-face{background:radial-gradient(circle at 50% 42%,#ffffff 0,#edf6ff 58%,#e5eefb 100%)!important;border-color:#b9cfee!important;box-shadow:0 0 0 1px rgba(59,130,246,.08),0 14px 34px rgba(42,79,125,.14),0 0 30px rgba(59,130,246,.16)!important}
+html[data-theme="light"] .voice-face-wrap.is-listening .voice-face{box-shadow:0 0 0 5px rgba(16,185,129,.15),0 0 38px rgba(16,185,129,.24)!important}
+html[data-theme="light"] .voice-face-wrap.is-speaking .voice-face{box-shadow:0 0 0 6px rgba(168,85,247,.14),0 0 46px rgba(59,130,246,.25)!important}
+@media(max-width:600px){.voice-face{width:108px;height:108px}}
+@media(prefers-reduced-motion:reduce){.voice-face{transform:none!important}}

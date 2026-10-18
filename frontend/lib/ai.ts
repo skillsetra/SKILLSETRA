@@ -87,38 +87,61 @@ async function ensurePuterLoaded(): Promise<void> {
   }
 }
 
-export async function runPuter(prompt:string, _requestedModel?:string) {
+export async function runPuter(prompt:string, requestedModel?:string) {
   const activityId = (typeof crypto !== "undefined" && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`;
   if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("skillsetra:request-start", {detail:{id:activityId,method:"AI",path:"puter-ai",busy:true,label:"Generating AI analysis…"}}));
+
+  // Puter is the only runtime provider. We use a fast OpenAI model as a bounded
+  // fallback so an overloaded primary model cannot block the interviewer/coach.
+  // There is no Gemini/Ollama/server-model fallback here.
+  const models = [...new Set([
+    requestedModel || DEFAULT_AI_MODEL,
+    "openai/gpt-5.4-nano",
+    DEFAULT_AI_MODEL,
+  ].filter(Boolean))];
+
+  const runWithTimeout = async (model:string, timeoutMs:number): Promise<string> => {
+    let watchdog = 0;
+    try {
+      const request = Promise.resolve().then(() => window.puter!.ai.chat(prompt, {
+        model,
+        temperature:0.35,
+        normalize:true,
+      }));
+      const result = await Promise.race([
+        request,
+        new Promise<never>((_, reject) => {
+          watchdog = window.setTimeout(() => reject(new Error(`Model ${model} timed out after ${Math.round(timeoutMs / 1000)} seconds.`)), timeoutMs);
+        }),
+      ]);
+      const text = extractPuterText(result);
+      if (!text) throw new Error(`Model ${model} returned an empty response.`);
+      return text;
+    } finally {
+      if (watchdog) window.clearTimeout(watchdog);
+    }
+  };
+
   try {
     await ensurePuterLoaded();
-    let lastError: unknown;
-    for (let attempt = 0; attempt < 2; attempt++) {
-      let watchdog = 0;
+    let lastError: unknown = null;
+    for (let i = 0; i < models.length; i++) {
+      const model = models[i];
       try {
-        const request = Promise.resolve().then(() => window.puter!.ai.chat(prompt, {model:DEFAULT_AI_MODEL, temperature:0.35, normalize:true}));
-        const result = await Promise.race([
-          request,
-          new Promise<never>((_, reject) => { watchdog = window.setTimeout(() => reject(new Error("The AI service did not respond within 25 seconds.")), 25000); })
-        ]);
-        const text = extractPuterText(result);
-        if (text) return text;
-        throw new Error("The AI service returned an empty response.");
+        // Keep the total AI wait bounded. The second model is a real Puter
+        // fallback, not a second backend request.
+        return await runWithTimeout(model, i === 0 ? 11500 : 10000);
       } catch (error:any) {
         lastError = error;
         const message = String(error?.message || error || "");
-        const transient = /network|fetch|timeout|timed out|temporar|rate.?limit|429|502|503|504|empty response|connection reset|unavailable/i.test(message);
-        const timedOut = /did not respond within/i.test(message);
-        // Promise.race cannot cancel the provider's underlying request. Do not replay a
-        // timed-out call and accidentally create overlapping billable/slow work.
-        if (attempt === 0 && transient && !timedOut) await new Promise(resolve => window.setTimeout(resolve, 700));
-        else break;
-      } finally {
-        if (watchdog) window.clearTimeout(watchdog);
+        const retryable = /network|fetch|timeout|timed out|temporar|rate.?limit|429|502|503|504|empty response|connection reset|unavailable|failed/i.test(message);
+        if (!retryable || i === models.length - 1) break;
+        // Give Puter a tiny recovery window before the fallback model.
+        await new Promise(resolve => window.setTimeout(resolve, 120));
       }
     }
     const detail = lastError instanceof Error ? lastError.message : "Check your connection and retry.";
-    throw new Error(`The AI request did not complete. Your entered content has been retained. ${detail}`);
+    throw new Error(`AI is temporarily unavailable. I tried the selected Puter model and a fast Puter fallback. Your content was retained. ${detail}`);
   } finally {
     if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("skillsetra:request-finish", {detail:{id:activityId}}));
   }

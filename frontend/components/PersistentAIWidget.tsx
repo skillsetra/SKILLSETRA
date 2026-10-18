@@ -273,6 +273,8 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
   const startRecognitionRef = useRef<() => void>(() => {});
   const recognitionLocaleRef = useRef("en-IN");
   const recognitionAttemptedRef = useRef<string[]>([]);
+  const voiceInterimTimerRef = useRef<number | null>(null);
+  const voiceInterimTextRef = useRef("");
   const providerRef = useRef(provider);
   const modelRef = useRef(model);
   const voiceLanguageRef = useRef(voiceLanguage);
@@ -407,6 +409,9 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
     setVoiceTextInput("");
     if (restartTimerRef.current !== null) window.clearTimeout(restartTimerRef.current);
     restartTimerRef.current = null;
+    if (voiceInterimTimerRef.current !== null) window.clearTimeout(voiceInterimTimerRef.current);
+    voiceInterimTimerRef.current = null;
+    voiceInterimTextRef.current = "";
     try { recognitionRef.current?.abort(); } catch { /* Browser may already have stopped recognition. */ }
     recognitionRef.current = null;
     if (textFallbackTimerRef.current !== null) window.clearTimeout(textFallbackTimerRef.current);
@@ -456,7 +461,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
             setVoiceStatus("Your turn. Type your next message below; SKILLSETRA will reply aloud. End conversation is always available above.");
           } else {
             setVoiceState("listening");
-            setVoiceStatus("Your turn — speak naturally. No transcript will appear.");
+            setVoiceStatus("Your turn — speak naturally. I will respond shortly after you pause.");
             restartTimerRef.current = window.setTimeout(() => startRecognitionRef.current(), 450);
           }
         }
@@ -668,18 +673,44 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
     try {
       const recognition = new Recognition();
       recognition.continuous = true;
-      recognition.interimResults = false;
+      // Interim results let us detect the end of a natural phrase sooner than
+      // waiting for the browser to decide that the whole recognition session is final.
+      recognition.interimResults = true;
       const requestedLocale = recognitionLocaleRef.current || (LANGS[voiceLanguageRef.current] || "en-IN");
       recognition.lang = requestedLocale;
       if (!recognitionAttemptedRef.current.includes(requestedLocale)) recognitionAttemptedRef.current.push(requestedLocale);
-      recognition.onstart = () => { if (voiceSessionRef.current && !voiceBusyRef.current && !voiceTextFallbackRef.current) { setVoiceState("listening"); setVoiceStatus("Listening… speak naturally when you are ready."); } };
+      recognition.onstart = () => { if (voiceSessionRef.current && !voiceBusyRef.current && !voiceTextFallbackRef.current) { setVoiceState("listening"); setVoiceStatus("Listening… speak naturally. I will answer shortly after you pause."); } };
       recognition.onresult = (event: RecognitionEvent) => {
         const finalWords: string[] = [];
+        const interimWords: string[] = [];
         for (let i = event.resultIndex; i < event.results.length; i++) {
           const result = event.results[i];
-          if (result?.isFinal && result[0]?.transcript) finalWords.push(result[0].transcript.trim());
+          const transcript = result?.[0]?.transcript?.trim();
+          if (!transcript) continue;
+          if (result.isFinal) finalWords.push(transcript);
+          else interimWords.push(transcript);
         }
-        if (finalWords.length && !voiceTextFallbackRef.current) { recognitionNetworkRetriesRef.current = 0; void latestVoiceTurnRef.current(finalWords.join(" ")); }
+        if (finalWords.length && !voiceTextFallbackRef.current) {
+          if (voiceInterimTimerRef.current !== null) window.clearTimeout(voiceInterimTimerRef.current);
+          voiceInterimTimerRef.current = null;
+          voiceInterimTextRef.current = "";
+          recognitionNetworkRetriesRef.current = 0;
+          void latestVoiceTurnRef.current(finalWords.join(" "));
+          return;
+        }
+        if (interimWords.length && !voiceTextFallbackRef.current && !voiceBusyRef.current) {
+          voiceInterimTextRef.current = interimWords.join(" ");
+          if (voiceInterimTimerRef.current !== null) window.clearTimeout(voiceInterimTimerRef.current);
+          // Start the AI after a short natural pause instead of waiting for a
+          // long browser recognition-finalization delay. A later interim event
+          // resets this timer, so normal continuous speech is not cut up.
+          voiceInterimTimerRef.current = window.setTimeout(() => {
+            voiceInterimTimerRef.current = null;
+            const buffered = voiceInterimTextRef.current.trim();
+            voiceInterimTextRef.current = "";
+            if (buffered && voiceSessionRef.current && !voiceBusyRef.current) void latestVoiceTurnRef.current(buffered);
+          }, 720);
+        }
       };
       recognition.onerror = (event: RecognitionErrorEvent) => {
         const code = event.error || "unknown";
@@ -838,6 +869,9 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
     setMicrophoneRetryUsed(true);
     if (restartTimerRef.current !== null) window.clearTimeout(restartTimerRef.current);
     restartTimerRef.current = null;
+    if (voiceInterimTimerRef.current !== null) window.clearTimeout(voiceInterimTimerRef.current);
+    voiceInterimTimerRef.current = null;
+    voiceInterimTextRef.current = "";
     try { recognitionRef.current?.abort(); } catch { /* Ignore an already-ended recognizer. */ }
     recognitionRef.current = null;
     voiceTextFallbackRef.current = false;
@@ -1019,7 +1053,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
       </div>
       <div className={`voice-face-wrap ${voiceState === "listening" ? "is-listening" : ""} ${voiceState === "speaking" ? "is-speaking" : ""} ${voiceState === "thinking" ? "is-thinking" : ""} ${voiceState === "typing" ? "is-typing" : ""}`}>
         <span className="voice-ring voice-ring-one" /><span className="voice-ring voice-ring-two" />
-        <div className="voice-face"><img src="/skillsetra-logo.png" alt="SKILLSETRA AI face" /></div>
+        <div className="voice-face"><img src="/skillsetra-ai-face.png" alt="SKILLSETRA AI voice indicator" /></div>
         {voiceState === "listening" && <span className="voice-live-dot" />}
       </div>
       <div className={`voice-waveform state-${voiceState}`} aria-hidden="true">{[0,1,2,3,4,5,6,7,8].map(bar => <span key={bar} style={{animationDelay:`${bar * 75}ms`}} />)}</div>
