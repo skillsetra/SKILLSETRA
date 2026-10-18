@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: skillsetra-demo
+    name: skillsetra
     runtime: docker
     plan: free
     dockerfilePath: ./Dockerfile
@@ -9,8 +9,10 @@ services:
     envVars:
       - key: DEMO_MODE
         value: "true"
+      - key: ALLOW_PRODUCTION_DEMO
+        value: "true"
       - key: ENVIRONMENT
-        value: demo
+        value: production
       - key: AI_PROVIDER
         value: puter
       - key: PUTER_MODEL
@@ -21,3 +23,27 @@ services:
         value: "true"
       - key: NEXT_PUBLIC_API_BASE_URL
         value: ""
+      - key: CORS_ORIGINS
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_ROLE_KEY
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_URL
+        sync: false
+      - key: NEXT_PUBLIC_SUPABASE_ANON_KEY
+        sync: false
+      - key: NEXT_PUBLIC_SITE_URL
+        sync: false
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: ADMIN_SESSION_SECRET
+        sync: false
+      - key: ADMIN_USER_IDS
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false

@@ -25,7 +25,12 @@ try:
 except Exception:
     raise SystemExit(1)
 PY
-  then break; fi
+  then break
+  fi
+  if [ "$i" -eq 60 ]; then
+    echo "ERROR: FastAPI did not become healthy within 60 seconds." >&2
+    exit 1
+  fi
   sleep 1
 done
 

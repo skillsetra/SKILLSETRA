@@ -4,6 +4,7 @@ import type {Session} from "@supabase/supabase-js";
 import {supabase} from "../lib/supabase";
 import Logo from "./Logo";
 import {DEMO_ENABLED} from "../lib/demo";
+import {api} from "../lib/api";
 
 type User={id:string;name:string;email:string;targetRole:string;isDemo?:boolean};
 type SignUpResult={authenticated:boolean;confirmationRequired:boolean};
@@ -73,11 +74,15 @@ export function AppProvider({children}:{children:React.ReactNode}){
   if(supabase&&!user?.isDemo){try{await supabase.auth.signOut()}catch{/* Local demo remains separate even if the remote sign-out request fails. */}}
   clearDemo();removeStorage("skillsetra_access_token");clearSessionCookie("skillsetra_session");setUser(null);
   const sessionId=newId();if(!writeStorage("skillsetra_demo_session_id",sessionId))throw new Error("Browser storage is unavailable. Enable site storage to start a demo workspace.");
-  const ctrl=new AbortController();const timer=window.setTimeout(()=>ctrl.abort(),10000);let response:Response;
-  try{response=await fetch("/api/v1/demo/reset",{method:"POST",headers:{"X-SKILLSETRA-Demo-Session":sessionId},signal:ctrl.signal})}
-  catch{removeStorage("skillsetra_demo_session_id");throw new Error("Cannot reach the SKILLSETRA backend. Start the API and try again.")}
-  finally{window.clearTimeout(timer)}
-  if(!response.ok){removeStorage("skillsetra_demo_session_id");throw new Error(response.status===404||response.status===503?"Demo is not enabled on the backend. Set DEMO_MODE=true; on production also set ALLOW_PRODUCTION_DEMO=true only if you want public demo access.":`Could not create a fresh demo workspace (HTTP ${response.status}). Please retry.`)}
+  try{
+   await api("/api/v1/demo/reset",{method:"POST",headers:{"X-SKILLSETRA-Demo-Session":sessionId}});
+  }catch(error:any){
+   removeStorage("skillsetra_demo_session_id");
+   const status=Number(error?.status)||0;
+   if(status===404||status===503) throw new Error("Demo is not enabled on the backend. Set DEMO_MODE=true and, for production demo access, ALLOW_PRODUCTION_DEMO=true.");
+   if(status===502||status===504) throw new Error("The SKILLSETRA API proxy could not reach the backend. In Render, use the root Dockerfile/Render Blueprint or set BACKEND_INTERNAL_URL to the FastAPI service URL.");
+   throw new Error(error?.message||"Could not create a fresh demo workspace. Please retry.");
+  }
   const u:User={id:sessionId,name:"Demo Learner",email:"",targetRole:"",isDemo:true};saveDemo(u);setUser(u);
  };
  const signIn=async(e:string,p:string)=>{
