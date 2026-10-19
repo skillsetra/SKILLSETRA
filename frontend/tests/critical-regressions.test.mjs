@@ -7,13 +7,15 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const read = (relative) => fs.readFileSync(path.join(root, relative), 'utf8');
 
-test('role baseline has no undefined provider setter and loads questions for the active target role', () => {
+test('role baseline automatically generates AI questions for the active target role and has no built-in bank fallback', () => {
   const source = read('components/stitch-source/components/Screens/DiagnosticAssessment.tsx');
   assert.doesNotMatch(source, /setProvider\s*\(/);
   assert.match(source, /const \{user\}=useApp\(\)/);
-  assert.match(source, /api<any>\(endpoint\)/);
-  assert.match(source, /requestedRole\?`\/api\/v1\/assessment\?role=/);
+  assert.match(source, /void generateAISet\(\)/);
+  assert.match(source, /assessment\/generate/);
   assert.match(source, /setD\(undefined\);setI\(0\);setAnswers\(\{\}\);setResult\(null\)/);
+  assert.match(source, /AI-GENERATED QUESTIONS/);
+  assert.doesNotMatch(source, /Normal question bank/);
 });
 
 test('interviewer reads target role from the AppProvider context instead of an undeclared user', () => {
@@ -76,13 +78,15 @@ test('project and GitHub results have explicit completion state and auto-scroll 
   assert.match(github, /target_role:user\?\.targetRole\|\|""/);
 });
 
-test('API failures get a longer timeout and bounded retries only for safe GET requests', () => {
+test('API failures get bounded retries for safe GETs and transient AI generation or analysis requests', () => {
   const source = read('lib/api.ts');
   assert.match(source, /DEFAULT_TIMEOUT_MS = Number\(process\.env\.NEXT_PUBLIC_API_TIMEOUT_MS \|\| 30000\)/);
   assert.match(source, /const SAFE_GET_RETRIES = 2/);
   assert.match(source, /const safeToRetry = method === "GET" && !options\.body/);
   assert.match(source, /\[429, 502, 503, 504\]/);
   assert.match(source, /retryAfterMs/);
+  assert.match(source, /const retryableAI = method === \"POST\"/);
+  assert.match(source, /const AI_ANALYSIS_RETRIES = 1/);
 });
 
 
@@ -91,4 +95,16 @@ test('AI requests announce busy state so analysis has visible progress feedback'
   assert.match(ai, /skillsetra:request-start/);
   assert.match(ai, /skillsetra:request-finish/);
   assert.match(ai, /Generating AI analysis/);
+});
+
+test('Reasoning, Practice and Challenges prepare fresh AI-generated prompts automatically', () => {
+  const reasoning = read('app/reasoning/page.tsx');
+  const practice = read('app/practice/page.tsx');
+  const challenges = read('components/stitch-source/components/Screens/ChallengeSandbox.tsx');
+  assert.match(reasoning, /runPuter\(`Create one fresh, realistic technical reasoning case/);
+  assert.match(practice, /if \(compilerMode && roleReady && skill\.trim\(\) && !task/);
+  assert.match(practice, /setCompilerMode\(true\)/);
+  assert.match(practice, /New AI practice/);
+  assert.match(challenges, /runPuter\(`Generate one original, practical technical challenge/);
+  assert.match(challenges, /aiGenerated: true/);
 });

@@ -883,8 +883,9 @@ def test_project_upload_analyzes_zip_source_without_executing_it():
     assert response.status_code == 200, response.text
     body = response.json()
     assert body["project"]["name"] == "Uploaded Demo"
+    assert body["analysis_only"] is True
     assert 'print("hello uploaded project")' in body["ai_analysis"]
-    assert "target role" in body["ai_analysis"].lower()
+    assert "read-only project review" in body["ai_analysis"].lower()
     assert "not analyzed" not in body["ai_analysis"]
 
 
@@ -897,18 +898,25 @@ def test_project_upload_rejects_files_without_readable_source_or_description():
     assert "No readable text" in str(response.json().get("detail") or response.json().get("error", {}).get("message", ""))
 
 
-def test_projects_are_user_workspace_records_not_a_hardcoded_demo():
-    before = client.get("/api/v1/projects").json()
-    created = client.post("/api/v1/projects/analyze", json={
+def test_project_analysis_is_read_only_and_does_not_change_goal_or_role_progress():
+    isolated = TestClient(app, headers={"X-SKILLSETRA-Demo-Session": str(uuid.uuid4())})
+    profile_before = isolated.get("/api/v1/profile").json()
+    projects_before = isolated.get("/api/v1/projects").json()
+    evidence_before = isolated.get("/api/v1/evidence").json()
+    created = isolated.post("/api/v1/projects/analyze", json={
         "name": "Test API project",
         "description": "A Python FastAPI service with pytest tests and deployment documentation.",
         "provider": "puter"
     })
     assert created.status_code == 200
-    project_id = created.json()["project"]["id"]
-    after = client.get("/api/v1/projects").json()
-    assert any(item.get("id") == project_id for item in after["items"])
-    assert after["count"] >= len(before.get("items", []))
+    assert created.json()["analysis_only"] is True
+    assert created.json()["project"]["status"].startswith("Analysis only")
+    profile_after = isolated.get("/api/v1/profile").json()
+    projects_after = isolated.get("/api/v1/projects").json()
+    evidence_after = isolated.get("/api/v1/evidence").json()
+    assert profile_after == profile_before
+    assert projects_after == projects_before
+    assert evidence_after == evidence_before
 
 
 def test_resume_draft_is_persisted_in_current_workspace():

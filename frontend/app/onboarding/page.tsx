@@ -14,19 +14,45 @@ type Detail={question_id:string;question:string;competency:string;options:string
 type Result={score:number;correct:number;total:number;details:Detail[];summary:string;source:string;passed?:boolean;role_progress?:any;progress_saved?:boolean};
 
 function parseGenerated(raw:string):Q[]{
- const text=(raw||"").trim();
- const candidates=[text.replace(/```json/gi,"").replace(/```/g,"").trim()];
- const m=text.match(/\{[\s\S]*\}/);if(m)candidates.push(m[0]);
- const arr=text.match(/\[[\s\S]*\]/);if(arr)candidates.push(arr[0]);
- for(const c of candidates){
+ const text=String(raw||"").trim();
+ // Models sometimes wrap JSON in prose/fences or return answer labels rather than
+ // a zero-based integer. Accept common equivalent formats, but reject ambiguous items.
+ const candidates:string[]=[];
+ const cleaned=text.replace(/```(?:json)?/gi,"").replace(/```/g,"").trim();
+ candidates.push(cleaned);
+ const objMatch=cleaned.match(/\{[\s\S]*\}/);if(objMatch)candidates.push(objMatch[0]);
+ const arrMatch=cleaned.match(/\[[\s\S]*\]/);if(arrMatch)candidates.push(arrMatch[0]);
+ for(const candidate of [...new Set(candidates)]){
   try{
-   const o=JSON.parse(c);const list=Array.isArray(o)?o:o.questions;if(!Array.isArray(list))continue;
-   const out=list.map((x:any,i:number)=>({id:`ai-${i+1}`,competency:String(x.competency||"Role fundamentals"),difficulty:String(x.difficulty||"Intermediate"),question:String(x.question||""),options:Array.isArray(x.options)?x.options.map((v:any)=>String(v)):[],correct:Number(x.correct),explanation:String(x.explanation||"")}))
-    .filter((x:Q)=>x.question.length>10&&x.options.length===4&&Number.isInteger(x.correct)&&(x.correct as number)>=0&&(x.correct as number)<4);
+   const parsed=JSON.parse(candidate);
+   const list=Array.isArray(parsed)?parsed:(Array.isArray(parsed?.questions)?parsed.questions:Array.isArray(parsed?.items)?parsed.items:null);
+   if(!Array.isArray(list))continue;
+   const out:Q[]=[];
+   for(const [i,x] of list.entries()){
+    if(!x||typeof x!=="object")continue;
+    const question=String(x.question||x.prompt||"").trim();
+    const optionsRaw=x.options||x.choices||x.answers;
+    if(!question||!Array.isArray(optionsRaw)||optionsRaw.length!==4)continue;
+    const options=optionsRaw.map((v:any)=>String(typeof v==="object"?(v.text??v.label??""):v).trim());
+    if(options.some((v:string)=>!v)||options.some((v:string)=>v.length>500))continue;
+    let correctRaw=x.correct??x.correct_index??x.answer_index??x.correctAnswer??x.answer;
+    if(typeof correctRaw==="string"){
+     const answer=correctRaw.trim();
+     const letter=answer.match(/^([A-D])(?:[.)]|$)/i);
+     if(letter)correctRaw=letter[1].toUpperCase().charCodeAt(0)-65;
+     else if(/^option\s*[1-4]$/i.test(answer))correctRaw=Number(answer.match(/[1-4]/)?.[0])-1;
+     else if(/^\d+$/.test(answer))correctRaw=Number(answer);
+     else {const byText=options.findIndex(v=>v.toLowerCase()===answer.toLowerCase());correctRaw=byText;}
+    }
+    const correct=Number(correctRaw);
+    if(!Number.isInteger(correct)||correct<0||correct>3)continue;
+    out.push({id:`ai-${out.length+1}`,competency:String(x.competency||x.skill||"Role fundamentals").slice(0,120),difficulty:String(x.difficulty||"Intermediate").slice(0,40),question,options,correct,explanation:String(x.explanation||x.reason||"").slice(0,500)});
+    if(out.length>=8)break;
+   }
    if(out.length>=3)return out;
-  }catch{}
+  }catch{/* try another candidate; built-in questions are used only if all AI parsing fails */}
  }
- throw new Error("AI returned an invalid question set.");
+ throw new Error("AI returned fewer than three valid role-specific questions.");
 }
 
 const roles=["ML Engineer","AI Engineer","Data Scientist","Data Analyst","Backend Developer","Full-Stack Developer","Frontend Developer","Python Developer","DevOps Engineer","Cybersecurity","Cloud Engineer","Product Data Engineer"];
@@ -106,7 +132,7 @@ export default function Onboarding(){
   setAttemptedRole(roleName);
   setLoading(true);setError("");
   try{
-   const provider="puter",model="openai/gpt-oss-20b";
+   const provider="puter",model="openai/gpt-4o-mini";
    const r=await api<any>("/api/v1/assessment/generate",{method:"POST",body:JSON.stringify({role:roleName,provider,model,language:"English",count:8})});
    let generated:Q[];let id="adaptive-v1";let browser=false;
    if(r.mode==="puter-client"){generated=parseGenerated(await runPuter(r.prompt,r.model||model)).slice(0,8);id="browser-ai-practice";browser=true}

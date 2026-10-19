@@ -3,6 +3,7 @@ import { DEMO_ENABLED } from "./demo";
 const BASE = (process.env.NEXT_PUBLIC_API_BASE_URL || "").replace(/\/$/, "");
 const DEFAULT_TIMEOUT_MS = Number(process.env.NEXT_PUBLIC_API_TIMEOUT_MS || 30000);
 const SAFE_GET_RETRIES = 2;
+const AI_ANALYSIS_RETRIES = 1;
 
 function v1(path: string) {
   if (path.startsWith("/api/v1/")) return path;
@@ -43,6 +44,11 @@ async function apiRequest<T = unknown>(path: string, options: RequestInit = {}):
 
   const method = String(options.method || "GET").toUpperCase();
   const safeToRetry = method === "GET" && !options.body;
+  // AI generation/analysis requests are computational and do not create user
+  // records themselves. Retry one transient transport/5xx failure using the
+  // same request ID so observability and any server-side deduplication remain stable.
+  const retryableAI = method === "POST" && /\/(?:assessment\/(?:generate|ask-question)|projects\/analyze(?:-upload)?|github\/analyze|reasoning\/analyze|ai\/ask|resume\/analyze|interview\/(?:generate|ask-question))$/i.test(v1(path));
+  const maxRetries = safeToRetry ? SAFE_GET_RETRIES : retryableAI ? AI_ANALYSIS_RETRIES : 0;
   const requestUrl = `${BASE}${v1(path)}`;
   const headers = new Headers(options.headers);
   if (options.body && !(typeof FormData !== "undefined" && options.body instanceof FormData) && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
@@ -86,7 +92,7 @@ async function apiRequest<T = unknown>(path: string, options: RequestInit = {}):
         err.requestId = data?.error?.request_id || response.headers.get("x-request-id") || undefined;
         const retryAfter = Number(response.headers.get("retry-after"));
         if (Number.isFinite(retryAfter) && retryAfter > 0) err.retryAfterMs = Math.min(5000, retryAfter * 1000);
-        if (safeToRetry && attempt < SAFE_GET_RETRIES && isSafeRetry(err)) {
+        if (attempt < maxRetries && isSafeRetry(err)) {
           attempt += 1;
           await delay(Math.min(5000, Math.max(250 * (2 ** (attempt - 1)), Number(err.retryAfterMs) || 0)));
           continue;
@@ -96,7 +102,7 @@ async function apiRequest<T = unknown>(path: string, options: RequestInit = {}):
       return await response.json() as T;
     } catch (caught: any) {
       const error = normalizeRequestError(caught);
-      if (safeToRetry && attempt < SAFE_GET_RETRIES && isSafeRetry(error)) {
+      if (attempt < maxRetries && isSafeRetry(error)) {
         attempt += 1;
         await delay(Math.min(5000, Math.max(250 * (2 ** (attempt - 1)), Number(error.retryAfterMs) || 0)));
         continue;

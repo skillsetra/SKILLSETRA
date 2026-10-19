@@ -30,12 +30,21 @@ export const SocraticDefense: React.FC<{ onNavigate: (s: ScreenId) => void }> = 
     setIndex(0);
     setAnswer('');
     setResult(null);
-    api<DefenseData>('/api/v1/project-defense').then(response => {
+    api<DefenseData>('/api/v1/project-defense').then(async response => {
       if (!active) return;
       if (!Array.isArray(response?.questions) || response.questions.length === 0) {
         throw new Error('No project-defense questions are available yet. Retry to request a fresh question set.');
       }
-      setData(response);
+      // Generate a fresh question set with Puter AI. Keep the server-provided set as
+      // a reliable fallback if AI is temporarily unavailable.
+      try {
+        const generated = await runPuter('Create 5 distinct technical project-defense questions for a software project. Focus on architecture choices, alternatives and trade-offs, testing, security, reliability, and scale. Do not assume a particular stack or invent project details. Return ONLY valid JSON in this exact shape: {"questions":["question 1","question 2","question 3","question 4","question 5"]}.', model);
+        const clean = generated.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
+        const parsed = JSON.parse(clean);
+        const questions = Array.isArray(parsed?.questions) ? parsed.questions.filter((q: unknown) => typeof q === 'string' && q.trim()).slice(0, 5) : [];
+        if (questions.length >= 3) response.questions = questions;
+      } catch { /* Keep the server-provided questions and let the user continue. */ }
+      if (active) setData(response);
     }).catch((error: any) => {
       if (!active) return;
       setLoadError(error?.message || 'The project-defense service could not be reached.');

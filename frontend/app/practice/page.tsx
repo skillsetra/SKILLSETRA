@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import AppLayout from "../../components/AppLayout";
+import { useApp } from "../../components/AppProvider";
 import { api } from "../../lib/api";
 import { runPuter } from "../../lib/ai";
 import AIInsight from "../../components/AIInsight";
@@ -32,14 +33,15 @@ function parseObject(raw: string): any {
 }
 
 export default function Practice() {
-  const [challenge, setChallenge] = useState<any>(null);
+  const { user } = useApp();
   const [answer, setAnswer] = useState("");
   const [result, setResult] = useState<any>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
-  const [compilerMode, setCompilerMode] = useState(false);
+  const [compilerMode, setCompilerMode] = useState(true);
   const [skill, setSkill] = useState("");
   const [role, setRole] = useState("Target role");
+  const [roleReady, setRoleReady] = useState(false);
   const [difficulty, setDifficulty] = useState("Intermediate");
   const [task, setTask] = useState<CompiledTask | null>(null);
   const [compiledEvaluation, setCompiledEvaluation] = useState<Evaluation | null>(null);
@@ -57,20 +59,19 @@ export default function Practice() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const isCompiler = params.get("compiler") === "1";
     const initialSkill = (params.get("skill") || "").slice(0, 120);
-    setCompilerMode(isCompiler); setSkill(initialSkill);
-    api<any>("/api/v1/career/roles").then(data => { if (data.current_role) setRole(data.current_role); }).catch(() => {});
-    if (isCompiler) {
-      if (!initialSkill) api<any>("/api/v1/analytics").then(data => setSkill(data.role_progress?.skills?.find((x: any) => x.gap)?.competency || "Role fundamentals")).catch(() => setSkill("Role fundamentals"));
-    } else void loadStandard(false);
-  }, []);
+    setCompilerMode(true); setSkill(initialSkill);
+    if (user?.targetRole) setRole(user.targetRole);
+    api<any>("/api/v1/career/roles").then(data => { if (data.current_role) setRole(data.current_role); }).catch(() => {}).finally(() => setRoleReady(true));
+    if (!initialSkill) api<any>("/api/v1/analytics").then(data => setSkill(data.role_progress?.skills?.find((x: any) => x.gap)?.competency || "Role fundamentals")).catch(() => setSkill("Role fundamentals"));
+  }, [user?.targetRole]);
 
-  async function loadStandard(next = false) {
-    setResult(null); setAnswer(""); setError("");
-    try { if (next && challenge?.id) setChallenge(await api<any>(`/api/v1/challenges/${challenge.id}/retest`, { method: "POST" })); else setChallenge(await api<any>("/api/v1/challenges/next")); }
-    catch (e: any) { setChallenge(null); setError(e?.message || "Standard practice could not be loaded."); }
-  }
+  useEffect(() => {
+    if (compilerMode && roleReady && skill.trim() && !task && !busy && !error) void buildTask();
+    // One fresh AI-generated task is prepared automatically when the page opens.
+    // Explicit button presses can request another task after the first is shown.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [compilerMode, roleReady, skill]);
 
   async function buildTask() {
     if (!skill.trim()) { setError("Choose the competency you want to practice."); return; }
@@ -103,16 +104,6 @@ export default function Practice() {
     finally { setBusy(false); }
   }
 
-  async function submitStandard() {
-    if (!challenge || !answer.trim()) return;
-    setBusy(true); setError("");
-    try {
-      const data = await api<any>(`/api/v1/challenges/${challenge.id}/submit`, { method: "POST", body: JSON.stringify({ answer, provider: "puter", model }) });
-      if (data.evaluation?.mode === "puter-client" && data.evaluation?.prompt) data.evaluation.ai_note = await runPuter(data.evaluation.prompt, data.evaluation.model || model);
-      setResult(data);
-    } catch (e: any) { setError(e?.message || "Could not evaluate this practice answer."); }
-    finally { setBusy(false); }
-  }
 
   return <AppLayout><div className="page practice-page practice-flow-page">
     <div className="page-head">
@@ -122,14 +113,12 @@ export default function Practice() {
         <p>{compilerMode ? "AI creates a fresh applied task for your selected competency and evaluates your response against a clear rubric." : "Work through the prompt, explain your approach, and review the feedback after submission."}</p>
       </div>
       <div className="action-row">
-        {compilerMode
-          ? <button className="button secondary" type="button" onClick={() => window.location.assign("/practice")}>Standard practice</button>
-          : <button className="button" type="button" onClick={() => void loadStandard(true)}>New practice <ArrowRight size={14}/></button>}
+        <button className="button secondary" type="button" onClick={() => void buildTask()} disabled={busy || !skill.trim()}><ArrowRight size={14}/> New AI practice</button>
       </div>
     </div>
     {error && <div className="notice error" role="alert"><AlertCircle size={16}/>{error}</div>}
 
-    {compilerMode ? <>
+    <>
       <section className="panel practice-compiler-setup">
         <div className="panel-head"><div><div className="eyebrow">PERSONALIZED PRACTICE</div><h2>Choose what to practice</h2></div><Hammer/></div>
         <div className="grid grid-3">
@@ -160,30 +149,7 @@ export default function Practice() {
           </div>}
         </section>
       </div>}
-    </> : !challenge ? <div className="empty">{error ? "Practice could not be loaded." : "Loading practice…"}</div> : <div className="practice-task-flow">
-      <section className="panel practice-question-panel">
-        <div className="practice-question-kicker"><span className="eyebrow">PRACTICE QUESTION</span><span className="tag blue">Role-aligned</span></div>
-        <h2>{challenge.title}</h2>
-        <p className="practice-question-statement">{challenge.statement}</p>
-      </section>
-      <section className="panel practice-answer-panel">
-        <div className="panel-head"><div><div className="eyebrow">YOUR RESPONSE</div><h2>Write your answer here</h2><p className="muted">Explain the steps you would take and why.</p></div><Target/></div>
-        <textarea className="big-textarea" aria-label="Write your practice answer here" value={answer} onChange={e => setAnswer(e.target.value)} placeholder="Write your answer here…" rows={8}/>
-        <button className="button primary" style={{ marginTop: 12 }} type="button" onClick={() => void submitStandard()} disabled={busy || !answer.trim()}>{busy ? "Analyzing…" : "Submit answer and view analysis"} <ArrowRight size={14}/></button>
-        {result && <div ref={resultRef} tabIndex={-1} className="panel practice-evaluation-result" style={{ marginTop: 18, scrollMarginTop: 92 }}>
-          <div className="practice-result-summary"><div><div className="eyebrow">YOUR RESULT</div><h2>Practice analysis</h2></div><div className="result-score">{result.score}%</div></div>
-          {result.role_progress && <div className="grid grid-3 practice-progress-metrics" style={{ margin: "10px 0" }}>
-            <div className="signal"><b>Target role signal</b><span>{result.role_progress.score == null ? "—" : `${result.role_progress.score}%`}</span></div>
-            <div className="signal"><b>Assessment coverage</b><span>{result.role_progress.assessment_covered_skill_count || 0}/{result.role_progress.required_skill_count} · {result.role_progress.assessment_coverage_percent}%</span></div>
-            <div className="signal"><b>Gaps / evidence</b><span>{result.role_progress.gap_count} gaps · {result.role_progress.evidence_covered_skill_count} skills with evidence</span></div>
-          </div>}
-          <p className="muted">Practice scores are rubric signals and are not independent proof of skill.</p>
-          {result.evaluation?.criteria?.length > 0 && <div className="practice-criteria-map" aria-label="Evaluation criteria">{result.evaluation.criteria.map((x: any, i: number) => <article className={`practice-criteria-item ${x.met ? "good" : "warn"}`} key={i}><span className="practice-criteria-mark">{x.met ? "✓" : "•"}</span><div><b>{x.label}</b><p>{x.detail}</p></div></article>)}</div>}
-          {result.evaluation?.ai_note && <AIInsight text={result.evaluation.ai_note} compact visualFlow />}
-          <p><b>Next step:</b> {result.evaluation?.next_step}</p>
-        </div>}
-      </section>
-    </div>}
+    </>
   </div></AppLayout>;
 
 }

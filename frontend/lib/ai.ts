@@ -95,9 +95,10 @@ export async function runPuter(prompt:string, requestedModel?:string) {
   // fallback so an overloaded primary model cannot block the interviewer/coach.
   // There is no Gemini/Ollama/server-model fallback here.
   const models = [...new Set([
-    requestedModel || DEFAULT_AI_MODEL,
+    requestedModel || "openai/gpt-4o-mini",
     "openai/gpt-5.4-nano",
-    DEFAULT_AI_MODEL,
+    "openai/gpt-oss-20b",
+    "openai/gpt-4o-mini",
   ].filter(Boolean))];
 
   const runWithTimeout = async (model:string, timeoutMs:number): Promise<string> => {
@@ -134,7 +135,7 @@ export async function runPuter(prompt:string, requestedModel?:string) {
       } catch (error:any) {
         lastError = error;
         const message = String(error?.message || error || "");
-        const retryable = /network|fetch|timeout|timed out|temporar|rate.?limit|429|502|503|504|empty response|connection reset|unavailable|failed/i.test(message);
+        const retryable = /network|fetch|timeout|timed out|temporar|rate.?limit|\b(408|429|500|502|503|504)\b|internal server error|server error|bad gateway|gateway timeout|overloaded|empty response|connection reset|unavailable|failed|unsupported model|model.{0,30}(not found|unsupported|invalid)/i.test(message);
         if (!retryable || i === models.length - 1) break;
         // Give Puter a tiny recovery window before the fallback model.
         await new Promise(resolve => window.setTimeout(resolve, 120));

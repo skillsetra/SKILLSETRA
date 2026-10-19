@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Bot, Check, Copy, Download, Expand, Headphones, Languages, Mic, MicOff, Minimize2, RotateCcw,
-  Send, Settings2, Sparkles, Volume2, X,
+  Send, Settings2, Sparkles, Square, Volume2, X,
 } from "lucide-react";
 import { api } from "../lib/api";
 import { runPuter } from "../lib/ai";
@@ -275,6 +275,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
   const recognitionAttemptedRef = useRef<string[]>([]);
   const voiceInterimTimerRef = useRef<number | null>(null);
   const voiceInterimTextRef = useRef("");
+  const voiceFinalTextRef = useRef("");
   const providerRef = useRef(provider);
   const modelRef = useRef(model);
   const voiceLanguageRef = useRef(voiceLanguage);
@@ -342,7 +343,8 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
       if (savedLanguage && Object.prototype.hasOwnProperty.call(LANGS, savedLanguage)) setVoiceLanguage(savedLanguage);
       else if (Object.prototype.hasOwnProperty.call(LANGS, language)) setVoiceLanguage(language);
       if (Number.isFinite(savedRate) && savedRate >= 0.7 && savedRate <= 1.2) setSpeechRate(savedRate);
-      if (Number.isFinite(savedVolume) && savedVolume >= 0 && savedVolume <= 1) setSpeechVolume(savedVolume);
+      if (Number.isFinite(savedVolume) && savedVolume > 0 && savedVolume <= 1) setSpeechVolume(savedVolume);
+      else setSpeechVolume(1);
     } catch { /* Optional voice preferences may be unavailable in private mode. */ }
     setVoicePrefsLoaded(true);
     if (!("speechSynthesis" in window)) return;
@@ -412,6 +414,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
     if (voiceInterimTimerRef.current !== null) window.clearTimeout(voiceInterimTimerRef.current);
     voiceInterimTimerRef.current = null;
     voiceInterimTextRef.current = "";
+    voiceFinalTextRef.current = "";
     try { recognitionRef.current?.abort(); } catch { /* Browser may already have stopped recognition. */ }
     recognitionRef.current = null;
     if (textFallbackTimerRef.current !== null) window.clearTimeout(textFallbackTimerRef.current);
@@ -458,7 +461,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
         if (voiceSessionRef.current) {
           if (voiceTextFallbackRef.current) {
             setVoiceState("typing");
-            setVoiceStatus("Your turn. Type your next message below; SKILLSETRA will reply aloud. End conversation is always available above.");
+            setVoiceStatus("Your turn. Type your next message below; SKILLSETRA will reply aloud. Use the close button when you want to leave voice chat.");
           } else {
             setVoiceState("listening");
             setVoiceStatus("Your turn — speak naturally. I will respond shortly after you pause.");
@@ -647,7 +650,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
       // silently tear down the microphone lifecycle.
       setVoiceTextInput(transcript.trim());
       setVoiceState("listening");
-      setVoiceStatus(`${error?.message || "The AI could not respond."} Your words are preserved. The conversation remains active and listening will resume; use End conversation whenever you want to stop.`);
+      setVoiceStatus(`${error?.message || "The AI could not respond."} Your words are preserved. The conversation remains active and listening will resume; use Use the close button whenever you want to stop.`);
       if (restartTimerRef.current !== null) window.clearTimeout(restartTimerRef.current);
       restartTimerRef.current = window.setTimeout(() => startRecognitionRef.current(), 700);
     }
@@ -690,26 +693,23 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
           if (result.isFinal) finalWords.push(transcript);
           else interimWords.push(transcript);
         }
-        if (finalWords.length && !voiceTextFallbackRef.current) {
+        if ((finalWords.length || interimWords.length) && !voiceTextFallbackRef.current && !voiceBusyRef.current) {
+          // Keep final chunks separately from the latest interim hypothesis. Browser
+          // engines revise interim text repeatedly, so appending every interim event
+          // would duplicate words. Wait for a real pause before asking AI to think.
+          if (finalWords.length) voiceFinalTextRef.current = [voiceFinalTextRef.current.trim(), ...finalWords].filter(Boolean).join(" ").replace(/\s+/g, " ");
+          voiceInterimTextRef.current = interimWords.join(" ").trim();
           if (voiceInterimTimerRef.current !== null) window.clearTimeout(voiceInterimTimerRef.current);
-          voiceInterimTimerRef.current = null;
-          voiceInterimTextRef.current = "";
-          recognitionNetworkRetriesRef.current = 0;
-          void latestVoiceTurnRef.current(finalWords.join(" "));
-          return;
-        }
-        if (interimWords.length && !voiceTextFallbackRef.current && !voiceBusyRef.current) {
-          voiceInterimTextRef.current = interimWords.join(" ");
-          if (voiceInterimTimerRef.current !== null) window.clearTimeout(voiceInterimTimerRef.current);
-          // Start the AI after a short natural pause instead of waiting for a
-          // long browser recognition-finalization delay. A later interim event
-          // resets this timer, so normal continuous speech is not cut up.
           voiceInterimTimerRef.current = window.setTimeout(() => {
             voiceInterimTimerRef.current = null;
-            const buffered = voiceInterimTextRef.current.trim();
+            const buffered = [voiceFinalTextRef.current.trim(), voiceInterimTextRef.current.trim()].filter(Boolean).join(" ").replace(/\s+/g, " ");
+            voiceFinalTextRef.current = "";
             voiceInterimTextRef.current = "";
-            if (buffered && voiceSessionRef.current && !voiceBusyRef.current) void latestVoiceTurnRef.current(buffered);
-          }, 720);
+            if (buffered && voiceSessionRef.current && !voiceBusyRef.current) {
+              recognitionNetworkRetriesRef.current = 0;
+              void latestVoiceTurnRef.current(buffered);
+            }
+          }, 2400);
         }
       };
       recognition.onerror = (event: RecognitionErrorEvent) => {
@@ -761,7 +761,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
           voiceTextFallbackRef.current = true;
           setVoiceTextFallback(true);
           setVoiceState("typing");
-          setVoiceStatus(`${recognitionErrorMessage(code, voiceLanguageRef.current)} Voice session remains active in typed fallback; AI replies will still be spoken. End conversation when you choose.`);
+          setVoiceStatus(`${recognitionErrorMessage(code, voiceLanguageRef.current)} Voice session remains active in typed fallback; AI replies will still be spoken. Use the close button when you choose.`);
           return;
         }
         // Keep the session controllable and recoverable; don't create a
@@ -815,7 +815,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
       voiceTextFallbackRef.current = true;
       setVoiceTextFallback(true);
       setVoiceState("typing");
-      setVoiceStatus(`${reason} Type your messages below; AI replies will still be spoken aloud. End conversation remains available in the top bar.`);
+      setVoiceStatus(`${reason} Type your messages below; AI replies will still be spoken aloud. Use the close button to leave voice chat.`);
     };
     if (!(w.SpeechRecognition || w.webkitSpeechRecognition)) {
       setRecognitionSupported(false);
@@ -872,6 +872,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
     if (voiceInterimTimerRef.current !== null) window.clearTimeout(voiceInterimTimerRef.current);
     voiceInterimTimerRef.current = null;
     voiceInterimTextRef.current = "";
+    voiceFinalTextRef.current = "";
     try { recognitionRef.current?.abort(); } catch { /* Ignore an already-ended recognizer. */ }
     recognitionRef.current = null;
     voiceTextFallbackRef.current = false;
@@ -1011,7 +1012,6 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
       <div className="ai-head-actions">
         <button type="button" onClick={() => setShowSettings(v => !v)} title={showSettings ? "Hide AI settings" : "Show AI settings"} aria-label="Toggle AI settings" aria-expanded={showSettings}><Settings2 size={16} /></button>
         {mode === "chat" && speakingMessageIndex !== null && <button type="button" className="ai-header-stop" onClick={stopAnswerSpeech} title="Stop AI speech immediately" aria-label="Stop AI speech"><MicOff size={15} /><span>Stop audio</span></button>}
-        {mode === "voice" && <button type="button" className="ai-header-stop" onClick={() => stopVoiceSession()} disabled={voiceState === "idle" || voiceState === "error"} title="End the voice conversation and stop current speech" aria-label="End conversation"><MicOff size={15} /><span>End conversation</span></button>}
         {mode === "chat" && <button type="button" onClick={exportConversation} title="Export text conversation as Markdown" aria-label="Export conversation"><Download size={16} /></button>}
         {mode === "chat" && <button type="button" onClick={async () => { if (!window.confirm("Clear this Coach conversation from the current workspace?")) return; await api("/api/v1/ai/history", { method: "DELETE" }).catch(() => {}); setMsgs([]); }} title="Clear saved conversation" aria-label="Clear conversation"><RotateCcw size={16} /></button>}
         <button type="button" onClick={full ? exitFullscreen : enterFullscreen} title={full ? "Exit fullscreen" : "Enter fullscreen"} aria-label={full ? "Exit fullscreen" : "Enter fullscreen"}>{full ? <Minimize2 size={16} /> : <Expand size={16} />}</button>
@@ -1077,7 +1077,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
       {(voiceState === "idle" || voiceState === "error") && !voiceTextFallback && <button type="button" className="voice-start-button" onClick={startVoiceSession} disabled={!voiceSupported || providerLoading}><Mic size={18} /> Start voice conversation</button>}
       {voiceState === "typing" && <form className="ai-voice-typed-fallback" onSubmit={e => { e.preventDefault(); void sendVoiceTypedMessage(); }}><label htmlFor="skillsetra-voice-typed-message">Your message</label><textarea id="skillsetra-voice-typed-message" rows={2} maxLength={4000} value={voiceTextInput} onChange={e => setVoiceTextInput(e.target.value)} placeholder="Type what you want to say. SKILLSETRA will reply aloud…" disabled={voiceBusyRef.current} /><div className="ai-voice-typed-actions"><span>{voiceTextInput.length}/4000</span><button type="submit" className="voice-start-button" disabled={!voiceTextInput.trim() || voiceBusyRef.current}><Send size={15} /> Send and hear reply</button><button type="button" className="button" onClick={resumeVoiceRecognition} disabled={!recognitionSupported || recognitionLanguageOptions.length === 0 || microphoneRetryUsed}>{microphoneRetryUsed ? "Microphone retry used" : "Try microphone once"}</button></div></form>}
       <div className="voice-privacy-note"><Mic size={13} /> {voiceTextFallback ? "Typed fallback messages appear only in this panel and are not saved to chat history. Browser speech recognition may process audio under your browser provider’s policies." : "Spoken input and replies are not displayed or saved to chat history. Browser speech recognition may process audio under your browser provider’s policies."}</div>
-      <div className="ai-voice-bottom-actions"><span>{voiceState === "speaking" ? "AI voice is playing" : voiceState === "listening" ? "Microphone is active" : voiceState === "thinking" ? "Preparing a reply" : "Conversation controls"}</span><button type="button" className="ai-voice-end-button" onClick={() => { stopVoiceSession(); setMode("chat"); }}><MicOff size={16}/> End conversation</button></div>
+      <div className="ai-voice-bottom-actions"><span>{voiceState === "speaking" ? "AI voice is playing" : voiceState === "listening" ? "Microphone is active" : voiceState === "thinking" ? "Preparing a reply" : voiceState === "typing" ? "Typed conversation active" : "Conversation controls"}</span><span className="muted">End the active conversation here, or switch to Normal Chat.</span>{(voiceSessionRef.current || ["listening", "thinking", "speaking", "typing"].includes(voiceState)) && <button type="button" className="ai-voice-end-button" onClick={() => { stopVoiceSession(); setVoiceStatus("Conversation ended. Start a new voice conversation whenever you are ready."); }} aria-label="End conversation"><Square size={15} /> End conversation</button>}</div>
     </section>}
   </div>;
 

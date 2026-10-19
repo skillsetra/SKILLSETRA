@@ -37,3 +37,25 @@ test('assessment and evidence cards stay within their containers without default
   assert.match(css, /\.product-shell \.question-fieldset\{[^}]*max-width:100%/);
   assert.match(css, /\.evidence-flow-steps>li::marker\{content:(?:none|""|\x27\x27)!important/);
 });
+
+test('project review is analysis-only and cannot record evidence or alter learner progress', () => {
+  const source = read('components/stitch-source/components/Screens/ProjectUpgrade.tsx');
+  assert.match(source, /no goal, role-progress, or evidence updates/i);
+  assert.doesNotMatch(source, /\/api\/v1\/projects\/upgrades/);
+  assert.doesNotMatch(source, /Record evidence/);
+  const routes = fs.readFileSync(path.resolve(root, '../backend/app/routes.py'), 'utf8');
+  const start = routes.indexOf('@router.post("/projects/analyze",dependencies=[Depends(current_user)])');
+  const end = routes.indexOf('@router.post("/projects/analyze-upload"', start);
+  const analyzeRoute = routes.slice(start, end);
+  assert.match(analyzeRoute, /read-only with respect to learner progress/i);
+  assert.doesNotMatch(analyzeRoute, /state\["evidence"\]\.insert/);
+  assert.doesNotMatch(analyzeRoute, /record_role_skill_signal|record_competency_signal|state\["projects"\]\.insert/);
+});
+
+test('project defense requests AI-generated questions and retains server fallback questions', () => {
+  const source = read('components/stitch-source/components/Screens/SocraticDefense.tsx');
+  assert.match(source, /Create 5 distinct technical project-defense questions/);
+  assert.match(source, /runPuter\(.*model\)/s);
+  assert.match(source, /Keep the server-provided questions/);
+  assert.match(source, /runPuter\(response\.prompt, response\.model \|\| model\)/);
+});

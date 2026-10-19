@@ -4,12 +4,15 @@ import AppLayout from "../../components/AppLayout";
 import AIInsight from "../../components/AIInsight";
 import { api } from "../../lib/api";
 import { runPuter } from "../../lib/ai";
+import { useApp } from "../../components/AppProvider";
 import { Brain, ArrowRight, RotateCcw, Copy, Check, ClipboardCheck } from "lucide-react";
 
 export default function Reasoning() {
+  const { user } = useApp();
   const analysisRef = useRef<HTMLDivElement | null>(null);
   const answerRef = useRef<HTMLTextAreaElement | null>(null);
-  const [problem, setProblem] = useState("A production API becomes slow only when traffic spikes. CPU is moderate, database connections are near their limit, and retry traffic increases during timeouts. Explain the most likely causal chain and how you would verify it.");
+  const [problem, setProblem] = useState("");
+  const [generatingProblem, setGeneratingProblem] = useState(true);
   const [answer, setAnswer] = useState("");
   const [analysis, setAnalysis] = useState("");
   const [progress, setProgress] = useState<any>(null);
@@ -17,6 +20,17 @@ export default function Reasoning() {
   const [error, setError] = useState("");
   const model = "openai/gpt-oss-20b";
   const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    const role = user?.targetRole || "the learner's chosen technical role";
+    setGeneratingProblem(true);
+    runPuter(`Create one fresh, realistic technical reasoning case for ${role}. It must be suitable for a learner to analyze through assumptions, causal chain, alternative explanations, evidence, and verification. Vary the domain and do not use a generic textbook question. Return only the case text, 2-4 sentences, no heading or solution.`, model)
+      .then(value => { if (active && value.trim()) setProblem(value.trim()); })
+      .catch((reason: any) => { if (active) setError(reason?.message || "AI could not prepare a reasoning case. Retry to generate one."); })
+      .finally(() => { if (active) setGeneratingProblem(false); });
+    return () => { active = false; };
+  }, [user?.targetRole]);
 
   useEffect(() => {
     if (!analysis) return;
@@ -78,12 +92,13 @@ export default function Reasoning() {
 
     <section className="panel reasoning-question-panel">
       <div className="panel-head"><div><div className="eyebrow">THE CASE</div><h2>Reasoning challenge</h2></div><Brain/></div>
-      <p className="reasoning-question-text">{problem}</p>
+      <p className="reasoning-question-text">{generatingProblem ? "Generating a fresh AI reasoning case…" : problem || "AI could not generate a case. Use Retry generation below."}</p>
+      {!generatingProblem && !problem && <button type="button" className="button" onClick={() => { setError(""); setGeneratingProblem(true); runPuter(`Create one fresh, realistic technical reasoning case for ${user?.targetRole || "the learner's chosen technical role"}. It must test assumptions, causal reasoning, alternative explanations, evidence and verification. Return only a 2-4 sentence case without a solution.`, model).then(setProblem).catch((e:any)=>setError(e?.message||"AI generation failed.")).finally(()=>setGeneratingProblem(false)); }}>Retry generation</button>}
       <div className="reasoning-answer-area">
         <label htmlFor="reasoning-answer">Write your answer here</label>
         <textarea ref={answerRef} id="reasoning-answer" value={answer} onChange={event => setAnswer(event.target.value)} placeholder="Explain your assumptions, likely cause, evidence, alternatives, and how you would verify the explanation…" rows={7} />
         {error && !analysis && <p className="notice error" role="alert">{error}</p>}
-        <div className="reasoning-submit-row"><span className="muted">Use specific evidence and explain how you would test the cause.</span><button className="button primary" type="button" onClick={() => void go()} disabled={busy || !answer.trim()}>{busy ? "Analyzing…" : "Analyze my answer"} <ArrowRight size={14}/></button></div>
+        <div className="reasoning-submit-row"><span className="muted">Use specific evidence and explain how you would test the cause.</span><button className="button primary" type="button" onClick={() => void go()} disabled={busy || generatingProblem || !problem.trim() || !answer.trim()}>{busy ? "Analyzing…" : "Analyze my answer"} <ArrowRight size={14}/></button></div>
       </div>
     </section>
 

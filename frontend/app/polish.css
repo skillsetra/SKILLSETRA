@@ -1298,10 +1298,10 @@ html[data-theme="dark"] .ai-window .ai-welcome h3,html[data-theme="dark"] .ai-wi
 html[data-theme="dark"] .ai-window .ai-welcome p,html[data-theme="dark"] .ai-window .voice-status,html[data-theme="dark"] .ai-window .voice-privacy-note{color:#adbed5!important}
 .ai-voice-bottom-actions{position:sticky;bottom:0;z-index:6;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:16px;padding:12px 0 max(10px,env(safe-area-inset-bottom));border-top:1px solid var(--p-border);background:linear-gradient(var(--p-surface),var(--p-surface) 88%,color-mix(in srgb,var(--p-surface) 80%,transparent));}
 .ai-voice-bottom-actions>span{font-size:11px;color:var(--p-muted)}
-.ai-voice-bottom-actions .ai-voice-end-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:0 18px;border:1px solid #ca3545;border-radius:10px;background:#c9233715;color:var(--p-text);font-size:13px;font-weight:800;cursor:pointer}
-.ai-voice-bottom-actions .ai-voice-end-button:focus-visible{outline:3px solid #ca354566;outline-offset:2px}
-.ai-voice-bottom-actions .ai-voice-end-button:disabled{opacity:.45;cursor:not-allowed}
-@media(max-width:520px){.ai-voice-bottom-actions{align-items:stretch}.ai-voice-bottom-actions .ai-voice-end-button{width:100%}}
+.ai-voice-end-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;padding:8px 13px;border:1px solid color-mix(in srgb,#ef4444 48%,var(--p-border));border-radius:10px;background:color-mix(in srgb,#ef4444 10%,var(--p-surface));color:var(--p-text);font:inherit;font-size:12px;font-weight:650;cursor:pointer;transition:background .15s ease,border-color .15s ease}
+.ai-voice-end-button:hover{background:color-mix(in srgb,#ef4444 17%,var(--p-surface));border-color:#ef4444}
+.ai-voice-end-button:focus-visible{outline:2px solid #ef4444;outline-offset:3px}
+@media(max-width:520px){.ai-voice-bottom-actions{align-items:stretch}}
 
 @media(max-width:520px){.request-activity-overlay{top:64px;right:10px;width:calc(100vw - 20px)}.request-activity-card{padding:12px 13px 16px;grid-template-columns:24px minmax(0,1fr);gap:9px}}
 /* Request status remains visible even in fullscreen Coach/Interview views, while allowing every click through. */

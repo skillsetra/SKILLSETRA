@@ -44,11 +44,13 @@ test("only explicit unsupported-language errors recommend hiding a language", ()
 });
 
 
-test("AI Coach exposes an end control during voice playback and cleans up active media", async () => {
+test("AI Coach has no redundant End Conversation header button and retains safe media cleanup", async () => {
   const source = await readFile(new URL("../components/PersistentAIWidget.tsx", import.meta.url), "utf8");
-  assert.match(source, /aria-label="End conversation"[^>]*>/);
-  assert.match(source, /onClick=\{\(\) => stopVoiceSession\(\)\}/);
-  assert.match(source, /disabled=\{voiceState === "idle" \|\| voiceState === "error"\}/);
+  assert.match(source, /className="ai-voice-end-button"[\s\S]{0,220}aria-label="End conversation"/);
+  const header = source.slice(source.indexOf('<div className="ai-head-actions">'), source.indexOf('</div>', source.indexOf('<div className="ai-head-actions">')));
+  assert.doesNotMatch(header, /End conversation/i);
+  assert.match(source, /full \? exitFullscreen : enterFullscreen/);
+  assert.match(source, /stopVoiceSession\(false\); setOpen\(false\)/);
   assert.match(source, /recognitionRef\.current\?\.abort\(\)/);
   assert.match(source, /window\.speechSynthesis\.cancel\(\)/);
   assert.match(source, /speechRunRef\.current\?\.\(\)/);
@@ -65,4 +67,13 @@ test("AI Coach keeps the voice session open after transient failures and bounds 
   assert.match(source, /setVoiceTextInput\(transcript\.trim\(\)\)/);
   assert.match(source, /voiceSessionRef\.current = false/); // Explicit stop/session reset still closes the session.
   assert.match(source, /if \(mode === "voice" && voiceSessionRef\.current\) stopVoiceSession\(false\)/);
+});
+
+test("voice input waits for a natural pause and does not duplicate interim hypotheses", async () => {
+  const source = await readFile(new URL("../components/PersistentAIWidget.tsx", import.meta.url), "utf8");
+  assert.match(source, /voiceFinalTextRef/);
+  assert.match(source, /}, 2400\)/);
+  assert.match(source, /would duplicate words/);
+  assert.match(source, /voiceSessionRef\.current \|\| \["listening", "thinking", "speaking", "typing"\]\.includes\(voiceState\)/);
+  assert.match(source, /const \[speechVolume, setSpeechVolume\] = useState\(1\)/);
 });

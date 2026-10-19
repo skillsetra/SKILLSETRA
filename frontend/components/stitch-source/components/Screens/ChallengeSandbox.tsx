@@ -3,12 +3,15 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ArrowRight, CheckCircle2, Copy, Check, Target, RotateCw } from 'lucide-react';
 import type { ScreenId } from '../../types';
 import { api } from '../../../../lib/api';
+import { useApp } from '../../../AppProvider';
 import { runPuter } from '../../../../lib/ai';
 import AIInsight from '../../../AIInsight';
 import { cleanAIText } from '../../../../lib/ai-insight.mjs';
 
 type Challenge = {
   id: string;
+  aiGenerated?: boolean;
+  competency?: string;
   title: string;
   statement: string;
   constraints: string[];
@@ -17,6 +20,7 @@ type Challenge = {
 };
 
 export const ChallengeSandbox: React.FC<{ onNavigate: (s: ScreenId) => void }> = ({ onNavigate }) => {
+  const { user } = useApp();
   const [challenge, setChallenge] = useState<Challenge | null>(null);
   const [challengeError, setChallengeError] = useState('');
   const [loadingChallenge, setLoadingChallenge] = useState(true);
@@ -35,13 +39,13 @@ export const ChallengeSandbox: React.FC<{ onNavigate: (s: ScreenId) => void }> =
     setResult(null);
     setAnswer('');
     try {
-      const next = await api<Challenge>('/api/v1/challenges/next');
-      if (!next?.id || !String(next.title || '').trim() || !String(next.statement || '').trim()) {
-        throw new Error('The challenge service returned an incomplete prompt. Please retry.');
-      }
-      setChallenge(next);
+      const raw = await runPuter(`Generate one original, practical technical challenge for target role ${user?.targetRole || "the learner's chosen technical role"}. It must be a new scenario, not a memorized question. Focus on implementation/debugging, edge cases, tests, and verification. Return ONLY valid JSON: {"title":"short title","statement":"clear challenge in 2-5 sentences","constraints":["constraint"],"starter_code":"optional tiny context or empty string","competency":"one skill name"}. Do not include a solution or answer key.`, model);
+      const cleaned = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+      const parsed = JSON.parse(cleaned.slice(cleaned.indexOf('{'), cleaned.lastIndexOf('}') + 1));
+      if (!String(parsed.title || '').trim() || !String(parsed.statement || '').trim()) throw new Error('The AI returned an incomplete challenge. Retry generation.');
+      setChallenge({ id: `ai-generated-${Date.now()}`, aiGenerated: true, title: String(parsed.title).slice(0, 180), statement: String(parsed.statement).slice(0, 5000), constraints: Array.isArray(parsed.constraints) ? parsed.constraints.map(String).slice(0, 8) : [], starter_code: String(parsed.starter_code || '').slice(0, 4000), competency: String(parsed.competency || 'Role fundamentals'), variant: 'AI GENERATED' });
     } catch (error: any) {
-      setChallengeError(error?.message || 'Challenge service is unavailable.');
+      setChallengeError(error?.message || 'AI challenge generation is unavailable. Retry after checking your connection.');
     } finally {
       setLoadingChallenge(false);
     }
@@ -63,16 +67,24 @@ export const ChallengeSandbox: React.FC<{ onNavigate: (s: ScreenId) => void }> =
     setLoading(true);
     setResult(null);
     try {
-      const response = await api<any>(`/api/v1/challenges/${encodeURIComponent(challenge.id)}/submit`, {
-        method: 'POST',
-        body: JSON.stringify({ answer, language: 'English', provider, model }),
-      });
-      let output: any = response;
-      if (response.evaluation?.mode === 'puter-client' && response.evaluation?.prompt) {
-        const text = await runPuter(response.evaluation.prompt, response.evaluation.model || model);
-        output = { ...response, evaluation: { ...response.evaluation, ai_note: text, mode: 'live' } };
+      if (challenge.aiGenerated) {
+        const prompt = `Evaluate the learner's answer to this AI-generated challenge for the target role. Challenge: ${challenge.title}. Statement: ${challenge.statement}. Constraints: ${JSON.stringify(challenge.constraints || [])}. Competency: ${challenge.competency || 'Role fundamentals'}. Learner answer: ${answer.slice(0, 9000)}. Evaluate only what is present; do not infer unshown work. Return ONLY JSON: {"score":0,"status":"Evaluation complete","strengths":["..."],"gaps":["..."],"criteria":[{"label":"criterion","met":false,"detail":"evidence from answer"}],"ai_note":"clear feedback","next_step":"..."}. Score is 0-100.`;
+        const raw = await runPuter(prompt, model);
+        const cleaned = raw.trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+        const data = JSON.parse(cleaned.slice(cleaned.indexOf('{'), cleaned.lastIndexOf('}') + 1));
+        const score = Math.max(0, Math.min(100, Number(data.score) || 0));
+        let roleProgress: any = null;
+        try { const saved = await api<any>('/api/v1/practice/record-result', { method: 'POST', body: JSON.stringify({ source: 'ai-generated-challenge', title: challenge.title, competency: challenge.competency || 'Role fundamentals', score, client_scored: true, competency_scores: [{ competency: challenge.competency || 'Role fundamentals', score, answered: 1, total: 1 }] }) }); roleProgress = saved?.role_progress || null; } catch { /* Evaluation remains available if progress recording is temporarily offline. */ }
+        setResult({ ...data, score, role_progress: roleProgress, evaluation: { ...data, ai_note: String(data.ai_note || ''), criteria: Array.isArray(data.criteria) ? data.criteria : [], strengths: Array.isArray(data.strengths) ? data.strengths : [], gaps: Array.isArray(data.gaps) ? data.gaps : [] } });
+      } else {
+        const response = await api<any>(`/api/v1/challenges/${encodeURIComponent(challenge.id)}/submit`, { method: 'POST', body: JSON.stringify({ answer, language: 'English', provider, model }) });
+        let output: any = response;
+        if (response.evaluation?.mode === 'puter-client' && response.evaluation?.prompt) {
+          const text = await runPuter(response.evaluation.prompt, response.evaluation.model || model);
+          output = { ...response, evaluation: { ...response.evaluation, ai_note: text, mode: 'live' } };
+        }
+        setResult(output);
       }
-      setResult(output);
     } catch (error: any) {
       setResult({
         status: 'Evaluation unavailable',
@@ -98,7 +110,7 @@ export const ChallengeSandbox: React.FC<{ onNavigate: (s: ScreenId) => void }> =
     return <div className="page challenge-flow-page">
       <div className="page-head"><div><div className="eyebrow">Challenge Lab</div><h1>Solve the challenge. Prove the fix.</h1><p>Work through a focused scenario, explain your reasoning, and inspect the evaluation.</p></div></div>
       <section className="panel challenge-loading-state" role={challengeError ? 'alert' : 'status'} aria-live="polite">
-        {loadingChallenge ? <><div className="challenge-loading-mark" aria-hidden="true"><span /><span /><span /></div><h2>Preparing your challenge</h2><p className="muted">Getting the next role-relevant scenario ready.</p></> : <><h2>Challenge unavailable</h2><p>{challengeError || 'A challenge could not be loaded.'}</p><button className="button primary" type="button" onClick={() => void loadChallenge()}><RotateCw size={14} /> Retry challenge</button></>}
+        {loadingChallenge ? <><div className="challenge-loading-mark" aria-hidden="true"><span /><span /><span /></div><h2>Preparing your challenge</h2><p className="muted">AI is creating a fresh role-relevant scenario. No built-in question bank is used.</p></> : <><h2>AI challenge unavailable</h2><p>{challengeError || 'An AI-generated challenge could not be loaded.'}</p><button className="button primary" type="button" onClick={() => void loadChallenge()}><RotateCw size={14} /> Retry AI generation</button></>}
       </section>
     </div>;
   }
@@ -109,7 +121,7 @@ export const ChallengeSandbox: React.FC<{ onNavigate: (s: ScreenId) => void }> =
 
   return <div className="page challenge-flow-page">
     <div className="page-head">
-      <div><div className="eyebrow">CHALLENGE LAB · {challenge.variant || 'ADAPTIVE'}</div><h1>Solve the challenge. Prove the fix.</h1><p>Focus on the prompt, explain your approach, and verify how you would know the solution works.</p></div>
+      <div><div className="eyebrow">CHALLENGE LAB · AI GENERATED</div><h1>Solve the challenge. Prove the fix.</h1><p>Focus on the prompt, explain your approach, and verify how you would know the solution works.</p></div>
       <button className="button" type="button" onClick={() => onNavigate('diagnostic')}>Assess first <ArrowRight size={15} /></button>
     </div>
 

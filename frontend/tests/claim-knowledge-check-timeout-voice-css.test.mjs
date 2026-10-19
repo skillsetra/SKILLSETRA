@@ -24,18 +24,25 @@ test('optional AI review is deferred until after the quiz and fallback progress 
   assert.match(backend,/score>=75/);
 });
 
-test('timed-out AI calls are not duplicated and are no longer described as retried', () => {
+test('AI requests fall back to another supported model on transient errors without repeating the same timed-out call', () => {
   const ai=read('lib/ai.ts');
-  assert.match(ai,/did not respond within 25 seconds/);
-  assert.match(ai,/if \(attempt === 0 && transient && !timedOut\)/);
-  assert.doesNotMatch(ai,/after a safe retry/);
+  assert.match(ai,/openai\/gpt-5\.4-nano/);
+  assert.match(ai,/runWithTimeout\(model, i === 0 \? 11500 : 10000\)/);
+  assert.match(ai,/const retryable = \/network/);
+  assert.match(ai,/unsupported model|model\.\{0,30\}/);
 });
 
-test('fullscreen AI Coach has an end control near the bottom and global progress toast cannot intercept clicks', () => {
+test('fullscreen AI Coach keeps End Conversation in the active voice panel, not the header', () => {
   const coach=read('components/PersistentAIWidget.tsx');
-  assert.match(coach,/ai-voice-bottom-actions/);
-  assert.match(coach,/End conversation/);
   const css=read('app/polish.css');
+  assert.match(coach,/ai-voice-bottom-actions/);
+  assert.match(coach,/Exit fullscreen/);
+  assert.match(coach,/aria-label="Close AI Coach"/);
+  assert.match(coach,/className="ai-voice-end-button"[\s\S]{0,220}aria-label="End conversation"/);
+  assert.match(coach,/voiceSessionRef\.current \|\| \["listening", "thinking", "speaking", "typing"\]\.includes\(voiceState\)/);
+  const header=coach.slice(coach.indexOf('<div className="ai-head-actions">'),coach.indexOf('</div>',coach.indexOf('<div className="ai-head-actions">')));
+  assert.doesNotMatch(header,/End conversation/i);
+  assert.match(css,/\.ai-voice-end-button/);
   assert.match(css,/\.request-activity-overlay[^}]*pointer-events:none/);
   assert.match(css,/\.ai-voice-bottom-actions/);
 });

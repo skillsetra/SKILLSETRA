@@ -19,7 +19,7 @@ test('Role Baseline scrolls when questions load, role changes, or the active que
   assert.match(source, /questions\.map\(\(question,questionPosition\)=>/);
   assert.match(source, /chooseAnswer\(question\.id,idx,questionPosition\)/);
   assert.match(source, /scrollToElement\(currentQuestionRef\.current\|\|document\.getElementById\('assessment-current-question'\)/);
-  assert.match(source, /\[loading,d\?\.id,i,mode,questions\.length,role\]/);
+  assert.match(source, /\[loading,d\?\.id,i,questions\.length,role\]/);
 });
 
 test('shared scroll helper detects nested scroll containers and retries after React layout commits', () => {
