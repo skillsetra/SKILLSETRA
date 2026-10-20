@@ -80,14 +80,21 @@ test("voice input waits for a natural pause and does not duplicate interim hypot
 });
 
 
-test("AI Coach dictation rebuilds from the current result snapshot and removes repeated adjacent hypotheses", async () => {
-  const source = await readFile(new URL("../components/PersistentAIWidget.tsx", import.meta.url), "utf8");
-  assert.match(source, /Rebuild the transcript from that snapshot/);
-  assert.match(source, /textDictationResultsRef\.current = segments/);
-  assert.match(source, /dedupeRecognitionSegments\(Array\.from/);
+test("normal chat dictation removes repeated and overlapping recognition segments", () => {
+  assert.deepEqual(dedupeRecognitionSegments(["Hi, I am good.", "Hi, I am good."]), ["Hi, I am good."]);
+  assert.deepEqual(dedupeRecognitionSegments(["I am good", "am good today"]), ["I am good today"]);
+  assert.deepEqual(dedupeRecognitionSegments(["Hi I am good", "Hi I am good and ready"]), ["Hi I am good and ready"]);
+  assert.deepEqual(dedupeRecognitionSegments(["Hello", "world"]), ["Hello", "world"]);
+  assert.deepEqual(dedupeRecognitionSegments(["Hi I am good Hi I am good"]), ["Hi I am good"]);
+  assert.deepEqual(dedupeRecognitionSegments(["Hi I am good", "Hi I am good Hi I am good"]), ["Hi I am good"]);
+  assert.deepEqual(dedupeRecognitionSegments(["Hi I am good", "Hi I am good and ready"]), ["Hi I am good and ready"]);
 });
 
-
-test("speech recognition segments deduplicate repeated phrases even when punctuation changes", () => {
-  assert.deepEqual(dedupeRecognitionSegments(["Hi, I am good", "Hi, I am good.", "How are you?", "How are you?"]), ["Hi, I am good", "How are you?"]);
+test("normal chat dictation uses resultIndex and replaces changed transcript segments instead of appending cumulative results", async () => {
+  const source = await readFile(new URL("../components/PersistentAIWidget.tsx", import.meta.url), "utf8");
+  assert.match(source, /textDictationSegmentsRef/);
+  assert.match(source, /Math\.max\(0, Math\.min\(event\.resultIndex \|\| 0, event\.results\.length\)\)/);
+  assert.match(source, /textDictationSegmentsRef\.current\[i\] = String\(event\.results\[i\]/);
+  assert.match(source, /dedupeRecognitionSegments\(textDictationSegmentsRef\.current\)/);
+  assert.match(source, /if \(textRecognitionRef\.current !== recognition\) return/);
 });

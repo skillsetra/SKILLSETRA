@@ -154,7 +154,6 @@ function playSpeechQueue(
     const utterance = new SpeechSynthesisUtterance(chunks[index++]);
     utterance.lang = options.lang;
     utterance.rate = Math.max(0.7, Math.min(1.2, options.rate));
-    // Web Speech caps volume at 1.0; retain the saved preference but never exceed the API maximum.
     utterance.volume = Math.max(0, Math.min(1, options.volume));
     utterance.pitch = 1;
     const voices = options.voices || [];
@@ -261,8 +260,8 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
   const recognitionRef = useRef<RecognitionInstance | null>(null);
   const textRecognitionRef = useRef<RecognitionInstance | null>(null);
   const textDictationBaseRef = useRef("");
+  const textDictationSegmentsRef = useRef<string[]>([]);
   const textDictationHasErrorRef = useRef(false);
-  const textDictationResultsRef = useRef<string[]>([]);
   const textFallbackTimerRef = useRef<number | null>(null);
   const restartTimerRef = useRef<number | null>(null);
   const voiceSessionRef = useRef(false);
@@ -546,7 +545,6 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
       textRecognitionRef.current = null;
       try { active.stop(); } catch { /* The recognition service may already have ended. */ }
       setTextListening(false);
-      textDictationResultsRef.current = [];
       setStatus("Dictation stopped. Review or edit the recognized text before sending.");
       return;
     }
@@ -562,7 +560,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
     }
     const locales = recognitionLocales(voiceLanguageRef.current);
     textDictationBaseRef.current = input ? `${input}${/\s$/.test(input) ? "" : " "}` : "";
-    textDictationResultsRef.current = [];
+    textDictationSegmentsRef.current = [];
     textDictationHasErrorRef.current = false;
     let fallbackPending = false;
     const startAtLocale = (localeIndex: number) => {
@@ -582,13 +580,18 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
         recognition.lang = locales[localeIndex];
         recognition.onstart = () => { setTextListening(true); setStatus(`Listening in ${voiceLanguageRef.current} (${locales[localeIndex]}). Speak naturally; recognized words appear as editable text.`); };
         recognition.onresult = (event: RecognitionEvent) => {
-          // SpeechRecognition results are a changing snapshot, not an append-only
-          // stream. Rebuild the transcript from that snapshot so a repeated event
-          // cannot append the same final phrase to the text box again.
-          const segments = dedupeRecognitionSegments(Array.from({length:event.results.length}, (_, i) => event.results[i]?.[0]?.transcript || ""));
-          textDictationResultsRef.current = segments;
-          const recognized = `${textDictationBaseRef.current}${segments.join(" ")}`.trimEnd();
-          setInput(recognized);
+          // Web Speech events usually contain the full cumulative result list. Only
+          // replace segments from resultIndex onward; appending the full list on every
+          // event duplicates already-finalized phrases in the composer.
+          if (textRecognitionRef.current !== recognition) return;
+          const startIndex = Math.max(0, Math.min(event.resultIndex || 0, event.results.length));
+          for (let i = startIndex; i < event.results.length; i++) {
+            textDictationSegmentsRef.current[i] = String(event.results[i]?.[0]?.transcript || "").trim();
+          }
+          textDictationSegmentsRef.current.length = event.results.length;
+          const transcript = dedupeRecognitionSegments(textDictationSegmentsRef.current).join(" ").trim();
+          const recognized = `${textDictationBaseRef.current}${transcript}`;
+          setInput(recognized.replace(/\s+$/, ""));
         };
         recognition.onerror = (event: RecognitionErrorEvent) => {
           const code = event.error || "unknown";
@@ -601,6 +604,7 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
               if (textRecognitionRef.current !== recognition) return;
               try { recognition.abort(); } catch { /* Expected while changing locale. */ }
               textRecognitionRef.current = null;
+              textDictationSegmentsRef.current = [];
               fallbackPending = false;
               startAtLocale(localeIndex + 1);
             }, 180);
@@ -616,7 +620,6 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
           if (textRecognitionRef.current !== recognition || fallbackPending) return;
           textRecognitionRef.current = null;
           setTextListening(false);
-          textDictationResultsRef.current = [];
           if (!textDictationHasErrorRef.current) setStatus("Speech converted to editable text. Review it before sending.");
         };
         textRecognitionRef.current = recognition;
@@ -688,21 +691,19 @@ export default function PersistentAIWidget({ initiallyOpen = false }: { initiall
       recognition.onresult = (event: RecognitionEvent) => {
         const finalWords: string[] = [];
         const interimWords: string[] = [];
-        // Browser engines can resend earlier final results along with a revised
-        // interim hypothesis. Rebuild both buffers from the full snapshot instead
-        // of appending each event, otherwise a single sentence would duplicate words.
-        for (let i = 0; i < event.results.length; i++) {
+        for (let i = event.resultIndex; i < event.results.length; i++) {
           const result = event.results[i];
           const transcript = result?.[0]?.transcript?.trim();
           if (!transcript) continue;
           if (result.isFinal) finalWords.push(transcript);
           else interimWords.push(transcript);
         }
-        const dedupedFinalWords = dedupeRecognitionSegments(finalWords);
-        const dedupedInterimWords = dedupeRecognitionSegments(interimWords);
-        if ((dedupedFinalWords.length || dedupedInterimWords.length) && !voiceTextFallbackRef.current && !voiceBusyRef.current) {
-          voiceFinalTextRef.current = dedupedFinalWords.join(" ").replace(/\s+/g, " ");
-          voiceInterimTextRef.current = dedupedInterimWords.join(" ").trim();
+        if ((finalWords.length || interimWords.length) && !voiceTextFallbackRef.current && !voiceBusyRef.current) {
+          // Keep final chunks separately from the latest interim hypothesis. Browser
+          // engines revise interim text repeatedly, so appending every interim event
+          // would duplicate words. Wait for a real pause before asking AI to think.
+          if (finalWords.length) voiceFinalTextRef.current = [voiceFinalTextRef.current.trim(), ...finalWords].filter(Boolean).join(" ").replace(/\s+/g, " ");
+          voiceInterimTextRef.current = interimWords.join(" ").trim();
           if (voiceInterimTimerRef.current !== null) window.clearTimeout(voiceInterimTimerRef.current);
           voiceInterimTimerRef.current = window.setTimeout(() => {
             voiceInterimTimerRef.current = null;

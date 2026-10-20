@@ -1034,3 +1034,78 @@ def test_claim_knowledge_check_scores_four_answers_and_keeps_answer_keys_private
     assert all("correct" not in question and "explanation" not in question for question in saved_claim["knowledge_check"]["questions"])
     assert "details" not in saved_claim["knowledge_check"]
     assert all("details" not in attempt for attempt in saved_claim["knowledge_check"].get("attempts", []))
+
+
+def test_assessment_studio_track_updates_goal_progress_and_analytics_graphs():
+    from app import assessment_bank
+    isolated = TestClient(app, headers={"X-SKILLSETRA-Demo-Session": str(uuid.uuid4())})
+    configured = isolated.post("/api/v1/profile/goal", json={
+        "target_role": "Backend Developer", "experience": "Early career", "goal": "Improve architecture and API reliability"
+    })
+    assert configured.status_code == 200
+    before = isolated.get("/api/v1/analytics").json()
+    previous_progress = before["role_progress"]["progress_percent"]
+
+    data = isolated.get("/api/v1/assessment", params={"track": "system-design"}).json()
+    bank = {question["id"]: question["correct"] for question in assessment_bank.track_questions("system-design")}
+    answers = {question["id"]: str(bank[question["id"]]) for question in data["questions"]}
+    result = isolated.post("/api/v1/assessment/submit", json={
+        "assessment_id": data["id"], "attempt_id": "assessment-studio-progress-e2e", "answers": answers
+    })
+    assert result.status_code == 200, result.text
+    body = result.json()
+    assert body["score"] == 100
+    assert body["role_progress"]["configured"] is True
+    assert body["role_progress"]["assessment_covered_skill_count"] >= 1
+    assert body["role_progress"]["assessment_coverage_percent"] > 0
+    assert body["role_progress"]["score"] is not None
+    assert isinstance(body["goal_progress_change"], int)
+    assert body["role_progress"]["progress_percent"] > previous_progress
+    assert any(detail.get("role_competency") == "System Design" for detail in body["details"])
+
+    after = isolated.get("/api/v1/analytics").json()
+    assert after["role_progress"]["progress_percent"] == body["role_progress"]["progress_percent"]
+    assert after["selected_role_activity_counts"]["assessments"] >= 1
+    assert any(item.get("title") and item["score"] == 100 for item in after["assessment_scores"])
+    dashboard = isolated.get("/api/v1/dashboard").json()
+    assert dashboard["role_progress"]["progress_percent"] == body["role_progress"]["progress_percent"]
+
+
+def test_assessment_duplicate_submission_returns_progress_without_double_counting():
+    from app import assessment_bank
+    isolated = TestClient(app, headers={"X-SKILLSETRA-Demo-Session": str(uuid.uuid4())})
+    isolated.post("/api/v1/profile/goal", json={"target_role": "Backend Developer", "experience": "Early career", "goal": "Improve APIs"})
+    data = isolated.get("/api/v1/assessment", params={"track": "backend"}).json()
+    bank = {question["id"]: question["correct"] for question in assessment_bank.track_questions("backend")}
+    payload = {"assessment_id": data["id"], "attempt_id": "assessment-duplicate-progress-test", "answers": {question["id"]: str(bank[question["id"]]) for question in data["questions"]}}
+    first = isolated.post("/api/v1/assessment/submit", json=payload).json()
+    activity_count = len(isolated.get("/api/v1/analytics").json()["assessment_scores"])
+    second = isolated.post("/api/v1/assessment/submit", json=payload).json()
+    assert second["duplicate"] is True
+    assert second["role_progress"]["progress_percent"] == first["role_progress"]["progress_percent"]
+    assert len(isolated.get("/api/v1/analytics").json()["assessment_scores"]) == activity_count
+
+
+def test_unmapped_assessment_track_still_updates_overall_goal_without_fabricating_skill_mapping():
+    from app import assessment_bank
+    isolated = TestClient(app, headers={"X-SKILLSETRA-Demo-Session": str(uuid.uuid4())})
+    isolated.post("/api/v1/profile/goal", json={"target_role": "Frontend Developer", "experience": "Early career", "goal": "Improve frontend engineering"})
+    before = isolated.get("/api/v1/analytics").json()["role_progress"]
+    data = isolated.get("/api/v1/assessment", params={"track": "ai-engineering"}).json()
+    bank = {question["id"]: question["correct"] for question in assessment_bank.track_questions("ai-engineering")}
+    # This track has no sound skill-level mapping to a Frontend Developer role.
+    # A high score should still affect overall goal completion through the transparent
+    # aggregate assessment component, without fabricating per-skill progress.
+    answers = {q["id"]: str(bank[q["id"]]) for q in data["questions"]}
+    response = isolated.post("/api/v1/assessment/submit", json={"assessment_id": data["id"], "attempt_id": "unmapped-track-test", "answers": answers})
+    assert response.status_code == 200, response.text
+    body = response.json()
+    after = body["role_progress"]
+    assert after["assessment_activity_score_percent"] == 100
+    assert after["scored_assessment_count"] == 1
+    assert after["assessment_coverage_percent"] == 0
+    assert after["progress_percent"] == round(0.85 * after["base_progress_percent"] + 15)
+    assert after["progress_percent"] > before["progress_percent"]
+    analytics = isolated.get("/api/v1/analytics").json()
+    assert analytics["role_progress"]["progress_percent"] == after["progress_percent"]
+    assert any(row.get("score") == 100 and row.get("type") == "assessment" for row in analytics["assessment_scores"])

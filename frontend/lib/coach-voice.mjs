@@ -21,19 +21,99 @@ const LOCALE_ALTERNATES = Object.freeze({
   Vietnamese: ["vi-VN", "vi"], Polish: ["pl-PL", "pl"], Swedish: ["sv-SE", "sv"], Greek: ["el-GR", "el"], Hebrew: ["he-IL", "he"],
 });
 
-/** Rebuild browser speech results without repeating duplicate adjacent hypotheses. */
-export function dedupeRecognitionSegments(values) {
-  const segments = [];
-  const normalize = value => String(value || "").toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
-  for (const value of values || []) {
-    const segment = String(value || "").trim();
+
+/**
+ * Removes repeated or overlapping adjacent speech-recognition segments.
+ * SpeechRecognition may expose the same phrase in consecutive finalized results;
+ * segments are normalized only for comparison, while the displayed wording is kept.
+ */
+export function dedupeRecognitionSegments(values = []) {
+  const output = [];
+  const normalize = value => String(value || "")
+    .normalize("NFKC")
+    .toLocaleLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, " ")
+    .trim();
+  const words = value => String(value || "").trim().split(/\s+/).filter(Boolean);
+  const wordKey = value => normalize(value);
+
+  // Some speech engines occasionally return one whole sentence twice inside a
+  // single segment. Collapse adjacent repeated phrases of at least three words,
+  // while leaving short natural repetitions (e.g. "no, no") untouched.
+  const collapseInsideSegment = value => {
+    let tokens = words(value);
+    let changed = true;
+    while (changed && tokens.length >= 6) {
+      changed = false;
+      const keys = tokens.map(wordKey);
+      for (let i = 0; i < keys.length && !changed; i++) {
+        const max = Math.floor((keys.length - i) / 2);
+        for (let size = max; size >= 3; size--) {
+          const first = keys.slice(i, i + size).join(" ");
+          const second = keys.slice(i + size, i + size * 2).join(" ");
+          if (first && first === second) {
+            tokens.splice(i + size, size);
+            changed = true;
+            break;
+          }
+        }
+      }
+    }
+    return tokens.join(" ");
+  };
+
+  for (const value of Array.from(values || [])) {
+    const segment = collapseInsideSegment(String(value || "").trim());
     if (!segment) continue;
-    const key = normalize(segment);
-    const previous = segments[segments.length - 1];
-    if (previous && normalize(previous) === key) continue;
-    segments.push(segment);
+    if (!output.length) { output.push(segment); continue; }
+
+    const previous = output[output.length - 1];
+    const previousKey = normalize(previous);
+    const segmentKey = normalize(segment);
+    if (!segmentKey || previousKey === segmentKey) continue;
+
+    const previousWords = words(previous);
+    const segmentWords = words(segment);
+    const previousKeys = previousWords.map(wordKey);
+    const segmentKeys = segmentWords.map(wordKey);
+
+    // One event may replay the full previous phrase followed by new words. Only
+    // replace the repeated prefix if it adds genuinely new words.
+    let prefixOverlap = 0;
+    const maxPrefix = Math.min(previousKeys.length, segmentKeys.length);
+    for (let count = maxPrefix; count >= 3; count--) {
+      if (previousKeys.slice(0, count).join(" ") === segmentKeys.slice(0, count).join(" ")) {
+        prefixOverlap = count;
+        break;
+      }
+    }
+    if (prefixOverlap >= 3) {
+      const remainder = collapseInsideSegment(segmentWords.slice(prefixOverlap).join(" "));
+      if (!remainder || normalize(remainder) === previousKey) continue;
+      output[output.length - 1] = `${previous.replace(/[.!?。！？]+$/u, "")} ${remainder}`.trim();
+      continue;
+    }
+
+    // Remove overlap when a new chunk starts by repeating the tail of the prior
+    // chunk, such as "I am good" followed by "am good today".
+    let overlap = 0;
+    const maxOverlap = Math.min(previousKeys.length, segmentKeys.length);
+    for (let count = maxOverlap; count >= 2; count--) {
+      if (previousKeys.slice(-count).join(" ") === segmentKeys.slice(0, count).join(" ")) {
+        overlap = count;
+        break;
+      }
+    }
+    if (overlap >= 2) {
+      const remainder = collapseInsideSegment(segmentWords.slice(overlap).join(" "));
+      if (!remainder || normalize(remainder) === previousKey) continue;
+      output[output.length - 1] = `${previous.replace(/[.!?。！？]+$/u, "")} ${remainder}`.trim();
+      continue;
+    }
+
+    output.push(segment);
   }
-  return segments;
+  return output;
 }
 
 /** Regional/base locale candidates are fallbacks, not a guarantee of support. */
@@ -71,5 +151,3 @@ export function recognitionErrorMessage(code, languageName) {
       return `Browser speech recognition stopped (${code || "unknown error"}). You can continue by typing instead.`;
   }
 }
-
-/**DONE */

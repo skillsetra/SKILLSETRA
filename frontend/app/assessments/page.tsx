@@ -4,36 +4,11 @@ import {useRouter} from "next/navigation";
 import AppLayout from "../../components/AppLayout";
 import {useApp} from "../../components/AppProvider";
 import {api} from "../../lib/api";
-import {runPuter} from "../../lib/ai";
 import {scrollToElement,focusWithoutScroll} from "../../lib/scroll";
 import {ClipboardCheck,Play,Timer,Brain,CheckCircle2,XCircle,MinusCircle,RotateCcw} from "lucide-react";
 
-type Question={id:string;competency:string;difficulty:string;question:string;options:string[];correct?:number;explanation?:string};
+type Question={id:string;competency:string;difficulty:string;question:string;options:string[]};
 type CatalogItem={id:string;title:string;difficulty:string;skills:string[];time:string;questions:number};
-
-function parseGeneratedAssessment(raw:string, count:number):Question[]{
- const text=String(raw||"").trim();
- const candidates=[text.replace(/^```(?:json)?\s*/i,"").replace(/\s*```$/i,"")];
- const objectMatch=text.match(/\{[\s\S]*\}/);if(objectMatch)candidates.push(objectMatch[0]);
- const arrayMatch=text.match(/\[[\s\S]*\]/);if(arrayMatch)candidates.push(arrayMatch[0]);
- for(const candidate of candidates){
-  try{
-   const parsed=JSON.parse(candidate);const list=Array.isArray(parsed)?parsed:parsed?.questions;
-   if(!Array.isArray(list))continue;
-   const clean:Question[]=[];
-   for(const item of list){
-    if(!item||typeof item.question!=="string"||!Array.isArray(item.options)||item.options.length!==4)continue;
-    const correct=Number(item.correct);if(!Number.isInteger(correct)||correct<0||correct>3)continue;
-    const question=item.question.trim();const options=item.options.map((option:unknown)=>String(option).trim());
-    if(question.length<15||options.some((option:string)=>!option))continue;
-    clean.push({id:`browser-ai-${clean.length+1}`,question,options,correct,competency:String(item.competency||"General reasoning").slice(0,120),difficulty:String(item.difficulty||"Intermediate").slice(0,40),explanation:String(item.explanation||"").slice(0,500)});
-    if(clean.length>=count)break;
-   }
-   if(clean.length>=Math.min(3,count))return clean;
-  }catch{/* try the next JSON shape */}
- }
- throw new Error("The AI response did not contain a valid assessment question set.");
-}
 
 export default function Assessments(){
  const router=useRouter();
@@ -53,7 +28,6 @@ export default function Assessments(){
  const [error,setError]=useState("");
  const [attemptId,setAttemptId]=useState("");
  const [draftNotice,setDraftNotice]=useState("");
- const [questionSource,setQuestionSource]=useState<"browser-ai"|"server-ai"|"built-in"|"">("");
 
  useEffect(()=>{
   let alive=true;
@@ -66,13 +40,8 @@ export default function Assessments(){
      if(raw){
       const draft=JSON.parse(raw);const item=catalog.find(x=>x.id===draft.trackId);
       if(item&&draft.attemptId&&draft.answers&&typeof draft.answers==="object"){
-       let restoredQuestions:Question[]=Array.isArray(draft.questions)?draft.questions:[];
-       let restoredAssessmentId=String(draft.assessmentId||"");
-       if(!restoredQuestions.length||!restoredAssessmentId){
-        const q=await api<any>(`/api/v1/assessment?track=${encodeURIComponent(item.id)}`);
-        restoredQuestions=q.questions||[];restoredAssessmentId=q.id||"";
-       }
-       if(alive&&restoredQuestions.length){setActive(item);setAssessmentId(restoredAssessmentId);setQuestions(restoredQuestions);setAnswers(draft.answers);setQuestionIndex(Math.max(0,Math.min(Number(draft.questionIndex)||0,restoredQuestions.length-1)));setAttemptId(draft.attemptId);if(["browser-ai","server-ai","built-in"].includes(draft.questionSource))setQuestionSource(draft.questionSource);setDraftNotice(`Restored your unfinished ${item.title} draft from this browser. It has not been submitted yet.`)}
+       const q=await api<any>(`/api/v1/assessment?track=${encodeURIComponent(item.id)}`);
+       if(alive&&q.questions?.length){setActive(item);setAssessmentId(q.id);setQuestions(q.questions);setAnswers(draft.answers);setQuestionIndex(Math.max(0,Math.min(Number(draft.questionIndex)||0,q.questions.length-1)));setAttemptId(draft.attemptId);setDraftNotice(`Restored your unfinished ${item.title} draft from this browser. It has not been submitted yet.`)}
       }
      }
     }catch{/* ignore unusable local drafts */}
@@ -83,51 +52,24 @@ export default function Assessments(){
 
  useEffect(()=>{
   if(!active||!questions.length||!attemptId||result)return;
-  try{localStorage.setItem(draftKey,JSON.stringify({trackId:active.id,attemptId,answers,questionIndex,questions,assessmentId,questionSource,updatedAt:new Date().toISOString()}));setDraftNotice(`${questionSource==="browser-ai"?"Fresh AI-generated questions":questionSource==="server-ai"?"Fresh AI-generated questions":questionSource==="built-in"?"Built-in fallback questions":"Assessment questions"} · draft saved in this browser. Your result is not recorded until you submit.`)}
+  try{localStorage.setItem(draftKey,JSON.stringify({trackId:active.id,attemptId,answers,questionIndex,updatedAt:new Date().toISOString()}));setDraftNotice("Draft is saved in this browser. Your result is not recorded until you submit the assessment.")}
   catch{setDraftNotice("Draft saving is unavailable in this browser. Keep this page open until you submit.")}
- },[active,questions,assessmentId,questionSource,attemptId,answers,questionIndex,result,draftKey]);
+ },[active,questions,attemptId,answers,questionIndex,result,draftKey]);
 
  // When the result appears, bring it to the top of the viewport (below the fixed header) so the answer review is visible.
  useEffect(()=>{if(!result)return;scrollToElement(resultRef.current,{extra:20});focusWithoutScroll(resultRef.current)},[result]);
 
  async function start(item:CatalogItem){
   setBusy(true);setError("");setDraftNotice("");setResult(null);setAnswers({});setQuestionIndex(0);if(advanceTimerRef.current!==null)window.clearTimeout(advanceTimerRef.current);setAttemptId(crypto.randomUUID());
-  setActive(item);setQuestions([]);setAssessmentId("");setQuestionSource("");
-  const questionCount=Math.max(3,Math.min(15,Number(item.questions)||6));
-  const role=String(user?.targetRole||"Full-Stack Developer").trim()||"Full-Stack Developer";
-  const freshness=typeof crypto!=="undefined"&&"randomUUID" in crypto?crypto.randomUUID().slice(0,8):`${Date.now()}`;
-  const competency=`Fresh assessment ${freshness}; focus: ${item.title}; skills: ${item.skills.slice(0,4).join(", ")}`.slice(0,120);
-  const localPrompt=`Create ${questionCount} fresh, non-repetitive multiple-choice questions for the Assessment Studio track "${item.title}". Focus on these skills: ${item.skills.join(", ")}. Target learner role: ${role}. Freshness seed: ${freshness}. Use practical application and plausible distractors; do not reuse common built-in questions. Return ONLY JSON: {"questions":[{"question":"...","competency":"...","difficulty":"Beginner|Intermediate|Advanced|Expert","options":["A","B","C","D"],"correct":0,"explanation":"Short reason"}]}. Each question must have exactly four options and one unambiguous correct zero-based option index.`;
   try{
-   // Prefer the backend-generated prompt; if that endpoint is unavailable, still try
-   // Puter directly. runPuter performs bounded fallback across alternate Puter models.
-   let generated:any=null;
-   let prompt=localPrompt;
-   try{
-    generated=await api<any>("/api/v1/assessment/generate",{method:"POST",body:JSON.stringify({role,provider:"puter",model:"openai/gpt-oss-20b",language:"English",count:questionCount,competency})});
-    if(generated?.prompt)prompt=generated.prompt;
-   }catch{
-    setDraftNotice("Assessment API unavailable; trying browser AI with alternate Puter models before using built-in questions.");
-   }
-   if(generated?.mode==="server"){
-    const serverQuestions:Question[]=generated.questions||[];
-    if(!serverQuestions.length)throw new Error("The AI service returned no questions.");
-    setQuestions(serverQuestions);setAssessmentId(generated.assessment_id||generated.id||"");setQuestionSource("server-ai");
-    setDraftNotice("Fresh AI-generated questions are ready for this attempt.");
-   }else{
-    const raw=await runPuter(prompt,generated?.model||"openai/gpt-oss-20b");
-    const freshQuestions=parseGeneratedAssessment(raw,questionCount);
-    setQuestions(freshQuestions);setAssessmentId(generated?.assessment_id||`browser-ai-${freshness}`);setQuestionSource("browser-ai");
-    setDraftNotice("Fresh AI-generated questions are ready. Alternate Puter models are tried automatically before built-in questions are used.");
-   }
-  }catch(aiError:any){
-   try{
-    const fallback=await api<any>(`/api/v1/assessment?track=${encodeURIComponent(item.id)}`);
-    if(!fallback.questions?.length)throw new Error("No built-in questions are available for this track.");
-    setQuestions(fallback.questions);setAssessmentId(fallback.id);setQuestionSource("built-in");setDraftNotice("Fresh AI questions could not be generated after trying alternate Puter models, so built-in track questions are being used for this attempt.");
-   }catch(fallbackError:any){setError(`${aiError?.message||"AI question generation failed."} ${fallbackError?.message||"Built-in questions could not be loaded."}`);setQuestions([]);setActive(null)}
-  }finally{setBusy(false)}
+   const r=await api<any>(`/api/v1/assessment?track=${encodeURIComponent(item.id)}`);
+   if(!r.questions?.length)throw new Error("No assessment questions are available.");
+   setQuestions(r.questions);setAssessmentId(r.id);setActive(item);
+   // The question-list effect scrolls to the first card after React commits the bank.
+  }catch(e:any){setError(e.message||"Could not load assessment questions.");setQuestions([]);setActive(null)}
+  finally{setBusy(false)}
  }
+
  function choose(q:Question,index:number,questionPosition:number){
   if(advanceTimerRef.current!==null){window.clearTimeout(advanceTimerRef.current);advanceTimerRef.current=null;}
   setAnswers(a=>({...a,[q.id]:String(index)}));
@@ -148,21 +90,7 @@ export default function Assessments(){
   if(missing.length&&!window.confirm(`${missing.length} question${missing.length===1?" is":"s are"} unanswered and will count as incorrect. Submit anyway?`)){moveToQuestion(Math.max(0,questions.findIndex(q=>q.id===missing[0].id)));return}
   setBusy(true);setError("");
   try{
-   let r:any;
-   if(questionSource==="browser-ai"){
-    const details=questions.map(q=>{const selected=Number(answers[q.id]??-1);const isCorrect=selected===Number(q.correct);return {question_id:q.id,question:q.question,competency:q.competency,selected,selected_text:selected>=0?q.options[selected]:"No answer selected",expected:q.options[Number(q.correct)]||"",why:q.explanation||"Review the reasoning behind the AI-generated answer key.",next:`Practice ${q.competency} with a new applied task.`,is_correct:isCorrect,answered:selected>=0}});
-    const correct=details.filter((d:any)=>d.is_correct).length;const score=Math.round(correct/questions.length*100);
-    let savedNotice="This attempt was scored in the browser but could not be saved to progress.";
-    try{
-     const grouped:Record<string,{correct:number;total:number}>={};
-     for(const d of details){const key=String(d.competency||active.title);grouped[key] ||= {correct:0,total:0};grouped[key].total++;if(d.is_correct)grouped[key].correct++;}
-     const saved=await api<any>("/api/v1/practice/record-result",{method:"POST",body:JSON.stringify({source:"assessment-studio-ai",title:`${active.title} · AI-generated assessment`,role:user?.targetRole||"Full-Stack Developer",correct,total:questions.length,competency_scores:Object.entries(grouped).map(([competency,v])=>({competency,score:Math.round(v.correct/v.total*100),answered:v.total,total:v.total}))})});
-     savedNotice=saved.notice||"The practice result was saved.";
-    }catch(saveError:any){savedNotice=saveError?.message||savedNotice;}
-    r={score,correct,total:questions.length,passed:score>=70,details,summary:`AI-generated browser assessment. ${savedNotice}`,previous_score:null,change:null};
-   }else{
-    r=await api<any>("/api/v1/assessment/submit",{method:"POST",body:JSON.stringify({assessment_id:assessmentId,attempt_id:attemptId,answers})});
-   }
+   const r=await api<any>("/api/v1/assessment/submit",{method:"POST",body:JSON.stringify({assessment_id:assessmentId,attempt_id:attemptId,answers})});
    setResult(r);
    try{localStorage.removeItem(draftKey)}catch{}
    setDraftNotice("");
@@ -171,7 +99,7 @@ export default function Assessments(){
  }
 
  function finish(){
-  setResult(null);setAnswers({});setQuestionIndex(0);setQuestions([]);setActive(null);setAttemptId("");setAssessmentId("");setDraftNotice("");setQuestionSource("");
+  setResult(null);setAnswers({});setQuestionIndex(0);setQuestions([]);setActive(null);setAttemptId("");setAssessmentId("");setDraftNotice("");
   try{localStorage.removeItem(draftKey)}catch{}
   window.scrollTo({top:0,behavior:"smooth"});
  }
@@ -185,7 +113,7 @@ export default function Assessments(){
  },[active?.id,questionIndex,currentQuestion?.id,result]);
  useEffect(()=>()=>{if(advanceTimerRef.current!==null)window.clearTimeout(advanceTimerRef.current)},[]);
  return <AppLayout><div className="page">
-  <div className="page-head"><div><div className="eyebrow">Assessment Studio</div><h1>Measure knowledge, reasoning and transfer.</h1><p>Each attempt requests a fresh AI-generated question set. If the AI service and its alternate Puter models are unavailable, SKILLSETRA falls back to built-in track questions; your role baseline lives under Role Baseline.</p></div></div>
+  <div className="page-head"><div><div className="eyebrow">Assessment Studio</div><h1>Measure knowledge, reasoning and transfer.</h1><p>Choose a track, answer its questions, and review the scored attempt with the reason behind every answer. Each track has its own question set; your role baseline lives under Role Baseline.</p></div></div>
   {error&&<div className="error" role="alert">{error}</div>}
   {draftNotice&&<div className="notice" role="status">{draftNotice}</div>}
   <div className="grid grid-3">{items.map(x=><article className={`panel track-card ${active?.id===x.id?"is-active":""}`} key={x.id}>
@@ -222,6 +150,16 @@ export default function Assessments(){
     <div className={`signal ${result.passed?"good":"warn"}`}><h3>Attempt result: {result.score}%</h3>
      <p>{result.correct} correct out of {result.total}. {result.previous_score!==null&&result.previous_score!==undefined?`Previous attempt on this track: ${result.previous_score}%. Change: ${result.change>0?"+":""}${result.change} percentage points.`:"No previous attempt for this track to compare."}</p>
      <p>{result.passed?"You met the 70% threshold.":"Review the explanations below and practice before retesting."}</p><p className="muted">{result.summary}</p></div>
+    {result.role_progress?.configured ? <section className="panel assessment-progress-impact" aria-label="Goal and role progression update">
+     <div className="panel-head"><div><div className="eyebrow">GOAL &amp; ROLE PROGRESSION UPDATED</div><h2>Your assessment's impact</h2><p className="muted">This result updates overall goal progress and Analytics. Competency-level graphs update only for skills supported by this assessment’s topic mapping; unrelated tracks do not invent skill signals. Assessment scores are performance signals, not independent proof of mastery.</p></div><Brain/></div>
+     <div className="grid grid-4">
+      <article className="metric-card"><span className="eyebrow">Overall goal progress</span><strong>{Number.isFinite(Number(result.role_progress.progress_percent))?`${Number(result.role_progress.progress_percent)}%`:"—"}</strong><small>{typeof result.goal_progress_change==="number"?`${result.goal_progress_change>0?"+":""}${result.goal_progress_change} percentage points after this attempt`:"Progress baseline recorded"}</small></article>
+      <article className="metric-card"><span className="eyebrow">Role performance signal</span><strong>{result.role_progress.score==null?"—":`${Number(result.role_progress.score)}%`}</strong><small>{Number(result.role_progress.assessed_skill_count)||0} of {Number(result.role_progress.required_skill_count)||0} required skills have a score signal</small></article>
+      <article className="metric-card"><span className="eyebrow">Assessment coverage</span><strong>{Number(result.role_progress.assessment_coverage_percent)||0}%</strong><small>{Number(result.role_progress.assessment_covered_skill_count)||0} required skills touched by mapped assessments or practice</small></article>
+      <article className="metric-card"><span className="eyebrow">Assessment score trend</span><strong>{result.role_progress.assessment_activity_score_percent==null?`${Number(result.score)||0}%`:`${Number(result.role_progress.assessment_activity_score_percent)}%`}</strong><small>Average of {Number(result.role_progress.scored_assessment_count)||1} completed scored assessment(s)</small></article>
+     </div>
+     <div className="action-row" style={{marginTop:12}}><a className="button primary" href="/analytics">View updated analytics &amp; graphs</a><a className="button secondary" href="/dashboard">View dashboard</a></div>
+    </section> : <div className="notice" role="status">Your assessment score has been saved. Select a target role in your profile to connect future assessment results to goal and role progression.</div>}
     <div className="review-list">{(result.details||[]).map((d:any,i:number)=><article key={d.question_id} className={`review-item ${d.is_correct?"ok":d.answered===false?"skip":"bad"}`}>
      <header><span className="review-badge">{d.is_correct?<><CheckCircle2 size={14}/> Correct</>:d.answered===false?<><MinusCircle size={14}/> Not answered</>:<><XCircle size={14}/> Needs review</>}</span><span className="review-comp">Q{i+1} · {d.competency}</span></header>
      <h3>{d.question}</h3>
