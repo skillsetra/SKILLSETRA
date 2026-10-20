@@ -1181,3 +1181,25 @@ def test_github_analyzer_outputs_single_recommendation_not_claims(monkeypatch):
     assert "claims" not in result
     assert "suggestions" not in result
     assert "inferred" not in result
+
+def test_fresh_assessment_fallback_hides_answer_key_and_scores_into_progression():
+    isolated = TestClient(app, headers={"X-SKILLSETRA-Demo-Session": str(uuid.uuid4())})
+    goal = isolated.post("/api/v1/profile/goal", json={"target_role": "Frontend Developer", "experience": "Early career", "goal": "Improve frontend engineering"})
+    assert goal.status_code == 200
+    first = isolated.get("/api/v1/assessment", params={"track": "frontend", "fresh": "true"})
+    second = isolated.get("/api/v1/assessment", params={"track": "frontend", "fresh": "true"})
+    assert first.status_code == second.status_code == 200
+    a, b = first.json(), second.json()
+    assert a["id"].startswith("ai-fallback-") and b["id"].startswith("ai-fallback-")
+    assert a["id"] != b["id"]
+    restored = isolated.get("/api/v1/assessment", params={"assessment_id": a["id"]})
+    assert restored.status_code == 200
+    assert [q["id"] for q in restored.json()["questions"]] == [q["id"] for q in a["questions"]]
+    assert 3 <= len(a["questions"]) <= 8
+    assert all("correct" not in q and "explanation" not in q for q in a["questions"])
+    answers = {q["id"]: "0" for q in a["questions"]}
+    result = isolated.post("/api/v1/assessment/submit", json={"assessment_id": a["id"], "attempt_id": str(uuid.uuid4()), "answers": answers})
+    assert result.status_code == 200
+    assert result.json()["total"] == len(a["questions"])
+    assert result.json()["role_progress"]["configured"] is True
+    assert isolated.get("/api/v1/analytics").json()["role_progress"]["scored_assessment_count"] >= 1

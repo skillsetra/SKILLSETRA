@@ -2,6 +2,7 @@ import json
 import re
 import httpx
 import asyncio
+import random
 from urllib.parse import urlparse
 import io
 import zipfile
@@ -1619,24 +1620,60 @@ Return ONLY valid JSON with this exact shape:
 The correct value is a zero-based option index. Every question must have exactly four plausible options and exactly one best answer."""
 
 @router.get("/assessment",dependencies=[Depends(current_user)])
-async def assessment(role:str=Query(default="",max_length=120),track:str=Query(default="",max_length=60)):
-    """Return answer-key-free questions for a track, an explicit role, or the saved target role."""
+async def assessment(role:str=Query(default="",max_length=120),track:str=Query(default="",max_length=60),fresh:bool=Query(default=False),assessment_id:str=Query(default="",max_length=120)):
+    """Return the stable legacy bank by default; fresh=1 creates a randomized fallback set."""
     profile_role=state["profile"].get("target_role") or ""
-    if track:
-        questions=assessment_bank.track_questions(track)
-        if questions is None: raise HTTPException(404,"Unknown assessment track.")
-        title=assessment_bank.TRACK_TITLES[track.strip().lower()]
-        return {"id":assessment_bank.track_assessment_id(track),"title":f"{title} assessment","role":profile_role or "General competency baseline","track":track.strip().lower(),"source":"normal","question_count":len(questions),"questions":_strip_answer_key(questions)}
+    if assessment_id:
+        stored=state.get("generated_assessments",{}).get(assessment_id)
+        if not stored:
+            raise HTTPException(404,"This assessment draft has expired. Start a new assessment.")
+        stored_questions=stored.get("questions") or []
+        return {"id":assessment_id,"title":f"{stored.get('role') or 'Role'} assessment","role":stored.get("role") or profile_role or "General competency baseline","track":stored.get("track") or "","source":stored.get("source") or "generated","question_count":len(stored_questions),"questions":_strip_answer_key(stored_questions)}
     wanted=role.strip() or profile_role
     if role.strip() and not _known_role(role):
         raise HTTPException(400,"Choose a supported target role.")
     role_name=_known_role(wanted) or wanted or "General competency baseline"
-    questions=assessment_bank.role_questions(role_name)
-    if questions is not None:
-        return {"id":assessment_bank.role_assessment_id(role_name),"title":f"{role_name} competency assessment","role":role_name,"source":"normal","question_count":len(questions),"questions":_strip_answer_key(questions)}
-    questions=_general_assessment_questions()
-    title=f"{role_name} competency assessment" if role_name!="General competency baseline" else "General competency baseline"
-    return {"id":"adaptive-v1","title":title,"role":role_name,"source":"normal","question_count":len(questions),"questions":_strip_answer_key(questions)}
+    if not fresh:
+        if track:
+            questions=assessment_bank.track_questions(track)
+            if questions is None: raise HTTPException(404,"Unknown assessment track.")
+            title=assessment_bank.TRACK_TITLES[track.strip().lower()]
+            return {"id":assessment_bank.track_assessment_id(track),"title":f"{title} assessment","role":profile_role or "General competency baseline","track":track.strip().lower(),"source":"normal","question_count":len(questions),"questions":_strip_answer_key(questions)}
+        questions=assessment_bank.role_questions(role_name)
+        if questions is not None:
+            return {"id":assessment_bank.role_assessment_id(role_name),"title":f"{role_name} competency assessment","role":role_name,"source":"normal","question_count":len(questions),"questions":_strip_answer_key(questions)}
+        questions=_general_assessment_questions()
+        title=f"{role_name} competency assessment" if role_name!="General competency baseline" else "General competency baseline"
+        return {"id":"adaptive-v1","title":title,"role":role_name,"source":"normal","question_count":len(questions),"questions":_strip_answer_key(questions)}
+    if track:
+        track_key=track.strip().lower()
+        bank=assessment_bank.track_questions(track_key)
+        if bank is None: raise HTTPException(404,"Unknown assessment track.")
+        title=assessment_bank.TRACK_TITLES[track_key]
+        pool=list(bank)+list(assessment_bank.CORE_QUESTIONS)
+        role_bank=assessment_bank.role_questions(role_name)
+        if role_bank: pool.extend(role_bank)
+    else:
+        title=f"{role_name} competency assessment" if role_name!="General competency baseline" else "General competency baseline"
+        pool=list(assessment_bank.role_questions(role_name) or _general_assessment_questions())
+    unique={str(q.get("id")):dict(q) for q in pool if isinstance(q,dict)}
+    pool=list(unique.values())
+    rng=random.SystemRandom(); rng.shuffle(pool)
+    selected=pool[:min(8,len(pool))]; fresh_questions=[]
+    for index,q in enumerate(selected,1):
+        opts=list(q.get("options") or [])
+        try: correct_text=opts.pop(int(q.get("correct",0)))
+        except (ValueError,TypeError,IndexError): continue
+        rng.shuffle(opts); insert_at=rng.randrange(len(opts)+1); opts.insert(insert_at,correct_text)
+        fresh_questions.append({**q,"id":f"fallback-{uuid4().hex[:10]}-{index}","options":opts,"correct":insert_at})
+    if not fresh_questions: raise HTTPException(503,"The built-in assessment question bank is unavailable.")
+    aid=f"ai-fallback-{uuid4().hex[:12]}"
+    generated=state.get("generated_assessments",{})
+    generated[aid]={"role":role_name,"questions":fresh_questions,"provider":"built-in","source":"Built-in fallback question bank","created_at":str(date.today()),"track":track.strip().lower()}
+    state["generated_assessments"]=generated
+    for stale in list(generated)[:-100]: generated.pop(stale,None)
+    state.persist()
+    return {"id":aid,"title":title,"role":role_name,"track":track.strip().lower() if track else "","source":"built-in-fallback","question_count":len(fresh_questions),"questions":_strip_answer_key(fresh_questions)}
 
 @router.post("/assessment/generate",dependencies=[Depends(current_user)])
 async def assessment_generate(payload:AssessmentGenerate):
@@ -1651,7 +1688,7 @@ async def assessment_generate(payload:AssessmentGenerate):
         raw,used,_=await ask_selected(prompt,selected,payload.model)
         questions=_parse_generated_questions(raw,role,payload.count)
         aid=f"ai-{len(state['assessment_attempts'])+1}-{uuid4().hex[:8]}"
-        state.setdefault("generated_assessments",{})[aid]={"role":role,"questions":questions,"provider":used,"created_at":str(date.today()),"blind_transfer":payload.blind_transfer,"competency":payload.competency,"source":"Blind-transfer practice" if payload.blind_transfer else "AI-generated practice"}
+        generated=state.get("generated_assessments",{}); generated[aid]={"role":role,"questions":questions,"provider":used,"created_at":str(date.today()),"blind_transfer":payload.blind_transfer,"competency":payload.competency,"source":"Blind-transfer practice" if payload.blind_transfer else "AI-generated practice"}; state["generated_assessments"]=generated
         state.persist()
         return {"mode":"server","provider":used,"model":payload.model or getattr(get_provider(used),"model",None),"role":role,"assessment_id":aid,"source":"ai","question_count":len(questions),"questions":_strip_answer_key(questions)}
     except Exception as exc:
@@ -1690,7 +1727,7 @@ async def assessment_submit(payload:AssessmentSubmit, user=Depends(current_user)
         stored=state.get("generated_assessments",{}).get(payload.assessment_id)
         if not stored: raise HTTPException(404,"This AI-generated assessment has expired. Generate a new one.")
         questions=stored["questions"]
-        source="Blind-transfer practice" if stored.get("blind_transfer") else "AI-generated practice"
+        source=stored.get("source") or ("Blind-transfer practice" if stored.get("blind_transfer") else "AI-generated practice")
         attempt_role=stored.get("role") or attempt_role
     else:
         resolved=assessment_bank.questions_for_assessment_id(payload.assessment_id)

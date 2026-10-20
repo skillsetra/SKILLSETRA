@@ -5,10 +5,28 @@ import AppLayout from "../../components/AppLayout";
 import {useApp} from "../../components/AppProvider";
 import {api} from "../../lib/api";
 import {scrollToElement,focusWithoutScroll} from "../../lib/scroll";
+import {runPuter} from "../../lib/ai";
 import {ClipboardCheck,Play,Timer,Brain,CheckCircle2,XCircle,MinusCircle,RotateCcw} from "lucide-react";
 
-type Question={id:string;competency:string;difficulty:string;question:string;options:string[]};
+type Question={id:string;competency:string;difficulty:string;question:string;options:string[];correct?:number;explanation?:string};
 type CatalogItem={id:string;title:string;difficulty:string;skills:string[];time:string;questions:number};
+function parseAssessmentAI(raw:string, count=8):Question[]{
+ const text=String(raw||'').trim(); const candidates=[text.replace(/```json/gi,'').replace(/```/g,'').trim()];
+ const object=text.match(/\{[\s\S]*\}/); if(object)candidates.push(object[0]);
+ const array=text.match(/\[[\s\S]*\]/); if(array)candidates.push(array[0]);
+ for(const candidate of candidates){try{
+  const parsed=JSON.parse(candidate); const rows=Array.isArray(parsed)?parsed:parsed.questions; if(!Array.isArray(rows))continue;
+  const out:Question[]=[];
+  for(const [i,q] of rows.entries()){
+   if(!q||typeof q.question!=='string'||q.question.trim().length<15||!Array.isArray(q.options)||q.options.length!==4)continue;
+   const correct=Number(q.correct); const options=q.options.map((x:any)=>String(x).trim());
+   if(!Number.isInteger(correct)||correct<0||correct>3||options.some((x:string)=>!x||x.length>500)||new Set(options).size!==4)continue;
+   out.push({id:`ai-${crypto.randomUUID()}-${i}`,competency:String(q.competency||'Role fundamentals').slice(0,120),difficulty:String(q.difficulty||'Intermediate').slice(0,40),question:q.question.trim(),options,correct,explanation:String(q.explanation||'').slice(0,500)});
+  }
+  if(out.length>=Math.min(3,count))return out.slice(0,count);
+ }catch{}}
+ throw new Error('AI did not return a valid assessment question set.');
+}
 
 export default function Assessments(){
  const router=useRouter();
@@ -20,6 +38,7 @@ export default function Assessments(){
  const [active,setActive]=useState<CatalogItem|null>(null);
  const [assessmentId,setAssessmentId]=useState("");
  const [questions,setQuestions]=useState<Question[]>([]);
+ const [browserAI,setBrowserAI]=useState(false);
  const [questionIndex,setQuestionIndex]=useState(0);
  const advanceTimerRef=useRef<number|null>(null);
  const [answers,setAnswers]=useState<Record<string,string>>({});
@@ -40,8 +59,10 @@ export default function Assessments(){
      if(raw){
       const draft=JSON.parse(raw);const item=catalog.find(x=>x.id===draft.trackId);
       if(item&&draft.attemptId&&draft.answers&&typeof draft.answers==="object"){
-       const q=await api<any>(`/api/v1/assessment?track=${encodeURIComponent(item.id)}`);
-       if(alive&&q.questions?.length){setActive(item);setAssessmentId(q.id);setQuestions(q.questions);setAnswers(draft.answers);setQuestionIndex(Math.max(0,Math.min(Number(draft.questionIndex)||0,q.questions.length-1)));setAttemptId(draft.attemptId);setDraftNotice(`Restored your unfinished ${item.title} draft from this browser. It has not been submitted yet.`)}
+       const q=draft.assessmentId?.startsWith("ai-fallback-")
+        ? await api<any>(`/api/v1/assessment?assessment_id=${encodeURIComponent(draft.assessmentId)}`)
+        : await api<any>(`/api/v1/assessment?track=${encodeURIComponent(item.id)}`);
+       if(alive&&q.questions?.length){setActive(item);setAssessmentId(q.id);setQuestions(q.questions);setAnswers(draft.answers);setQuestionIndex(Math.max(0,Math.min(Number(draft.questionIndex)||0,q.questions.length-1)));setAttemptId(draft.attemptId);setBrowserAI(false);setDraftNotice(`Restored your unfinished ${item.title} draft from this browser. It has not been submitted yet.`)}
       }
      }
     }catch{/* ignore unusable local drafts */}
@@ -52,21 +73,40 @@ export default function Assessments(){
 
  useEffect(()=>{
   if(!active||!questions.length||!attemptId||result)return;
-  try{localStorage.setItem(draftKey,JSON.stringify({trackId:active.id,attemptId,answers,questionIndex,updatedAt:new Date().toISOString()}));setDraftNotice("Draft is saved in this browser. Your result is not recorded until you submit the assessment.")}
+  if(browserAI){try{localStorage.removeItem(draftKey)}catch{};setDraftNotice("AI-generated questions stay in this session until submitted. Submit this assessment to save its result to progression.");return;}
+  try{localStorage.setItem(draftKey,JSON.stringify({trackId:active.id,assessmentId,attemptId,answers,questionIndex,updatedAt:new Date().toISOString()}));setDraftNotice("Draft is saved in this browser. Your result is not recorded until you submit the assessment.")}
   catch{setDraftNotice("Draft saving is unavailable in this browser. Keep this page open until you submit.")}
- },[active,questions,attemptId,answers,questionIndex,result,draftKey]);
+ },[active,questions,attemptId,assessmentId,answers,questionIndex,result,draftKey,browserAI]);
 
  // When the result appears, bring it to the top of the viewport (below the fixed header) so the answer review is visible.
  useEffect(()=>{if(!result)return;scrollToElement(resultRef.current,{extra:20});focusWithoutScroll(resultRef.current)},[result]);
 
  async function start(item:CatalogItem){
-  setBusy(true);setError("");setDraftNotice("");setResult(null);setAnswers({});setQuestionIndex(0);if(advanceTimerRef.current!==null)window.clearTimeout(advanceTimerRef.current);setAttemptId(crypto.randomUUID());
+  setBusy(true);setError("");setDraftNotice("");setResult(null);setAnswers({});setQuestionIndex(0);setBrowserAI(false);
+  if(advanceTimerRef.current!==null)window.clearTimeout(advanceTimerRef.current);
+  const role=String((user as any)?.targetRole||(user as any)?.target_role||"Full-Stack Developer").trim();
   try{
-   const r=await api<any>(`/api/v1/assessment?track=${encodeURIComponent(item.id)}`);
-   if(!r.questions?.length)throw new Error("No assessment questions are available.");
-   setQuestions(r.questions);setAssessmentId(r.id);setActive(item);
-   // The question-list effect scrolls to the first card after React commits the bank.
-  }catch(e:any){setError(e.message||"Could not load assessment questions.");setQuestions([]);setActive(null)}
+   // AI is attempted first. runPuter already tries the requested model and multiple Puter model fallbacks.
+   try{
+    const generated=await api<any>("/api/v1/assessment/generate",{method:"POST",body:JSON.stringify({role,provider:"puter",model:"openai/gpt-oss-20b",language:"English",count:8,competency:item.skills.join(", ")})});
+    if(generated.mode==="puter-client"){
+     const raw=await runPuter(generated.prompt,generated.model||"openai/gpt-oss-20b");
+     const aiQuestions=parseAssessmentAI(raw,8);
+     setQuestions(aiQuestions);setAssessmentId(`browser-ai-${crypto.randomUUID()}`);setActive(item);setBrowserAI(true);setAttemptId(crypto.randomUUID());
+     return;
+    }
+    if(Array.isArray(generated.questions)&&generated.questions.length){
+     setQuestions(generated.questions);setAssessmentId(generated.assessment_id||generated.id);setActive(item);setAttemptId(crypto.randomUUID());return;
+    }
+    throw new Error("AI returned no questions.");
+   }catch(aiError){
+    // A bounded, randomized built-in bank is the final fallback if the API or all Puter models fail.
+    const fallback=await api<any>(`/api/v1/assessment?track=${encodeURIComponent(item.id)}&fresh=1`);
+    if(!fallback.questions?.length)throw new Error("Neither AI generation nor the built-in question bank returned questions.");
+    setQuestions(fallback.questions);setAssessmentId(fallback.id);setActive(item);setAttemptId(crypto.randomUUID());setBrowserAI(false);
+    setDraftNotice("AI question generation was unavailable, so a fresh randomized built-in question set is being used.");
+   }
+  }catch(e:any){setError(e.message||"Could not load assessment questions.");setQuestions([]);setActive(null);setAssessmentId("")}
   finally{setBusy(false)}
  }
 
@@ -90,8 +130,16 @@ export default function Assessments(){
   if(missing.length&&!window.confirm(`${missing.length} question${missing.length===1?" is":"s are"} unanswered and will count as incorrect. Submit anyway?`)){moveToQuestion(Math.max(0,questions.findIndex(q=>q.id===missing[0].id)));return}
   setBusy(true);setError("");
   try{
-   const r=await api<any>("/api/v1/assessment/submit",{method:"POST",body:JSON.stringify({assessment_id:assessmentId,attempt_id:attemptId,answers})});
-   setResult(r);
+   if(browserAI){
+    const details=questions.map(q=>{const selected=Number(answers[q.id]??-1);const correct=Number(q.correct);return {question_id:q.id,question:q.question,competency:q.competency,difficulty:q.difficulty,options:q.options,selected,selected_text:selected>=0?q.options[selected]:null,correct,is_correct:selected===correct,answered:selected>=0,expected:q.options[correct],why:q.explanation||"The selected answer is compared with the AI-generated answer key.",next:`Practice ${q.competency} with a new applied task.`}});
+    const correct=details.filter(d=>d.is_correct).length;const groups:Record<string,{correct:number;total:number}>={};
+    for(const d of details){const key=String(d.competency||"General assessment");groups[key] ||= {correct:0,total:0};groups[key].total++;if(d.is_correct)groups[key].correct++;}
+    const saved=await api<any>("/api/v1/practice/record-result",{method:"POST",body:JSON.stringify({source:"browser-ai-practice",title:`${active.title} · AI-generated assessment`,assessment_id:assessmentId,role:String((user as any)?.targetRole||(user as any)?.target_role||"Full-Stack Developer"),correct,total:questions.length,competency_scores:Object.entries(groups).map(([competency,v])=>({competency,score:Math.round(v.correct/v.total*100),answered:v.total,total:v.total}))})});
+    setResult({score:Math.round(correct/questions.length*100),correct,total:questions.length,passed:Math.round(correct/questions.length*100)>=70,details,summary:saved.notice||"AI-generated assessment saved as an unverified practice signal.",source:"AI-generated assessment · client-scored practice",role_progress:saved.role_progress,progress_saved:true});
+   }else{
+    const r=await api<any>("/api/v1/assessment/submit",{method:"POST",body:JSON.stringify({assessment_id:assessmentId,attempt_id:attemptId,answers})});
+    setResult(r);
+   }
    try{localStorage.removeItem(draftKey)}catch{}
    setDraftNotice("");
   }catch(e:any){setError(e.message||"Assessment submission failed. Your answers have not been confirmed as saved.")}
@@ -99,7 +147,7 @@ export default function Assessments(){
  }
 
  function finish(){
-  setResult(null);setAnswers({});setQuestionIndex(0);setQuestions([]);setActive(null);setAttemptId("");setAssessmentId("");setDraftNotice("");
+  setResult(null);setAnswers({});setQuestionIndex(0);setQuestions([]);setActive(null);setAttemptId("");setAssessmentId("");setDraftNotice("");setBrowserAI(false);
   try{localStorage.removeItem(draftKey)}catch{}
   window.scrollTo({top:0,behavior:"smooth"});
  }
@@ -113,7 +161,7 @@ export default function Assessments(){
  },[active?.id,questionIndex,currentQuestion?.id,result]);
  useEffect(()=>()=>{if(advanceTimerRef.current!==null)window.clearTimeout(advanceTimerRef.current)},[]);
  return <AppLayout><div className="page">
-  <div className="page-head"><div><div className="eyebrow">Assessment Studio</div><h1>Measure knowledge, reasoning and transfer.</h1><p>Choose a track, answer its questions, and review the scored attempt with the reason behind every answer. Each track has its own question set; your role baseline lives under Role Baseline.</p></div></div>
+  <div className="page-head"><div><div className="eyebrow">Assessment Studio</div><h1>Measure knowledge, reasoning and transfer.</h1><p>Choose a track for a fresh AI-generated question set. If AI and its Puter model fallbacks are unavailable, Assessment Studio automatically uses a randomized built-in question set. Scores update role progression and analytics as assessment signals.</p></div></div>
   {error&&<div className="error" role="alert">{error}</div>}
   {draftNotice&&<div className="notice" role="status">{draftNotice}</div>}
   <div className="grid grid-3">{items.map(x=><article className={`panel track-card ${active?.id===x.id?"is-active":""}`} key={x.id}>
@@ -144,7 +192,7 @@ export default function Assessments(){
     </div>
     <div className="action-row assessment-question-navigation assessment-draft-actions">
      <span className="muted" aria-live="polite">{answered} of {questions.length} answered</span>
-     <button type="button" className="button" disabled={busy} onClick={()=>router.push("/dashboard")}>Save draft &amp; return later</button>
+     <button type="button" className="button" disabled={busy||browserAI} onClick={()=>router.push("/dashboard")}>{browserAI?"Submit to save AI result":"Save draft &amp; return later"}</button>
     </div>
    </>:<div ref={resultRef} tabIndex={-1} aria-live="polite" className="assessment-result" style={{scrollMarginTop:90}}>
     <div className={`signal ${result.passed?"good":"warn"}`}><h3>Attempt result: {result.score}%</h3>
