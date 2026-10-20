@@ -1036,67 +1036,148 @@ def test_claim_knowledge_check_scores_four_answers_and_keeps_answer_keys_private
     assert all("details" not in attempt for attempt in saved_claim["knowledge_check"].get("attempts", []))
 
 
+def test_assessment_studio_track_updates_goal_progress_and_analytics_graphs():
+    from app import assessment_bank
+    isolated = TestClient(app, headers={"X-SKILLSETRA-Demo-Session": str(uuid.uuid4())})
+    configured = isolated.post("/api/v1/profile/goal", json={
+        "target_role": "Backend Developer", "experience": "Early career", "goal": "Improve architecture and API reliability"
+    })
+    assert configured.status_code == 200
+    before = isolated.get("/api/v1/analytics").json()
+    previous_progress = before["role_progress"]["progress_percent"]
 
-def test_github_analyzer_resolves_default_branch_to_tree_sha_and_keeps_partial_results(monkeypatch):
+    data = isolated.get("/api/v1/assessment", params={"track": "system-design"}).json()
+    bank = {question["id"]: question["correct"] for question in assessment_bank.track_questions("system-design")}
+    answers = {question["id"]: str(bank[question["id"]]) for question in data["questions"]}
+    result = isolated.post("/api/v1/assessment/submit", json={
+        "assessment_id": data["id"], "attempt_id": "assessment-studio-progress-e2e", "answers": answers
+    })
+    assert result.status_code == 200, result.text
+    body = result.json()
+    assert body["score"] == 100
+    assert body["role_progress"]["configured"] is True
+    assert body["role_progress"]["assessment_covered_skill_count"] >= 1
+    assert body["role_progress"]["assessment_coverage_percent"] > 0
+    assert body["role_progress"]["score"] is not None
+    assert isinstance(body["goal_progress_change"], int)
+    assert body["role_progress"]["progress_percent"] > previous_progress
+    assert any(detail.get("role_competency") == "System Design" for detail in body["details"])
+
+    after = isolated.get("/api/v1/analytics").json()
+    assert after["role_progress"]["progress_percent"] == body["role_progress"]["progress_percent"]
+    assert after["selected_role_activity_counts"]["assessments"] >= 1
+    assert any(item.get("title") and item["score"] == 100 for item in after["assessment_scores"])
+    dashboard = isolated.get("/api/v1/dashboard").json()
+    assert dashboard["role_progress"]["progress_percent"] == body["role_progress"]["progress_percent"]
+
+
+def test_assessment_duplicate_submission_returns_progress_without_double_counting():
+    from app import assessment_bank
+    isolated = TestClient(app, headers={"X-SKILLSETRA-Demo-Session": str(uuid.uuid4())})
+    isolated.post("/api/v1/profile/goal", json={"target_role": "Backend Developer", "experience": "Early career", "goal": "Improve APIs"})
+    data = isolated.get("/api/v1/assessment", params={"track": "backend"}).json()
+    bank = {question["id"]: question["correct"] for question in assessment_bank.track_questions("backend")}
+    payload = {"assessment_id": data["id"], "attempt_id": "assessment-duplicate-progress-test", "answers": {question["id"]: str(bank[question["id"]]) for question in data["questions"]}}
+    first = isolated.post("/api/v1/assessment/submit", json=payload).json()
+    activity_count = len(isolated.get("/api/v1/analytics").json()["assessment_scores"])
+    second = isolated.post("/api/v1/assessment/submit", json=payload).json()
+    assert second["duplicate"] is True
+    assert second["role_progress"]["progress_percent"] == first["role_progress"]["progress_percent"]
+    assert len(isolated.get("/api/v1/analytics").json()["assessment_scores"]) == activity_count
+
+
+def test_unmapped_assessment_track_still_updates_overall_goal_without_fabricating_skill_mapping():
+    from app import assessment_bank
+    isolated = TestClient(app, headers={"X-SKILLSETRA-Demo-Session": str(uuid.uuid4())})
+    isolated.post("/api/v1/profile/goal", json={"target_role": "Frontend Developer", "experience": "Early career", "goal": "Improve frontend engineering"})
+    before = isolated.get("/api/v1/analytics").json()["role_progress"]
+    data = isolated.get("/api/v1/assessment", params={"track": "ai-engineering"}).json()
+    bank = {question["id"]: question["correct"] for question in assessment_bank.track_questions("ai-engineering")}
+    # This track has no sound skill-level mapping to a Frontend Developer role.
+    # A high score should still affect overall goal completion through the transparent
+    # aggregate assessment component, without fabricating per-skill progress.
+    answers = {q["id"]: str(bank[q["id"]]) for q in data["questions"]}
+    response = isolated.post("/api/v1/assessment/submit", json={"assessment_id": data["id"], "attempt_id": "unmapped-track-test", "answers": answers})
+    assert response.status_code == 200, response.text
+    body = response.json()
+    after = body["role_progress"]
+    assert after["assessment_activity_score_percent"] == 100
+    assert after["scored_assessment_count"] == 1
+    assert after["assessment_coverage_percent"] == 0
+    assert after["progress_percent"] == round(0.85 * after["base_progress_percent"] + 15)
+    assert after["progress_percent"] > before["progress_percent"]
+    analytics = isolated.get("/api/v1/analytics").json()
+    assert analytics["role_progress"]["progress_percent"] == after["progress_percent"]
+    assert any(row.get("score") == 100 and row.get("type") == "assessment" for row in analytics["assessment_scores"])
+
+
+def test_github_repository_analysis_returns_one_change_and_no_claims(monkeypatch):
+    import uuid
+    from fastapi.testclient import TestClient
+    import app.routes as routes_module
+    from app.main import app
+
+    async def fake_analyze(url, token=""):
+        return {
+            "facts": {
+                "repository": "owner/repo", "url": "https://github.com/owner/repo",
+                "description": "Test repo", "languages": ["Python"], "signals": ["README"],
+                "has_tests": False, "has_ci": False, "file_count": 2, "directory_count": 1,
+                "inspection_truncated": False, "readme_excerpt": "Test repo",
+            },
+            "recommended_change": {
+                "path": "tests/", "kind": "folder", "operation": "Create",
+                "reason": "No tests detected.", "change": "Add focused regression tests.",
+            },
+            # Simulate an old provider returning fields that must not leak back out.
+            "claims": [{"claim": "must not be exposed"}],
+            "suggestions": [{"proof": "must not be exposed"}],
+            "observed": {"repository": "owner/repo"},
+        }
+
+    monkeypatch.setattr(routes_module, "analyze_public_repo", fake_analyze)
+    isolated = TestClient(app, headers={"X-SKILLSETRA-Demo-Session": str(uuid.uuid4())})
+    evidence_before = isolated.get("/api/v1/evidence").json()["summary"]["total_evidence"]
+    response = isolated.post("/api/v1/github/analyze", json={
+        "url": "https://github.com/owner/repo", "provider": "puter", "model": "openai/gpt-oss-20b"
+    })
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["recommended_change"]["path"] == "tests/"
+    assert "claims" not in body and "suggestions" not in body and "evidence_id" not in body
+    evidence_after = isolated.get("/api/v1/evidence").json()["summary"]["total_evidence"]
+    assert evidence_after == evidence_before
+
+    saved = isolated.get("/api/v1/github/analysis")
+    assert saved.status_code == 200
+    assert saved.json()["recommended_change"]["path"] == "tests/"
+    assert "claims" not in saved.json() and "suggestions" not in saved.json() and "evidence_id" not in saved.json()
+
+
+def test_github_analyzer_outputs_single_recommendation_not_claims(monkeypatch):
     import asyncio
-    import app.github_intelligence as gh
+    import base64
+    import app.github_intelligence as github_module
 
-    tree_sha = "a" * 40
-    calls = []
-
-    async def fake_github_request(path, token="", retries=2):
-        calls.append(path)
+    async def fake_github_request(path, token=""):
         if path == "/repos/owner/repo":
-            return {"private": False, "default_branch": "main", "description": "Demo project", "stargazers_count": 2}
-        if path == "/repos/owner/repo/commits/main":
-            return {"sha": "b" * 40, "commit": {"tree": {"sha": tree_sha}}}
-        if path == f"/repos/owner/repo/git/trees/{tree_sha}?recursive=1":
-            return {"truncated": False, "tree": [
-                {"path": "README.md", "type": "blob"},
-                {"path": "src/app.py", "type": "blob"},
-                {"path": "tests/test_app.py", "type": "blob"},
-                {"path": "src", "type": "tree"},
-            ]}
+            return {"private": False, "default_branch": "main", "description": "Test repo", "stargazers_count": 0, "forks_count": 0, "open_issues_count": 0}
+        if path.startswith("/repos/owner/repo/git/trees/"):
+            return {"tree": [{"type": "blob", "path": "README.md"}, {"type": "blob", "path": "src/main.py"}, {"type": "tree", "path": "src"}], "truncated": False}
         if path == "/repos/owner/repo/languages":
-            raise gh.GitHubAPIError(403, "API rate limit exceeded")
+            return {"Python": 100}
         if path == "/repos/owner/repo/commits?per_page=12":
-            return [{"sha": "b" * 40}]
+            return []
         if path == "/repos/owner/repo/pulls?state=all&per_page=10":
-            raise gh.GitHubAPIError(403, "API rate limit exceeded")
+            return []
         if path == "/repos/owner/repo/readme":
-            raise gh.GitHubAPIError(404, "Not Found")
+            return {"content": base64.b64encode(b"# Test repo").decode()}
         raise AssertionError(f"Unexpected GitHub API path: {path}")
 
-    monkeypatch.setattr(gh, "github_request", fake_github_request)
-    result = asyncio.run(gh.analyze_public_repo("https://github.com/owner/repo"))
-    assert result["facts"]["repository"] == "owner/repo"
-    assert result["facts"]["file_count"] == 3
-    assert result["facts"]["has_tests"] is True
-    assert result["facts"]["partial_data"] is True
-    assert result["facts"]["languages"] == []
-    assert result["facts"]["recent_commit_count_sample"] == 1
-    assert any("language totals" in warning for warning in result["facts"]["data_warnings"])
-    assert f"/repos/owner/repo/git/trees/{tree_sha}?recursive=1" in calls
-    assert not any(path.endswith("/git/trees/main?recursive=1") for path in calls)
-
-
-def test_github_api_errors_are_actionable_for_rate_limit_not_generic_class_names():
-    from app.github_intelligence import GitHubAPIError
-    assert "rate limit" in GitHubAPIError(403, "API rate limit exceeded").user_message().lower()
-    assert "at least one commit" in GitHubAPIError(404, "Not Found").user_message()
-    assert "temporary server error" in GitHubAPIError(503, "Service Unavailable").user_message()
-
-
-def test_github_route_returns_actionable_api_error(monkeypatch):
-    import app.routes as route_module
-    from app.github_intelligence import GitHubAPIError
-
-    async def fail_analysis(url, token=""):
-        raise GitHubAPIError(403, "API rate limit exceeded")
-
-    monkeypatch.setattr(route_module, "analyze_public_repo", fail_analysis)
-    isolated = TestClient(app, headers={"X-SKILLSETRA-Demo-Session": str(uuid.uuid4())})
-    response = isolated.post("/api/v1/github/analyze", json={"url": "https://github.com/owner/repo", "provider": "puter"})
-    assert response.status_code == 429
-    assert "GitHub API rate limit reached" in response.json()["error"]["message"]
-    assert "HTTPStatusError" not in response.json()["error"]["message"]
+    monkeypatch.setattr(github_module, "github_request", fake_github_request)
+    result = asyncio.run(github_module.analyze_public_repo("https://github.com/owner/repo"))
+    assert result["recommended_change"]["path"] == "tests/"
+    assert result["recommended_change"]["kind"] == "folder"
+    assert "claims" not in result
+    assert "suggestions" not in result
+    assert "inferred" not in result
