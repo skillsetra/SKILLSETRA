@@ -71,3 +71,5 @@ export function recognitionErrorMessage(code, languageName) {
       return `Browser speech recognition stopped (${code || "unknown error"}). You can continue by typing instead.`;
   }
 }
+
+/**DONE */
