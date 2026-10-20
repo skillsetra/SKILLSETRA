@@ -11,7 +11,7 @@ test('Assessment Studio shows stacked questions and automatically advances with 
   assert.match(source, /Next question →/);
   assert.match(source, /setQuestionIndex\(questionPosition\+1\)/);
   assert.match(source, /setQuestionIndex\(Math\.max\(0,Math\.min\(next,questions\.length-1\)\)\)/);
-  assert.match(source, /questionIndex,updatedAt:new Date\(\)\.toISOString\(\)/);
+  assert.match(source, /questionIndex,questions,assessmentId,questionSource,updatedAt:new Date\(\)\.toISOString\(\)/);
   assert.match(source, /scrollToElement\(resultRef\.current/);
 });
 
@@ -47,4 +47,22 @@ test('generated single AI questions are brought into view', () => {
   const source = read('components/stitch-source/components/Screens/DiagnosticAssessment.tsx');
   assert.match(source, /useEffect\(\(\)=>\{if\(aiQ\)scrollToElement\(aiQuestionRef\.current/);
   assert.match(source, /ref=\{aiQuestionRef\}/);
+});
+
+
+test('Assessment Studio requests fresh AI questions and falls back to built-in track questions only after Puter generation fails', () => {
+  const source = read('app/assessments/page.tsx');
+  assert.match(source, /\/api\/v1\/assessment\/generate/);
+  assert.match(source, /runPuter\(prompt,generated\?\.model/);
+  assert.match(source, /Fresh assessment/);
+  assert.match(source, /\/api\/v1\/assessment\?track=/);
+  assert.match(source, /Fresh AI questions could not be generated after trying alternate Puter models/);
+  assert.match(source, /questionSource===\"browser-ai\"/);
+});
+
+test('AI Interviewer submits a captured answer when mobile speech recognition ends naturally', () => {
+  const source = read('app/interview/page.tsx');
+  assert.match(source, /Mobile Safari\/Chrome can end a recognition session on their own/);
+  assert.match(source, /capturedAnswer.length > 0 && !busyRef.current && !evaluationInFlightRef.current/);
+  assert.match(source, /const finalAnswer = answerRef.current.trim\(\) \|\| capturedAnswer/);
 });

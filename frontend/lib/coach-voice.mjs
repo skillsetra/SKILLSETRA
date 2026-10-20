@@ -21,6 +21,21 @@ const LOCALE_ALTERNATES = Object.freeze({
   Vietnamese: ["vi-VN", "vi"], Polish: ["pl-PL", "pl"], Swedish: ["sv-SE", "sv"], Greek: ["el-GR", "el"], Hebrew: ["he-IL", "he"],
 });
 
+/** Rebuild browser speech results without repeating duplicate adjacent hypotheses. */
+export function dedupeRecognitionSegments(values) {
+  const segments = [];
+  const normalize = value => String(value || "").toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+  for (const value of values || []) {
+    const segment = String(value || "").trim();
+    if (!segment) continue;
+    const key = normalize(segment);
+    const previous = segments[segments.length - 1];
+    if (previous && normalize(previous) === key) continue;
+    segments.push(segment);
+  }
+  return segments;
+}
+
 /** Regional/base locale candidates are fallbacks, not a guarantee of support. */
 export function recognitionLocales(languageName) {
   const primary = COACH_LANGS[languageName] || COACH_LANGS.English;

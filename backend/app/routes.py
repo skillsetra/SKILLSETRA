@@ -1506,7 +1506,7 @@ Target role: {role}
 Language: {language}
 Question count: {count}
 {focus}{transfer}
-Generate practical multiple-choice questions that reveal whether the learner can apply knowledge, reason about trade-offs, debug or verify work. Avoid trivia and job-readiness claims. Distractors must be plausible and the answer key must be unambiguous.
+Generate a fresh, non-repetitive set of practical multiple-choice questions that reveal whether the learner can apply knowledge, reason about trade-offs, debug or verify work. Treat any freshness seed in the competency focus as a request to create a new scenario set; do not reuse or merely reword common built-in bank questions or questions from a previous attempt. Avoid trivia and job-readiness claims. Distractors must be plausible and the answer key must be unambiguous.
 Return ONLY valid JSON with this exact shape:
 {{"questions":[{{"question":"...","competency":"...","difficulty":"Beginner|Intermediate|Advanced|Expert","options":["A","B","C","D"],"correct":0,"explanation":"Short reason"}}]}}
 The correct value is a zero-based option index. Every question must have exactly four plausible options and exactly one best answer."""

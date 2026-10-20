@@ -7,6 +7,7 @@ import {
   normalizeUnavailableRecognitionLanguages,
   selectableRecognitionLanguages,
   recognitionErrorMessage,
+  dedupeRecognitionSegments,
 } from "../lib/coach-voice.mjs";
 
 test("every advertised speech language has a primary locale and locale fallbacks", () => {
@@ -76,4 +77,17 @@ test("voice input waits for a natural pause and does not duplicate interim hypot
   assert.match(source, /would duplicate words/);
   assert.match(source, /voiceSessionRef\.current \|\| \["listening", "thinking", "speaking", "typing"\]\.includes\(voiceState\)/);
   assert.match(source, /const \[speechVolume, setSpeechVolume\] = useState\(1\)/);
+});
+
+
+test("AI Coach dictation rebuilds from the current result snapshot and removes repeated adjacent hypotheses", async () => {
+  const source = await readFile(new URL("../components/PersistentAIWidget.tsx", import.meta.url), "utf8");
+  assert.match(source, /Rebuild the transcript from that snapshot/);
+  assert.match(source, /textDictationResultsRef\.current = segments/);
+  assert.match(source, /dedupeRecognitionSegments\(Array\.from/);
+});
+
+
+test("speech recognition segments deduplicate repeated phrases even when punctuation changes", () => {
+  assert.deepEqual(dedupeRecognitionSegments(["Hi, I am good", "Hi, I am good.", "How are you?", "How are you?"]), ["Hi, I am good", "How are you?"]);
 });

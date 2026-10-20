@@ -222,6 +222,7 @@ export default function Interview() {
       if (run !== speechRunRef.current) return;
       if (index >= chunks.length) { setFaceState("ready"); onDone?.(); return; }
       const utterance = new SpeechSynthesisUtterance(chunks[index++]);
+      // SpeechSynthesis volume is capped at 1.0 by browsers; use the maximum supported level.
       utterance.lang = lang; utterance.volume = 1; utterance.rate = 0.92; utterance.pitch = 1.03;
       const voices = window.speechSynthesis.getVoices();
       const base = lang.toLowerCase().split("-")[0];
@@ -304,16 +305,22 @@ export default function Interview() {
       recognition.onend = () => {
         setListening(false);
         if (silenceTimerRef.current) window.clearTimeout(silenceTimerRef.current);
-        if (autoEvaluateOnEndRef.current) {
+        // Mobile Safari/Chrome can end a recognition session on their own after a
+        // short utterance. Do not depend solely on the desktop-style silence timer:
+        // if a transcript exists, submit it once after a brief finalization window.
+        const capturedAnswer = answerRef.current.trim();
+        const shouldSubmit = autoEvaluateOnEndRef.current || (capturedAnswer.length > 0 && !busyRef.current && !evaluationInFlightRef.current);
+        if (shouldSubmit) {
           autoEvaluateOnEndRef.current = false; setFaceState("thinking");
           recognitionFinalizeTimerRef.current = window.setTimeout(() => {
             recognitionFinalizeTimerRef.current = null;
-            const finalAnswer = answerRef.current.trim();
+            const finalAnswer = answerRef.current.trim() || capturedAnswer;
             if (finalAnswer) void evaluateRef.current(finalAnswer);
             else if (timedOutRef.current) finishRef.current(historyRef.current, "time-limit");
             else { setFaceState("ready"); setVoiceError("No final transcript was captured. Try speaking again."); }
-          }, 220);
-        } else setFaceState("ready");
+          }, 320);
+        } else if (timedOutRef.current) finishRef.current(historyRef.current, "time-limit");
+        else setFaceState("ready");
       };
       recognition.start();
       listeningRef.current = true; setListening(true); setFaceState("listening");
